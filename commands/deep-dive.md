@@ -66,9 +66,56 @@ Use the Task tool to launch the financial-analyzer agent with instructions:
 - Identify concerns or red flags
 - Give recommendation on proceeding to valuation
 
-### 4. Present Results to User
+### 4. Validate Output with Investment Manager
 
-After agent completes:
+**CRITICAL:** After financial-analyzer completes, automatically invoke investment-manager agent to validate the output.
+
+Use the Task tool to launch investment-manager agent:
+
+**Validation prompt should include:**
+- Path to output file: `./analysis/[TICKER]-[DATE]/02-financial-analysis.md`
+- Instruction to perform comprehensive validation checking:
+  - All financial metrics properly calculated and sourced
+  - Assumptions documented (normalized adjustments, growth rates, etc.)
+  - No hallucinated financial data
+  - Meets specification requirements for financial analysis
+  - 10-year tables complete and accurate
+  - Red flags properly identified
+- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-financial-analysis.md`
+
+**Review validation results:**
+- If status is **PASS**: Proceed to step 5 (present results)
+- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
+- If status is **FAIL**: Must fix issues before proceeding
+
+### 5. Fix Issues Until Validation Passes
+
+**If validation identifies issues (FAIL or critical warnings):**
+
+1. **Review validation report** to understand specific issues:
+   - Missing metric calculations
+   - Unsourced financial data
+   - Undocumented normalization adjustments
+   - Incomplete analysis sections
+
+2. **Fix the issues** by updating the analysis file:
+   - For missing calculations: Add ROE, ROIC, margin calculations with formulas
+   - For unsourced data: Add "per 10-K filing FY20XX" or verify accuracy
+   - For missing assumptions: Document why normalizations were made
+   - For incomplete sections: Add required balance sheet, cash flow analysis
+
+3. **Re-validate** by invoking investment-manager again on the updated file
+
+4. **Iterate** until validation status is PASS:
+   - Keep fixing and re-validating
+   - Don't proceed until all critical issues resolved
+   - Maximum 3 iterations (if still failing after 3, escalate to user)
+
+**Important:** Do NOT present results to user until validation passes.
+
+### 6. Present Results to User
+
+After validation PASSES:
 
 1. **Summarize financial quality:**
    - Profitability trends (margins expanding/stable/declining)
@@ -86,12 +133,17 @@ After agent completes:
    - CAUTION: Some concerns but potentially addressable
    - STOP: Financial red flags too significant
 
-4. **Next steps:**
+4. **Validation status:**
+   - "✅ Quality validation: PASSED"
+   - "Issues found and resolved: [count]"
+
+5. **Next steps:**
    - If PROCEED/CAUTION: "Run `/valuation` to estimate intrinsic value and margin of safety"
    - If STOP: "Financial analysis reveals significant concerns. Recommend passing. [Key reasons]"
 
-5. **Location of detailed analysis:**
+6. **Location of detailed analysis:**
    - "Full analysis saved to: ./analysis/[TICKER]-[DATE]/02-financial-analysis.md"
+   - "Validation report: ./analysis/[TICKER]-[DATE]/validation-financial-analysis.md"
 
 ## Important Guidelines
 

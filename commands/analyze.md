@@ -62,9 +62,55 @@ Use the Task tool to launch the business-screener agent with clear instructions:
 - Provide decision and reasoning
 - Identify specific areas for deep dive if INVESTIGATE
 
-### 4. Present Results to User
+### 4. Validate Output with Investment Manager
 
-After agent completes:
+**CRITICAL:** After business-screener completes, automatically invoke investment-manager agent to validate the output.
+
+Use the Task tool to launch investment-manager agent:
+
+**Validation prompt should include:**
+- Path to output file: `./analysis/[TICKER]-[DATE]/01-initial-screening.md`
+- Instruction to perform comprehensive validation checking:
+  - All assumptions documented with reasoning
+  - All values have clear justification or sources
+  - No hallucinations (unsupported claims, made-up data)
+  - Meets specification requirements for initial screening
+  - Reasoning is sound and logical
+  - Sources are cited where needed
+- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-initial-screening.md`
+
+**Review validation results:**
+- If status is **PASS**: Proceed to step 5 (present results)
+- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
+- If status is **FAIL**: Must fix issues before proceeding
+
+### 5. Fix Issues Until Validation Passes
+
+**If validation identifies issues (FAIL or critical warnings):**
+
+1. **Review validation report** to understand specific issues:
+   - Read the detailed validation report
+   - Identify critical and major issues
+   - Understand what needs to be fixed
+
+2. **Fix the issues** by updating the analysis file:
+   - For missing assumptions: Add reasoning (e.g., "5% growth based on historical 3-year average")
+   - For unsourced values: Add citations (e.g., "per 10-K filing") or verify/remove
+   - For hallucinations: Remove unsupported claims or find proper sources
+   - For missing sections: Add required content per specification
+
+3. **Re-validate** by invoking investment-manager again on the updated file
+
+4. **Iterate** until validation status is PASS:
+   - Keep fixing and re-validating
+   - Don't proceed until all critical issues resolved
+   - Maximum 3 iterations (if still failing after 3, escalate to user)
+
+**Important:** Do NOT present results to user until validation passes. The investment-manager acts as a quality gate that must be cleared.
+
+### 6. Present Results to User
+
+After validation PASSES:
 
 1. **Summarize key findings:**
    - Company business model (1-2 sentences)
@@ -77,12 +123,17 @@ After agent completes:
    - INVESTIGATE: Mixed signals, need deeper investigation
    - FAIL: Fundamental issues, recommend passing on investment
 
-3. **Next steps:**
+3. **Validation status:**
+   - "✅ Quality validation: PASSED"
+   - "Issues found and resolved: [count] (see validation report for details)"
+
+4. **Next steps:**
    - If PASS/INVESTIGATE: "Run `/deep-dive` to continue with detailed financial analysis"
    - If FAIL: "Based on initial screening, I recommend passing on this opportunity. [Key reasons]"
 
-4. **Location of detailed report:**
+5. **Location of detailed report:**
    - "Full analysis saved to: ./analysis/[TICKER]-[DATE]/01-initial-screening.md"
+   - "Validation report: ./analysis/[TICKER]-[DATE]/validation-initial-screening.md"
 
 ## Important Guidelines
 

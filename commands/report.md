@@ -168,9 +168,46 @@ Use the Task tool to launch the report-generator agent to compile comprehensive 
 - Professional format suitable for reference
 - Clear recommendation with supporting evidence
 
-### 4. Present Results to User
+### 4. Validate Output with Investment Manager
 
-After report generation completes:
+**CRITICAL:** After report-generator completes, automatically invoke investment-manager agent to validate the final investment memo.
+
+Use the Task tool to launch investment-manager agent:
+
+**Validation prompt should include:**
+- Path to output file: `./analysis/[TICKER]-[DATE]/04-investment-memo.md`
+- Instruction to perform comprehensive validation checking:
+  - BUY/HOLD/PASS decision properly supported with reasoning
+  - All key sections complete (business, financial, valuation, risk)
+  - Decision criteria from value-investing skill applied correctly
+  - Key supporting reasons are factual and well-documented
+  - No unsupported claims in final recommendation
+  - Meets specification requirements for investment memo
+- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-investment-memo.md`
+
+**Review validation results:**
+- If status is **PASS**: Proceed to step 5 (present results)
+- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
+- If status is **FAIL**: Must fix issues before proceeding
+
+**Fix Issues Until Validation Passes:**
+
+If validation identifies issues:
+
+1. **Review validation report** - Understand what's missing or unsupported
+2. **Fix the issues**:
+   - For weak recommendations: Strengthen reasoning with specific evidence
+   - For missing sections: Add required content per specification
+   - For unsupported claims: Add sources or remove claims
+   - For unclear decision rationale: Make explicit connection to value investing principles
+3. **Re-validate** - Invoke investment-manager again
+4. **Iterate** - Keep fixing until PASS (max 3 iterations)
+
+**Important:** Do NOT present final recommendation until validation passes. This is the most critical validation as it determines the investment decision.
+
+### 5. Present Results to User
+
+After validation PASSES:
 
 1. **Headline Recommendation:**
    - **BUY** / **HOLD** / **PASS**: [Company Name] ([TICKER])
@@ -202,8 +239,15 @@ After report generation completes:
    - Primary reasons for passing
    - What would need to change for reconsideration (if anything)
 
-8. **Location of full memo:**
+8. **Validation status:**
+   - "✅ Quality validation: PASSED"
+   - "All analysis validated and decision criteria met"
+   - "Issues found and resolved: [count]"
+
+9. **Location of full memo:**
    - "Complete investment memo saved to: ./analysis/[TICKER]-[DATE]/04-investment-memo.md"
+   - "Validation report: ./analysis/[TICKER]-[DATE]/validation-investment-memo.md"
+   - "All validation reports available in analysis directory"
 
 ## Important Guidelines
 

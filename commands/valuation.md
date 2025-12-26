@@ -88,9 +88,46 @@ Use the Task tool to launch the valuation-modeler agent with comprehensive instr
 - Compare to current market price
 - Calculate margin of safety
 
-### 3. Present Results to User
+### 3. Validate Output with Investment Manager
 
-After agent completes:
+**CRITICAL:** After valuation-modeler completes, automatically invoke investment-manager agent to validate the output.
+
+Use the Task tool to launch investment-manager agent:
+
+**Validation prompt should include:**
+- Path to output file: `./analysis/[TICKER]-[DATE]/03-valuation.md`
+- Instruction to perform comprehensive validation checking:
+  - All valuation assumptions fully documented with reasoning
+  - Growth rates, discount rates justified
+  - DCF calculations shown step-by-step
+  - Comparable analysis properly sourced
+  - Sensitivity analysis complete
+  - No hallucinated valuation figures
+- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-valuation.md`
+
+**Review validation results:**
+- If status is **PASS**: Proceed to step 4 (present results)
+- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
+- If status is **FAIL**: Must fix issues before proceeding
+
+**Fix Issues Until Validation Passes:**
+
+If validation identifies issues:
+
+1. **Review validation report** - Understand what's missing or wrong
+2. **Fix the issues**:
+   - For undocumented assumptions: Add clear reasoning ("10% discount rate because...")
+   - For missing calculations: Show DCF formula and step-by-step math
+   - For unsourced comps: Cite where peer multiples came from
+   - For hallucinated values: Verify or recalculate properly
+3. **Re-validate** - Invoke investment-manager again
+4. **Iterate** - Keep fixing until PASS (max 3 iterations)
+
+**Important:** Do NOT present results until validation passes.
+
+### 4. Present Results to User
+
+After validation PASSES:
 
 1. **Summarize valuation results:**
    - DCF intrinsic value: $XX - $YY range
@@ -120,12 +157,17 @@ After agent completes:
    - EXPENSIVE: Limited margin or premium to value (<10% margin)
    - OVERVALUED: Trading above intrinsic value
 
-6. **Next steps:**
+6. **Validation status:**
+   - "✅ Quality validation: PASSED"
+   - "Issues found and resolved: [count]"
+
+7. **Next steps:**
    - "Run `/report` to complete comprehensive risk assessment and generate final investment memo"
    - Or if overvalued: "Company trading above intrinsic value. Consider adding to watchlist for better entry point."
 
-7. **Location of detailed models:**
+8. **Location of detailed models:**
    - "Full valuation analysis saved to: ./analysis/[TICKER]-[DATE]/03-valuation.md"
+   - "Validation report: ./analysis/[TICKER]-[DATE]/validation-valuation.md"
 
 ## Important Guidelines
 
