@@ -1,0 +1,29 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files (if marketplace needs any)
+.env
+.env.local
+
+# Node modules (if any marketplace tooling uses npm)
+node_modules/
+
+# Python virtual environments (if any marketplace tooling uses Python)
+venv/
+__pycache__/
+*.pyc
+
+# Temporary files
+*.tmp
+*.bak
+
+# Log files
+*.log
