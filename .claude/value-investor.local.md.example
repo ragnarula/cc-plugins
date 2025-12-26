@@ -1,0 +1,174 @@
+---
+# API Keys and Authentication
+api_keys:
+  sec_edgar: ""  # Optional - SEC EDGAR is public, no key needed
+  alpha_vantage: ""  # Get free key at https://www.alphavantage.co/support/#api-key
+  yahoo_finance: ""  # Not needed - yfinance library is free
+
+# Investment Preferences
+preferences:
+  # Minimum margin of safety required to recommend BUY
+  # 0.25 = 25%, 0.30 = 30%, 0.40 = 40%
+  margin_of_safety: 0.25
+
+  # Default discount rate for DCF valuations
+  # Will be adjusted based on business quality and risk
+  # 0.10 = 10%, 0.12 = 12%
+  discount_rate: 0.10
+
+  # Risk tolerance level affects position sizing and margin requirements
+  # Options: "conservative", "moderate", "aggressive"
+  risk_tolerance: "conservative"
+
+  # Terminal growth rate for DCF (typically GDP growth)
+  terminal_growth_rate: 0.03  # 3%
+
+# Industries to Avoid
+# List industries or sectors you prefer not to invest in
+industries_to_avoid:
+  - "cryptocurrency"
+  - "early-stage biotech"
+  - "gambling"
+  # Add more as needed
+
+# Portfolio Settings
+portfolio:
+  # Maximum position size as % of portfolio
+  # 0.10 = 10% maximum per position
+  max_position_size: 0.10
+
+  # Target number of holdings (for diversification)
+  target_holdings: 15-20
+
+# Analysis Settings
+analysis:
+  # Number of years of historical data to analyze
+  historical_years: 10
+
+  # Minimum ROE threshold for quality businesses
+  # 0.15 = 15%
+  min_roe: 0.15
+
+  # Minimum ROIC threshold for quality businesses
+  # 0.12 = 12%
+  min_roic: 0.12
+
+  # Maximum debt/EBITDA ratio acceptable
+  max_debt_to_ebitda: 3.0
+
+  # Minimum interest coverage ratio
+  min_interest_coverage: 3.0
+---
+
+# Value Investor Plugin Settings
+
+This file configures your value-investor plugin preferences. Copy this file to `.claude/value-investor.local.md` (without the .example extension) and customize with your preferences.
+
+## Setup Instructions
+
+1. **Copy this file**:
+   ```bash
+   cp .claude/value-investor.local.md.example .claude/value-investor.local.md
+   ```
+
+2. **Add API keys** (optional):
+   - Alpha Vantage: Get free key at https://www.alphavantage.co/support/#api-key
+   - SEC EDGAR and Yahoo Finance don't require keys
+
+3. **Customize preferences**:
+   - Adjust margin of safety requirements
+   - Set risk tolerance
+   - Define industries to avoid
+   - Configure portfolio constraints
+
+4. **Save the file**:
+   The plugin will automatically read settings from `.claude/value-investor.local.md`
+
+## Important Notes
+
+- The `.local.md` file is in `.gitignore` and won't be committed
+- This keeps your API keys and preferences private
+- Settings are optional - plugin works with defaults if file doesn't exist
+- You can update settings anytime and they'll apply to new analyses
+
+## Default Values
+
+If no settings file exists, plugin uses these defaults:
+- Margin of safety: 25%
+- Discount rate: 10%
+- Risk tolerance: Conservative
+- Historical years: 10
+- Min ROE: 15%
+- Min ROIC: 12%
+
+## Field Descriptions
+
+### API Keys
+- **alpha_vantage**: Free tier allows 25 requests/day. Get key at https://www.alphavantage.co/
+- **sec_edgar**: Not required - SEC data is public
+- **yahoo_finance**: Not required - yfinance library is free
+
+### Preferences
+- **margin_of_safety**: Minimum discount to intrinsic value required to recommend BUY (0.25 = 25%)
+- **discount_rate**: Default rate for DCF (adjusted based on business risk)
+- **risk_tolerance**: conservative (stricter standards) / moderate / aggressive (more lenient)
+- **terminal_growth_rate**: Long-term growth assumption for DCF (typically GDP = 2-3%)
+
+### Industries to Avoid
+- List sectors you don't want to invest in due to values, understanding, or risk preferences
+- Examples: crypto, biotech, gambling, tobacco, weapons, etc.
+
+### Portfolio Settings
+- **max_position_size**: Maximum % of portfolio in single stock (0.10 = 10% limit)
+- **target_holdings**: Ideal portfolio size for diversification (15-20 is typical)
+
+### Analysis Settings
+- **historical_years**: Years of data to analyze (10 recommended)
+- **min_roe**: Minimum ROE for quality business (15% is Buffett standard)
+- **min_roic**: Minimum ROIC for quality business (12% is value creation threshold)
+- **max_debt_to_ebitda**: Maximum leverage acceptable (3.0x is moderate)
+- **min_interest_coverage**: Minimum ability to cover interest (3.0x is adequate)
+
+## Examples
+
+### Conservative Investor
+```yaml
+preferences:
+  margin_of_safety: 0.35  # 35% minimum
+  discount_rate: 0.12     # 12% discount rate
+  risk_tolerance: "conservative"
+
+portfolio:
+  max_position_size: 0.08  # 8% max per stock
+
+analysis:
+  min_roe: 0.18  # 18% minimum ROE
+  max_debt_to_ebitda: 2.0  # Low debt tolerance
+```
+
+### Moderate Investor
+```yaml
+preferences:
+  margin_of_safety: 0.25  # 25% minimum
+  discount_rate: 0.10     # 10% discount rate
+  risk_tolerance: "moderate"
+
+portfolio:
+  max_position_size: 0.10  # 10% max per stock
+
+analysis:
+  min_roe: 0.15  # 15% minimum ROE
+  max_debt_to_ebitda: 3.0  # Moderate debt tolerance
+```
+
+### Growth-Oriented Value Investor
+```yaml
+preferences:
+  margin_of_safety: 0.20  # 20% minimum (accepting less margin for quality growth)
+  discount_rate: 0.09     # 9% discount rate for high-quality businesses
+  risk_tolerance: "moderate"
+
+analysis:
+  min_roe: 0.20  # 20% minimum ROE (seeking exceptional businesses)
+  min_roic: 0.15  # 15% minimum ROIC
+```
