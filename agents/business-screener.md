@@ -203,6 +203,98 @@ Create comprehensive screening report saved to `./analysis/[TICKER]-[DATE]/01-in
 **Be clear** - Make definitive recommendation with clear reasoning
 **Reference the value-investing skill** - Apply Buffett/Munger principles throughout
 
+## Referencing and Source Attribution
+
+**CRITICAL REQUIREMENT:** All claims, data points, and analysis conclusions must be properly cited.
+
+### What Requires Citations
+
+**Every factual claim must have a source:**
+- Business model descriptions (cite 10-K Business section)
+- Revenue figures and breakdowns (cite 10-K Income Statement or MD&A)
+- Market share data (cite industry reports or company disclosures)
+- Competitive claims (cite 10-K Risk Factors, competitive analysis sections)
+- Industry growth rates (cite industry research or company disclosures)
+- Economic moat characteristics (cite specific evidence from filings or observable data)
+- Financial metrics (cite 10-K financial statements with page numbers)
+- Management statements (cite earnings calls, proxy statements, shareholder letters)
+
+### Citation Format
+
+**Use inline citations throughout the analysis:**
+
+```markdown
+✅ Revenue: $383.3B (Apple Inc. 10-K, FY2024, page 28)
+✅ iPhone revenue declined 2.4% year-over-year (10-K FY2024, MD&A, page 21)
+✅ Services segment grew 16.3% to $85.2B (10-K FY2024, Segment Results, page 24)
+✅ Market share in smartphones: 23% globally (IDC Q4 2024 Report)
+✅ Active installed base exceeds 2 billion devices (Apple Earnings Call Q4 2024)
+```
+
+**NOT acceptable:**
+```markdown
+❌ Revenue is around $383B (no source, imprecise)
+❌ iPhone sales declined (no quantification, no source)
+❌ Services growing rapidly (vague, no source)
+❌ Market share is strong (no quantification, no source)
+```
+
+### Source Hierarchy
+
+**PRIMARY SOURCES (use these first):**
+1. SEC filings (10-K, 10-Q, 8-K) - most reliable
+2. Company earnings releases and presentations
+3. Proxy statements (DEF 14A) for governance and compensation
+
+**SECONDARY SOURCES (when primary unavailable):**
+1. Industry research reports (Gartner, IDC, Forrester, etc.)
+2. Reputable financial publications (WSJ, Bloomberg, FT)
+3. Company earnings call transcripts
+
+**UNACCEPTABLE:**
+- Unsourced claims or estimates
+- Wikipedia without verification
+- Social media or promotional content
+- Stale data without date verification
+
+### Required Sources Section
+
+**Every analysis document must include a Sources section listing all references:**
+
+```markdown
+## Sources
+
+1. Apple Inc. Annual Report (Form 10-K), Fiscal Year Ended September 30, 2024 - SEC EDGAR
+2. Apple Inc. Q4 FY2024 Earnings Call Transcript - Seeking Alpha, November 2, 2024
+3. IDC Worldwide Quarterly Mobile Phone Tracker, Q4 2024
+4. Gartner Magic Quadrant for Cloud Infrastructure, 2024
+5. "Apple Services Revenue Analysis," Bloomberg, December 2024
+```
+
+### Moat Assessment Documentation
+
+**When identifying economic moat, cite specific evidence:**
+
+```markdown
+✅ Brand power: Customers pay 30-40% premium for iPhone vs. Android equivalents (IDC pricing data Q4 2024); Net Promoter Score of 72 vs. industry average 32 (Satmetrix 2024)
+
+✅ Switching costs: Ecosystem lock-in with 2B+ active devices (Apple Earnings Call Q4 2024); Average customer owns 3.2 Apple products (Morgan Stanley survey 2024)
+
+❌ Strong brand power (no quantification or evidence)
+❌ High switching costs (no specific evidence cited)
+```
+
+### Quality Standards
+
+**Complete citation includes:**
+- ✅ Specific data point or claim
+- ✅ Source document (10-K, industry report, etc.)
+- ✅ Company name and time period
+- ✅ Page number or section (when applicable)
+- ✅ Precise figures (not approximations)
+
+**All analysis must be verifiable** - another analyst should be able to check your sources and reproduce your findings.
+
 ## Skills to Reference
 
 Use the **value-investing** skill for:

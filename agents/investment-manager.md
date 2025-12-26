@@ -216,26 +216,89 @@ Per report command spec, must include:
 - Recency bias (overweighting recent events)
 - Optimism bias (assuming best-case scenarios)
 
-### 6. Data Source Verification
+### 6. Data Source Verification & Citation Requirements
+
+**MANDATORY: Every factual claim must have a citation.**
 
 **For each factual claim, verify:**
 - Source identified? (SEC filing, company report, news article, research report)
 - Source credible? (official vs. rumor, primary vs. secondary)
 - Source recent? (data from appropriate time period)
 - Source accessible? (can be verified if needed)
+- **Citation format proper?** (See citation standards below)
+
+**Citation Standards:**
+
+**Financial data from SEC filings:**
+- ✅ "Revenue of $416.2B (per 10-K filing FY2025)"
+- ✅ "Net margin: 26.9% (Apple Inc. 10-K, fiscal year ended September 28, 2025)"
+- ✅ "Total debt: $XX billion (10-K FY2025, page 45)"
+- ❌ "Revenue of $416.2B" (no source)
+
+**Market statistics and industry data:**
+- ✅ "Smartphone market grew 0.4% (IDC Quarterly Mobile Phone Tracker, Q4 2025)"
+- ✅ "Industry average ROE: 15.8% (Damodaran Online industry dataset, 2025)"
+- ✅ "Market share: 18% (Counterpoint Research, Q3 2025)"
+- ❌ "Industry average ROE: 15.8%" (no source)
+
+**Company statements and guidance:**
+- ✅ "CEO stated goal of 10% growth (Q3 2025 earnings call, October 28, 2025)"
+- ✅ "Management expects margin expansion (FY2025 earnings release)"
+- ❌ "Management is optimistic" (vague, no source)
+
+**News and analyst reports:**
+- ✅ "Announced acquisition of X Corp (Wall Street Journal, December 15, 2025)"
+- ✅ "Analyst consensus EPS: $6.50 (Bloomberg terminal data, December 2025)"
+- ❌ "Analysts expect strong growth" (no specific source)
+
+**Calculated values:**
+- ✅ "ROE: 24.3% (calculated: Net Income $112B / Avg Equity $461B, per 10-K FY2025)"
+- ✅ "Free Cash Flow: $95B (Operating CF $118B - CapEx $23B, per 10-K FY2025)"
+- ❌ "ROE: 24.3%" (no calculation shown)
 
 **Acceptable sources:**
-- SEC filings (10-K, 10-Q, 8-K, proxy statements)
-- Company earnings releases and investor presentations
-- Verified financial data providers (Yahoo Finance, etc.)
-- Reputable news sources and research
-- Industry reports from credible organizations
+- SEC filings (10-K, 10-Q, 8-K, proxy statements) - PRIMARY
+- Company earnings releases and investor presentations - PRIMARY
+- Verified financial data providers (Yahoo Finance, Bloomberg, FactSet) - SECONDARY
+- Reputable industry research (Gartner, IDC, Forrester) - SECONDARY
+- Major financial news (WSJ, FT, Bloomberg, Reuters) - SECONDARY
+- Academic research and databases (Damodaran Online) - SECONDARY
 
-**Questionable sources:**
+**Questionable sources (REJECT unless verified):**
 - Unnamed sources or "industry sources"
-- Promotional materials without verification
+- Promotional materials without independent verification
 - Social media claims
 - Outdated data presented as current
+- "Common knowledge" without citation
+- Estimates without methodology
+
+**When primary source unavailable:**
+- Document limitation: "Specific market share data not publicly disclosed; using industry research estimate"
+- Use ranges instead of precise figures: "Market share estimated at 15-20% (Industry Analyst Report XYZ)"
+- State assumption clearly: "Assuming industry-average margins of 8-10% due to lack of public disclosure"
+
+**Citation placement:**
+- Inline citations: "Revenue grew 6.4% (10-K FY2025)"
+- Footnote style: "Revenue grew 6.4%[1]" with "[1] Apple Inc. 10-K, FY2025" at end
+- Parenthetical: "The smartphone market is mature (0.4% growth, IDC Q4 2025)"
+
+**Sources section required:**
+At end of each analysis document, include Sources section listing all references:
+```markdown
+## Sources
+
+**SEC Filings:**
+- Apple Inc. Form 10-K for fiscal year ended September 28, 2025
+- Apple Inc. Q3 2025 earnings release (October 28, 2025)
+
+**Industry Research:**
+- IDC Quarterly Mobile Phone Tracker, Q4 2025
+- Counterpoint Research Global Smartphone Market Share Report, Q3 2025
+
+**Financial Data:**
+- Yahoo Finance historical data for AAPL
+- Damodaran Online industry averages (accessed December 2025)
+```
 
 ### 7. Completeness Check
 
@@ -331,45 +394,53 @@ Summarize validation results:
 
 ## Validation Standards
 
-### PASS Criteria
+### PASS Criteria (Stricter Standards)
 
-**All of these must be true:**
+**ALL of these must be true:**
 - ✅ No critical issues (hallucinations, missing key sections, unsupported major claims)
-- ✅ All key assumptions documented with reasoning
-- ✅ Values have clear justification or sources
-- ✅ Meets specification requirements
-- ✅ Logical reasoning throughout
-- ✅ No significant gaps in analysis
+- ✅ No major issues (undocumented assumptions, unsourced values)
+- ✅ All minor issues either fixed OR justified why they cannot be fixed
+- ✅ ALL assumptions documented with reasoning (no exceptions)
+- ✅ ALL values have clear justification AND sources
+- ✅ ALL claims have proper citations or references
+- ✅ Meets specification requirements completely
+- ✅ Logical reasoning throughout with no gaps
+- ✅ No formatting issues that impair readability
 
-**May have:**
-- Minor formatting issues
-- Small areas for improvement
-- Suggestions for enhancement
+**Referencing requirements (MANDATORY):**
+- Every financial metric cited with source: "(per 10-K filing FY2024)"
+- Every market statistic referenced: "(Source: Industry Research Report, 2025)"
+- Every competitive claim evidenced: "(Company earnings call Q3 2025)"
+- Every growth rate/assumption justified: "5% based on [specific reasoning + source]"
 
-### PASS WITH WARNINGS
+### PASS WITH WARNINGS (No Longer Acceptable as Final State)
 
-**Acceptable when:**
-- ⚠️ Minor assumptions need better documentation
-- ⚠️ Some values could use more detail
-- ⚠️ Analysis meets specs but could be deeper
-- ⚠️ A few claims need verification but aren't central
+**This status triggers immediate fixing:**
+- ⚠️ ANY warnings must be addressed
+- ⚠️ At least one attempt to fix ALL warnings required
+- ⚠️ If warning cannot be fixed, must document justification why not
+- ⚠️ Re-validate after fixing to achieve full PASS
 
-**Must have:**
-- ✅ No critical issues
-- ✅ Core analysis sound
-- ✅ Key assumptions documented
+**Examples of acceptable justifications for unfixable warnings:**
+- "Cannot source exact market share % - no public data available. Using estimated range instead."
+- "Historical ROE for 2015 unavailable - company not yet public. Analysis starts from 2017 IPO."
+- "Competitor margin data confidential - using industry average as proxy with clear caveat."
 
 ### FAIL Criteria
 
 **Any of these cause FAIL:**
 - ❌ Hallucinations detected (made-up data, unsupported claims)
-- ❌ Major assumptions undocumented (growth rates, discount rates without reasoning)
+- ❌ ANY assumptions undocumented (growth rates, discount rates, margins without reasoning)
 - ❌ Missing required sections from specification
-- ❌ Unsupported key values (intrinsic value without calculation, etc.)
+- ❌ Unsupported values (intrinsic value without calculation, metrics without source)
+- ❌ Claims without citations or references
 - ❌ Broken reasoning or logic errors
-- ❌ Serious data quality issues
+- ❌ Data quality issues
+- ❌ Warnings not addressed after fixing attempt
 
-**Action required:** Fix issues before proceeding to next workflow stage
+**Action required:** Fix ALL issues before proceeding to next workflow stage
+
+**New standard:** Validation only passes when output has ZERO critical issues, ZERO major issues, and all minor issues either fixed or justified. The goal is publication-quality analysis, not "good enough."
 
 ## Example Validations
 

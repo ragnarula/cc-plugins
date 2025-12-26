@@ -403,6 +403,183 @@ Model impact of key risks:
 Risk assessment templates:
 - **`examples/risk-matrix-template.md`** - Comprehensive risk identification and scoring framework
 
+## Referencing and Source Attribution
+
+**CRITICAL REQUIREMENT:** All risk assessments must include proper source citations for every identified risk, claim, and data point.
+
+### Why Referencing Matters in Risk Assessment
+
+- **Prevents speculation:** Risk claims must be factual, not hypothetical fears
+- **Enables validation:** Others can verify risk exists and severity is accurate
+- **Distinguishes real from imagined risks:** Sourced risks are credible, unsourced are guesses
+- **Supports monitoring:** Clear sources facilitate tracking whether risks materialize
+- **Builds decision confidence:** Well-documented risks inform position sizing and margin requirements
+
+### What Requires Citations
+
+**All risk-related claims must be cited:**
+- Identified risks from company disclosures (10-K Risk Factors section)
+- Competitive threats and market share data
+- Regulatory or legal proceedings
+- Management changes or governance issues
+- Customer concentration or dependencies
+- Debt levels, covenants, and maturity schedules
+- Industry trends and disruption threats
+- Financial stress test inputs (revenue, margins, debt metrics)
+- Scenario probabilities and assumptions
+
+**No exceptions:** Every risk claim requires a verifiable source or explicit acknowledgment that it's an analyst judgment.
+
+### Citation Format for Risk Assessment
+
+**Disclosed risks (from SEC filings):**
+```markdown
+Customer concentration risk: Single customer represents 23% of revenue (Risk Factors, 10-K FY2025, page 15)
+Regulatory risk: FDA approval required for lead product; approval uncertain (Risk Factors, 10-K FY2025, page 18)
+Debt maturity: $2.5B debt matures in next 18 months (Note 8, 10-K FY2025, page 67)
+```
+
+**Competitive and market risks:**
+```markdown
+Market share loss: Company share declined from 34% (2023) to 28% (2025) (Company 10-K, industry reports from Gartner)
+New entrant threat: Three well-funded startups launched competing products in Q3 2025 (TechCrunch, Bloomberg)
+Disruption risk: Cloud-based alternatives growing 40% annually vs. company's on-premise model declining 5% (IDC Cloud Infrastructure Report, Q4 2025)
+```
+
+**Management and governance risks:**
+```markdown
+Management turnover: CFO departed September 2025, third CFO in 18 months (8-K filing, September 15, 2025)
+Insider selling: CEO sold 50% of holdings in Q3 2025 (Form 4 filings, SEC EDGAR)
+Low insider ownership: Executives own <1% of shares (Proxy Statement DEF 14A, 2025, page 24)
+```
+
+**Financial and accounting risks:**
+```markdown
+Covenant risk: Debt covenant requires Debt/EBITDA <3.5x; currently 3.2x (Credit Agreement, 10-K FY2025, Exhibit 10.1)
+Accounting irregularities: Revenue recognition policy changed twice in 24 months (10-K FY2024 and FY2025, Note 2)
+Working capital deterioration: DSO increased from 45 days (2023) to 68 days (2025) (calculated from 10-K filings)
+```
+
+### Analyst Judgments vs. Documented Risks
+
+**Distinguish between documented facts and analyst assessments:**
+
+**Documented fact (cite source):**
+```markdown
+✅ Debt matures December 2026: $1.8B (10-K FY2025, Note 8, page 72)
+```
+
+**Analyst judgment (label clearly):**
+```markdown
+✅ Refinancing risk assessment: Given company's declining cash flow and deteriorating credit metrics, refinancing this debt may require higher rates or asset sales. [Analyst judgment based on debt maturity schedule (10-K FY2025) and FCF trend analysis]
+```
+
+**Never present judgment as fact:**
+```markdown
+❌ Company will face refinancing challenges (unsourced claim presented as fact)
+```
+
+### Stress Test and Scenario Documentation
+
+**All stress test assumptions must be documented:**
+
+```markdown
+Revenue Decline Stress Test:
+- Base case revenue: $5.2B (10-K FY2025)
+- Stress scenario: 20% decline to $4.16B
+- Rationale: Historical worst year-over-year decline was 18% during 2008-2009 recession (10-K FY2009)
+- Impact on FCF: Falls from $850M to $340M based on 65% variable cost structure (calculated from 10-K cost breakdown)
+```
+
+**Scenario probabilities must be justified:**
+```markdown
+Downside Scenario (30% probability):
+- Assigned based on: (1) Historical occurrence of similar events in industry (3 times in 10 years per industry data), (2) Current competitive dynamics, (3) Management execution track record
+- Not a precise calculation; represents analyst judgment of likelihood
+```
+
+### Sources Section Requirements
+
+Every risk assessment document must include comprehensive Sources section:
+
+**Sources**
+1. Company 10-K Risk Factors: [Company Name] Annual Report (Form 10-K), FY2025, pages 12-22 - SEC EDGAR
+2. Credit Agreement: Note 8 - Long-term Debt, [Company Name] 10-K FY2025, pages 67-72
+3. Insider Trading: Form 4 filings for CEO, CFO, COO - SEC EDGAR, Q3 2025
+4. Market Share Data: Gartner Industry Analysis Report, Q4 2025
+5. Competitive Intelligence: Bloomberg article "New Entrants Disrupting Industry," November 2025
+6. Industry Trends: IDC Cloud Infrastructure Forecast, 2025-2030
+7. Historical Financial Performance: [Company Name] 10-K filings FY2015-2025
+
+### Acceptable Source Hierarchy for Risks
+
+**PRIMARY SOURCES (use these first):**
+1. SEC filings - Risk Factors section in 10-K
+2. SEC filings - Legal proceedings (Item 3 in 10-K, 8-K disclosures)
+3. SEC filings - Management Discussion & Analysis (MD&A)
+4. SEC filings - Insider trading (Form 4, Schedule 13D/G)
+5. Credit agreements and debt documentation (10-K exhibits)
+6. Earnings calls and investor presentations (for forward-looking risks)
+
+**SECONDARY SOURCES (use when primary unavailable):**
+1. Industry research reports (Gartner, IDC, Forrester)
+2. Reputable business publications (WSJ, FT, Bloomberg)
+3. Regulatory filings (FDA, FTC, DOJ announcements)
+4. Credit rating agency reports (Moody's, S&P, Fitch)
+5. Competitor disclosures and filings
+
+**ANALYST JUDGMENTS (clearly labeled):**
+1. Competitive response scenarios (based on historical patterns)
+2. Probability assignments for scenarios
+3. Severity assessments (High/Medium/Low)
+4. Downside valuation estimates
+
+**UNACCEPTABLE:**
+- Unsourced speculation about risks
+- Social media rumors or message board discussions
+- "Everyone knows" claims without documentation
+- Competitor promotional materials as sole source
+- Outdated data without verification of current status
+
+### Red Flag Documentation
+
+**Each red flag must cite specific evidence:**
+
+```markdown
+✅ Accounting restatement: Company restated FY2024 revenue down 8% due to improper recognition (8-K filing, March 15, 2025, Item 4.02)
+
+✅ Declining returns: ROE fell from 22% (FY2022) to 14% (FY2025) (calculated from 10-K filings FY2022-2025)
+
+✅ Customer concentration: Top customer represents 34% of revenue (10-K FY2025, Note 15, page 89)
+
+❌ Management integrity concerns (no supporting evidence cited)
+```
+
+### Quality Standards for Risk Assessment
+
+**Complete risk citation includes:**
+- ✅ Specific risk identified
+- ✅ Source document (10-K, 8-K, industry report)
+- ✅ Specific location (page number, note number, section)
+- ✅ Quantification where possible (percentages, amounts, dates)
+- ✅ Clear distinction between facts and analyst judgments
+
+**Incomplete risk citation (not acceptable):**
+- ❌ "Company has debt concerns" (vague, unsourced)
+- ❌ "Management issues" (no specifics, no source)
+- ❌ "Industry facing disruption" (no evidence, no source)
+- ❌ "High customer concentration" (no quantification, no source)
+
+### Handling Absence of Disclosed Risks
+
+**If a risk exists but company hasn't disclosed it:**
+
+```markdown
+Undisclosed concentration risk: Analysis of revenue by customer (Note 15, 10-K FY2025) reveals 45% concentration in top 3 customers, yet Risk Factors section does not identify customer concentration as a risk. [Analyst observation based on financial statement note analysis]
+```
+
+This documents both the risk (with source) and the concerning lack of disclosure.
+
 ## Summary
 
 Comprehensive risk assessment is the cornerstone of value investing. Focus on:
@@ -412,9 +589,10 @@ Comprehensive risk assessment is the cornerstone of value investing. Focus on:
 3. **Quantification** - Model downside scenarios, not just upside
 4. **Margin of safety** - Require larger buffer when risks higher
 5. **Monitoring** - Watch for new risks emerging or existing risks materializing
+6. **Complete documentation** - Cite sources for every risk claim and data point
 
 Remember Buffett's rules:
 - **Rule #1:** Don't lose money
 - **Rule #2:** Don't forget rule #1
 
-Thorough risk assessment ensures compliance with both rules.
+Thorough risk assessment with rigorous documentation ensures compliance with both rules.

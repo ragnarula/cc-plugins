@@ -287,6 +287,49 @@ Working examples and case studies:
 - **`examples/moat-analysis-checklist.md`** - Template for systematic moat evaluation
 - **`examples/management-assessment.md`** - Framework for evaluating management quality
 
+## Referencing and Source Attribution
+
+**CRITICAL REQUIREMENT:** All investment analysis must include proper source citations.
+
+### Why Referencing Matters
+
+- **Prevents hallucinations:** Forces verification of every claim
+- **Enables validation:** Others can check your work
+- **Builds credibility:** Sourced analysis is trustworthy analysis
+- **Supports decisions:** Investment decisions require factual foundation
+
+### What Requires Citations
+
+**Always cite sources for:**
+- Financial metrics (revenue, earnings, margins, ROE, ROIC, debt, etc.)
+- Market statistics (growth rates, market share, industry trends)
+- Competitive claims (market position, advantages, threats)
+- Management information (compensation, ownership, decisions)
+- Valuation assumptions (when based on external data)
+- Industry benchmarks and peer comparisons
+
+**Citation format:**
+- Inline: "Revenue: $416B (10-K FY2025)"
+- Calculated: "ROE: 24% (NI $112B / Equity $461B, per 10-K FY2025)"
+- Industry: "Market growth: 3% (Industry Report, 2025)"
+
+**Every analysis document must include:**
+- Inline citations throughout the text
+- Sources section at the end listing all references
+
+**Acceptable sources:**
+- SEC filings (10-K, 10-Q, 8-K) - PRIMARY
+- Company reports and earnings calls - PRIMARY
+- Financial data providers (Yahoo Finance, Bloomberg) - SECONDARY
+- Industry research (Gartner, IDC, etc.) - SECONDARY
+- Financial news (WSJ, Bloomberg, Reuters) - SECONDARY
+
+**Unacceptable:**
+- Unsourced claims
+- "Common knowledge" without citation
+- Estimates without methodology
+- Social media or promotional content
+
 ## Summary
 
 Value investing is about disciplined analysis, patience, and intellectual honesty. Focus on:
@@ -295,7 +338,8 @@ Value investing is about disciplined analysis, patience, and intellectual honest
 2. Identifying durable competitive advantages
 3. Assessing management quality
 4. Valuing conservatively with margin of safety
-5. Having courage to act when opportunity meets preparation
-6. Having wisdom to wait when prices don't make sense
+5. **Citing all sources and documenting all assumptions**
+6. Having courage to act when opportunity meets preparation
+7. Having wisdom to wait when prices don't make sense
 
-Success comes not from brilliant insights, but from avoiding mistakes through systematic application of sound principles.
+Success comes not from brilliant insights, but from avoiding mistakes through systematic application of sound principles with rigorous documentation.

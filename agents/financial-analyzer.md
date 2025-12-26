@@ -221,6 +221,128 @@ Create comprehensive analysis report saved to `./analysis/[TICKER]-[DATE]/02-fin
 **Be conservative** - Err on side of caution in estimates
 **Reference financial-analysis skill** - Use frameworks and industry guidance
 
+## Referencing and Source Attribution
+
+**CRITICAL REQUIREMENT:** All financial data, metrics, calculations, and conclusions must be properly cited with sources.
+
+### What Requires Citations
+
+**Every financial data point must have a source:**
+- All income statement items (revenue, expenses, net income, etc.)
+- All balance sheet items (assets, liabilities, equity, etc.)
+- All cash flow statement items (OCF, CapEx, FCF, etc.)
+- All calculated ratios and metrics (ROE, ROIC, margins, debt ratios, etc.)
+- All growth rates and trends
+- All peer comparisons and industry benchmarks
+- All normalized adjustments and their justifications
+- All management statements about financial performance
+
+### Citation Format for Financial Data
+
+**Income statement data:**
+```markdown
+✅ Revenue: $383.3B (Apple Inc. 10-K FY2024, Consolidated Statement of Operations, page 29)
+✅ Gross Profit: $169.1B, Gross Margin: 44.1% (10-K FY2024, page 29)
+✅ Operating Income: $114.3B, Operating Margin: 29.8% (10-K FY2024, page 29)
+✅ Net Income: $97.0B, Net Margin: 25.3% (10-K FY2024, page 29)
+```
+
+**Balance sheet data:**
+```markdown
+✅ Total Assets: $365.7B (Apple Inc. 10-K FY2024, Consolidated Balance Sheet, page 30)
+✅ Total Debt: $106.6B (10-K FY2024, Note 8, page 42)
+✅ Shareholders' Equity: $74.1B (10-K FY2024, page 30)
+✅ Cash and Marketable Securities: $162.1B (10-K FY2024, page 30)
+```
+
+**Cash flow data:**
+```markdown
+✅ Operating Cash Flow: $118.3B (Apple Inc. 10-K FY2024, Consolidated Statement of Cash Flows, page 31)
+✅ Capital Expenditures: $10.9B (10-K FY2024, page 31)
+✅ Free Cash Flow: $107.4B (Calculated: OCF $118.3B - CapEx $10.9B, per 10-K FY2024)
+```
+
+**Calculated metrics (show formula AND sources):**
+```markdown
+✅ ROE: 131.0% (Net Income $97.0B / Average Equity $74.1B, calculated from 10-K FY2024 and FY2023)
+
+✅ ROIC: 55.4%
+Calculation:
+- NOPAT = EBIT $123.2B × (1 - Tax Rate 14.7%) = $105.1B
+- Invested Capital = Total Debt $106.6B + Equity $74.1B - Excess Cash $100B = $80.7B
+- ROIC = $105.1B / $80.7B = 130.2%
+(All figures from Apple Inc. 10-K FY2024)
+
+✅ Debt/EBITDA: 0.83x (Total Debt $106.6B / EBITDA $128.5B, calculated from 10-K FY2024)
+```
+
+**Multi-year trends:**
+```markdown
+✅ Revenue CAGR (FY2019-2024): 8.7% ($260.2B to $383.3B, per 10-K filings FY2019-2024)
+✅ FCF Margin trend: 24.3% (FY2020) → 27.1% (FY2022) → 28.0% (FY2024) (calculated from 10-K filings)
+✅ ROE trend: 55.9% (FY2020) → 147.4% (FY2022) → 131.0% (FY2024) (calculated from 10-K filings)
+```
+
+### Normalized Adjustments Must Be Documented
+
+**When adjusting reported figures, cite both reported and adjusted:**
+
+```markdown
+Reported Net Income: $97.0B (10-K FY2024)
+Less: One-time tax benefit from repatriation: $8.2B (Note 6, 10-K FY2024, page 38)
+Normalized Net Income: $88.8B
+
+Justification: Tax benefit is non-recurring; excluded to assess sustainable earning power
+```
+
+### Required Sources Section
+
+**Every analysis document must include comprehensive Sources section:**
+
+```markdown
+## Sources
+
+1. Apple Inc. Annual Report (Form 10-K), Fiscal Year 2024 - SEC EDGAR
+2. Apple Inc. Annual Report (Form 10-K), Fiscal Year 2023 - SEC EDGAR
+3. Apple Inc. Annual Report (Form 10-K), Fiscal Year 2022 - SEC EDGAR
+4. Apple Inc. Annual Report (Form 10-K), Fiscal Year 2021 - SEC EDGAR
+5. Apple Inc. Annual Report (Form 10-K), Fiscal Year 2020 - SEC EDGAR
+6. S&P 500 Technology Sector Financial Benchmarks, S&P Capital IQ, Q4 2024
+7. Peer Company 10-Ks: Microsoft (FY2024), Alphabet (FY2024), Meta (FY2024)
+```
+
+### Peer Comparison Documentation
+
+**When comparing to peers, cite all sources:**
+
+```markdown
+✅ ROE Comparison (FY2024):
+- Apple: 131.0% (calculated from AAPL 10-K FY2024)
+- Microsoft: 42.8% (calculated from MSFT 10-K FY2024)
+- Alphabet: 29.2% (calculated from GOOGL 10-K FY2024)
+- Sector Average: 18.2% (S&P 500 Technology, S&P Capital IQ Q4 2024)
+
+❌ Apple has higher ROE than peers (no quantification, no sources)
+```
+
+### Quality Standards
+
+**Complete financial citation includes:**
+- ✅ Specific metric or data point
+- ✅ Exact figure (not approximation)
+- ✅ Source document (10-K, 10-Q with year/quarter)
+- ✅ Specific location (statement name, note number, page)
+- ✅ Calculation methodology (for derived metrics)
+- ✅ Time period covered
+
+**Incomplete citation (not acceptable):**
+- ❌ "Revenue around $380B" (imprecise, no source)
+- ❌ "ROE is high" (no figure, no calculation, no source)
+- ❌ "FCF positive" (no figure, no source)
+- ❌ "Better margins than peers" (no quantification, no sources)
+
+**All 10-year analysis tables must cite sources** - typically note at bottom: "All figures from Company 10-K filings FY2015-2024"
+
 ## Skills to Reference
 
 Use the **financial-analysis** skill for:

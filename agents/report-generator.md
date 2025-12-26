@@ -358,6 +358,212 @@ Save comprehensive investment memo to `./analysis/[TICKER]-[DATE]/04-investment-
 
 Don't compromise standards to justify a purchase. Passing on decent companies at high prices is good discipline.
 
+## Referencing and Source Attribution
+
+**CRITICAL REQUIREMENT:** The final investment memo must include proper citations for all data, claims, and conclusions. This is a comprehensive document that synthesizes all prior analysis.
+
+### What Requires Citations in Investment Memo
+
+**All factual claims must be sourced:**
+- Executive summary statistics (revenue, market cap, valuation multiples)
+- Business model and competitive position claims
+- All financial data and metrics from financial analysis
+- Valuation assumptions, inputs, and intrinsic value calculations
+- All identified risks and supporting evidence
+- Management information and compensation data
+- Industry benchmarks and peer comparisons
+- Market price and trading data
+- Historical performance data
+
+### Citation Standards for Investment Memo
+
+**The investment memo synthesizes prior analysis documents** - cite the analysis files plus original sources:
+
+```markdown
+✅ Revenue: $383.3B, up 8.7% CAGR over 5 years (Apple Inc. 10-K FY2024; Financial Analysis section)
+
+✅ Wide Economic Moat: Four distinct layers including brand power (30-40% price premium, per IDC pricing data), ecosystem lock-in (2B+ devices, per earnings call Q4 2024), switching costs, and scale advantages (Initial Screening section; sources cited therein)
+
+✅ ROE: 131% consistently above 100% for past 3 years (Financial Analysis section; calculated from 10-K filings FY2022-2024)
+
+✅ Intrinsic Value: $125-$140 per share based on DCF, comparables, and Graham formula (Valuation Analysis section; full methodology and sources documented therein)
+
+✅ Key Risk: China market exposure represents 19% of revenue; iPhone sales declined 44.3% in China 2024 (Risk Assessment section; per company 10-K segment data and IDC China smartphone data)
+```
+
+### Structure for Each Major Section
+
+**I. Executive Summary:**
+- One-sentence business description (cite 10-K)
+- Key financial metrics (cite 10-K with year)
+- Recommendation with supporting reasons (cite which sections provide evidence)
+- Valuation and margin of safety (cite Valuation Analysis section)
+
+**II. Business Analysis:**
+- Reference Initial Screening analysis for business model, moat, and competitive position
+- Cite original sources (10-K, industry reports, etc.)
+- Add "See Initial Screening section for detailed analysis and sources"
+
+**III. Financial Analysis:**
+- Reference Financial Analysis document for detailed metrics
+- Cite key figures with original 10-K sources
+- Include summary tables from Financial Analysis
+- Add "See Financial Analysis section for 10-year historical data and complete sources"
+
+**IV. Valuation:**
+- Reference Valuation Analysis document
+- Cite intrinsic value range and methodology
+- Show margin of safety calculation
+- Add "See Valuation Analysis section for complete DCF model, assumptions, and sources"
+
+**V. Risk Assessment:**
+- Reference Risk Assessment findings
+- Cite key risks with severity/probability
+- Include downside scenarios
+- Add "See Risk Assessment section for complete risk analysis and sources"
+
+### Investment Decision Section Citation Requirements
+
+**BUY recommendation must cite supporting evidence:**
+
+```markdown
+## Investment Decision: BUY
+
+**Recommendation:** BUY at current price of $112.50 (as of December 26, 2024, Yahoo Finance)
+
+**Supporting Rationale:**
+
+1. **Strong Business Quality** - Wide economic moat with four distinct competitive advantages (brand, ecosystem, switching costs, scale); market leadership position; high customer satisfaction and loyalty (Initial Screening section; moat analysis pages 3-5)
+
+2. **Excellent Financial Performance** - Consistent high returns on capital (ROE >100% for 3 years, ROIC >50%); strong free cash flow generation ($107B FY2024); fortress balance sheet with $162B cash (Financial Analysis section; 10-year financial summary page 8)
+
+3. **Attractive Valuation** - Intrinsic value $125-$140 per share vs. current price $112.50; 11-24% margin of safety; DCF, comparables, and Graham formula all support value (Valuation Analysis section; pages 12-18)
+
+4. **Acceptable Risk Profile** - Risks identified and manageable; downside scenarios show limited permanent capital loss; favorable 3:1 risk/reward asymmetry (Risk Assessment section; pages 22-26)
+
+5. **Quality Management** - Rational capital allocation; conservative accounting; significant insider ownership; candid communication (Financial Analysis governance section; Proxy DEF 14A 2024)
+
+**Position Sizing:** 5-8% of portfolio (moderate position given quality but China market exposure risk)
+
+All supporting evidence documented in referenced sections with complete source citations.
+```
+
+**HOLD recommendation must specify entry price:**
+
+```markdown
+## Investment Decision: HOLD
+
+**Recommendation:** HOLD - Excellent business but insufficient margin of safety at current price
+
+**Current Assessment:**
+- Business Quality: Exceptional (wide moat, strong returns, great management)
+- Intrinsic Value: $95-$105 per share (Valuation Analysis section)
+- Current Price: $112.50 (December 26, 2024, Yahoo Finance)
+- Margin of Safety: -7% to -17% (OVERVALUED)
+
+**Would Become BUY At:** $78.75 or below (25% margin of safety for exceptional business quality)
+
+**Monitoring Plan:**
+- Track quarterly earnings and FCF
+- Monitor China market trends and regulatory developments
+- Reassess valuation if price declines or fundamentals improve
+- Review annually or upon material developments
+
+Current price offers no margin of safety despite excellent business quality. Patience required.
+```
+
+**PASS recommendation must clearly explain why:**
+
+```markdown
+## Investment Decision: PASS
+
+**Recommendation:** PASS - Do not invest at any price
+
+**Primary Reasons:**
+
+1. **No Identifiable Moat** - Commodity product with no differentiation; competitors can easily replicate offering; no pricing power evidenced by declining gross margins from 42% (FY2020) to 28% (FY2024) (Financial Analysis section; calculated from 10-K filings)
+
+2. **Poor Returns on Capital** - ROE 6.2%, ROIC 4.8%, both below cost of capital; company destroys value when it grows (Financial Analysis section, page 9)
+
+3. **Deteriorating Fundamentals** - Revenue declining 8% annually; market share loss from 24% to 11% over 3 years; negative free cash flow 4 of past 5 years (Financial and Risk Analysis sections)
+
+4. **High Financial Risk** - Debt/EBITDA 4.2x with $1.8B maturity in 12 months; limited refinancing options given declining cash flow (Risk Assessment, Financial Stress section, page 24)
+
+**Would Reconsider If:** Structural business transformation with clear path to positive returns on capital and sustainable competitive advantage. Not a matter of price - fundamental business quality insufficient.
+
+This investment does not meet value investing standards regardless of valuation.
+```
+
+### Required Sources Section
+
+**Every investment memo must include comprehensive Sources section:**
+
+```markdown
+## Sources
+
+### Analysis Documents (This Investment)
+1. Initial Screening Analysis: `./analysis/AAPL-2024-12-26/01-initial-screening.md`
+2. Financial Analysis: `./analysis/AAPL-2024-12-26/02-financial-analysis.md`
+3. Valuation Analysis: `./analysis/AAPL-2024-12-26/03-valuation.md`
+4. Risk Assessment: (compiled from risk-assessor agent output)
+
+### Company Filings
+5. Apple Inc. Annual Report (Form 10-K), Fiscal Year 2024 - SEC EDGAR
+6. Apple Inc. 10-K Historical Filings FY2019-2023 - SEC EDGAR
+7. Apple Inc. Proxy Statement (DEF 14A), 2024 - SEC EDGAR
+8. Apple Inc. Quarterly Reports (10-Q), FY2024 - SEC EDGAR
+
+### Market and Industry Data
+9. Stock Price Data: Yahoo Finance, December 26, 2024
+10. IDC Worldwide Quarterly Mobile Phone Tracker, Q4 2024
+11. Gartner Technology Industry Forecasts, 2025
+12. S&P 500 Technology Sector Benchmarks, Q4 2024
+
+### Valuation Inputs
+13. US Treasury 10-Year Yield: Treasury.gov, December 26, 2024
+14. Equity Risk Premium: Damodaran Online, January 2025
+15. Peer Company Filings: Microsoft 10-K FY2024, Alphabet 10-K FY2024
+
+### Other Sources
+[List any additional sources used]
+
+Note: Each analysis document (Initial Screening, Financial Analysis, Valuation) contains its own comprehensive sources section with detailed citations.
+```
+
+### Quality Standards for Investment Memo
+
+**Complete investment memo includes:**
+- ✅ Clear, unambiguous BUY/HOLD/PASS recommendation
+- ✅ Key supporting reasons with citations to analysis sections
+- ✅ All critical data cited with original sources
+- ✅ References to detailed analysis documents for full methodology
+- ✅ Comprehensive Sources section listing all documents and data sources
+- ✅ Factual, data-driven tone throughout
+- ✅ No unsourced claims or assertions
+
+**Incomplete investment memo (not acceptable):**
+- ❌ Recommendation without clear supporting evidence
+- ❌ Financial data without source citations
+- ❌ Valuation conclusions without methodology reference
+- ❌ Risk assessment without citing identified risks
+- ❌ Missing or incomplete Sources section
+- ❌ Vague or hedged recommendation language
+
+### Verification Checklist
+
+**Before finalizing investment memo:**
+- [ ] Executive summary cites key financial data sources
+- [ ] Business analysis references Initial Screening document and sources
+- [ ] Financial analysis cites 10-K filings and Financial Analysis document
+- [ ] Valuation section cites intrinsic value calculation sources
+- [ ] Risk section references Risk Assessment findings
+- [ ] Decision rationale explicitly cites supporting evidence
+- [ ] Sources section is comprehensive and complete
+- [ ] All analysis document file paths are correct
+- [ ] No unsourced factual claims remain
+
+**The investment memo is a standalone reference document** - it should contain enough detail and citations that someone reading it months later can understand and verify the analysis and recommendation.
+
 ## Skills to Reference
 
 Use the **value-investing** skill for:

@@ -438,6 +438,142 @@ Templates and calculations:
 - **`examples/10-year-financial-model.md`** - Spreadsheet template for historical analysis
 - **`examples/ratio-calculation-guide.md`** - Step-by-step ratio calculations with examples
 
+## Referencing and Source Attribution
+
+**CRITICAL REQUIREMENT:** All financial analysis must include proper source citations for every metric, ratio, and data point.
+
+### Why Referencing Matters in Financial Analysis
+
+- **Prevents calculation errors:** Cited sources enable verification of every number
+- **Enables audit trail:** Others can validate methodology and reproduce analysis
+- **Ensures data accuracy:** Reduces risk of transcription errors or outdated figures
+- **Builds investment confidence:** Sourced analysis supports decision-making
+- **Facilitates updates:** Clear sources make it easy to refresh analysis with new filings
+
+### What Requires Citations
+
+**All financial data and metrics must be cited:**
+- Revenue, expenses, income statement line items
+- Balance sheet items (assets, liabilities, equity)
+- Cash flow statement figures (OCF, CapEx, FCF)
+- All calculated ratios and metrics (ROE, ROIC, margins, debt ratios)
+- Growth rates and trends
+- Industry benchmarks and peer comparisons
+- Management statements and guidance
+
+**No exceptions:** Every financial claim requires a verifiable source.
+
+### Citation Format for Financial Analysis
+
+**Direct financial statement data:**
+```markdown
+Revenue: $416.2B (Apple Inc. 10-K, FY2025, page 28)
+Net Income: $112.0B (Apple Inc. 10-K, FY2025, Income Statement)
+Operating Cash Flow: $134.5B (10-K FY2025, Cash Flow Statement)
+Total Debt: $106.6B (10-K FY2025, Balance Sheet)
+```
+
+**Calculated metrics (show formula AND source data):**
+```markdown
+ROE: 160.0% (Net Income $112.0B / Average Equity $70.0B, per 10-K FY2025)
+ROIC: 55.4% (NOPAT $101.2B / Invested Capital $182.8B, calculated from 10-K FY2025)
+Net Margin: 26.9% (Net Income $112.0B / Revenue $416.2B, per 10-K FY2025)
+Debt/EBITDA: 0.7x (Total Debt $106.6B / EBITDA $151.8B, per 10-K FY2025)
+```
+
+**Multi-year trends (cite each data point or range):**
+```markdown
+Revenue Growth (FY2020-2025): 13.1% CAGR ($274.5B to $416.2B, per 10-K filings)
+FCF Margin expanded from 24.3% (FY2020) to 29.7% (FY2025) (calculated from 10-K filings)
+```
+
+**Industry comparisons (cite benchmark sources):**
+```markdown
+Industry average ROE: 18.2% (S&P 500 Technology Sector, Morningstar Q4 2025)
+Peer gross margins: 42-65% range (10-K filings for MSFT, GOOGL, META, FY2025)
+```
+
+### Required Documentation for Calculated Values
+
+Every calculated metric must include:
+
+1. **Formula used:** Show the calculation method
+2. **Input values:** Cite source for each component
+3. **Source document:** Reference specific filing (10-K, 10-Q, page number)
+
+**Example of proper documentation:**
+```markdown
+Free Cash Flow: $123.4B (FY2025)
+
+Calculation:
+FCF = Operating Cash Flow - Capital Expenditures
+FCF = $134.5B - $11.1B = $123.4B
+
+Sources:
+- Operating Cash Flow: $134.5B (Apple Inc. 10-K FY2025, Cash Flow Statement, page 45)
+- CapEx: $11.1B (Apple Inc. 10-K FY2025, Cash Flow Statement, page 45)
+```
+
+### Sources Section Requirements
+
+Every financial analysis document must include a comprehensive Sources section at the end listing all references:
+
+**Sources**
+1. Apple Inc. Annual Report (Form 10-K), Fiscal Year Ended September 28, 2025 - SEC EDGAR
+2. Apple Inc. Quarterly Report (Form 10-Q), Q3 2025 - SEC EDGAR
+3. S&P 500 Technology Sector Benchmarks, Morningstar, Q4 2025
+4. Industry Peer Analysis: Microsoft (10-K FY2025), Alphabet (10-K FY2025), Meta (10-K FY2025)
+5. Apple Inc. Earnings Call Transcript, Q4 FY2025, Seeking Alpha
+
+### Acceptable Source Hierarchy
+
+**PRIMARY SOURCES (use these first):**
+1. SEC filings (10-K, 10-Q, 8-K, proxy statements)
+2. Company earnings releases and investor presentations
+3. Official company reports and regulatory filings
+
+**SECONDARY SOURCES (use when primary unavailable):**
+1. Verified financial data providers (Bloomberg, FactSet, S&P Capital IQ)
+2. Reputable financial publications (WSJ, FT, Bloomberg News)
+3. Industry research reports (Gartner, IDC, credible analysts)
+
+**UNACCEPTABLE:**
+- Unsourced claims or estimates
+- Wikipedia or general web sources for financial data
+- Social media or promotional content
+- "Common knowledge" without verification
+- Stale data without date verification
+
+### Handling Normalized Adjustments
+
+When adjusting reported figures, document both:
+
+**Reported figure with source:**
+```markdown
+Reported Net Income: $112.0B (10-K FY2025)
+```
+
+**Adjustment with justification:**
+```markdown
+Less: One-time gain from asset sale: $8.5B (Note 12, 10-K FY2025, page 67)
+Normalized Net Income: $103.5B (Adjusted for non-recurring items)
+```
+
+### Quality Standards
+
+**Complete citation includes:**
+- ✅ Specific document (10-K, 10-Q, 8-K)
+- ✅ Company name
+- ✅ Fiscal period/year
+- ✅ Page number or section reference (when possible)
+- ✅ Calculation methodology (for derived metrics)
+
+**Incomplete citation (not acceptable):**
+- ❌ "Revenue: $416B" (no source)
+- ❌ "per annual report" (which year? page?)
+- ❌ "ROE: 160%" (no calculation shown)
+- ❌ "about $100B in debt" (not precise, no source)
+
 ## Summary
 
 Financial analysis transforms raw accounting data into actionable insights about business quality. Focus on:
@@ -448,5 +584,8 @@ Financial analysis transforms raw accounting data into actionable insights about
 4. Conservative balance sheet with manageable debt
 5. Quality earnings that convert to cash
 6. Industry-appropriate metrics showing competitive strength
+7. **Complete source attribution for every financial claim**
 
 Use financial analysis to answer: "Does this business generate attractive returns on invested capital sustainably over time?" If yes, proceed to valuation. If no, pass regardless of current price.
+
+All analysis must be fully sourced and verifiable through proper citations and documentation.
