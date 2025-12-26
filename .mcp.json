@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "financial-data": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/financial-data-server.js"],
+      "env": {
+        "SEC_EDGAR_API_KEY": "${SEC_EDGAR_API_KEY}",
+        "ALPHA_VANTAGE_API_KEY": "${ALPHA_VANTAGE_API_KEY}"
+      }
+    }
+  }
+}

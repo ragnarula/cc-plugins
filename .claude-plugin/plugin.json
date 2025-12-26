@@ -1,0 +1,10 @@
+{
+  "name": "value-investor",
+  "version": "0.1.0",
+  "description": "Comprehensive investment analysis workflow for evaluating publicly traded companies using Warren Buffett and Charlie Munger's value investing principles",
+  "author": {
+    "name": "Investment Analyst",
+    "email": "analyst@example.com"
+  },
+  "keywords": ["investing", "value-investing", "stock-analysis", "financial-analysis", "buffett", "munger"]
+}
