@@ -126,56 +126,21 @@ You MUST:
 2. Ensure the save happens BEFORE any other action
 3. Do NOT proceed until file is saved successfully
 
-**Report Structure:**
+**Report Structure and Template:**
 
-### Executive Summary
-- Company name and ticker
-- One-sentence business description
-- Clear decision: PASS / INVESTIGATE / FAIL
-- Key reasons (3-5 bullets)
+**Use the report-writing skill for complete structure and guidance:**
+- **Template Reference**: `skills/report-writing/templates/business-screening-annotated.md`
+- The annotated template provides detailed guidance for each section, format examples, and citation requirements
+- **Clean Template**: `skills/report-writing/templates/business-screening-clean.md` for quick structure reference
 
-### Business Model Analysis
-- What does the company sell?
-- Who are the customers?
-- How does the company make money?
-- Unit economics and scalability
+**All 8 required sections are defined in the template with specific content requirements, format examples, and evidence standards.**
 
-### Competitive Position
-- Main competitors
-- Market share and trends
-- Differentiation and positioning
-- Economic moat assessment (type, strength, sustainability)
-
-### Industry Dynamics
-- Industry structure and participants
-- Growth rate and drivers
-- Competitive intensity
-- Disruption threats
-- Regulatory environment
-
-### Initial Financial Observations
-- Revenue and growth trends
-- Profitability and margins
-- Cash generation
-- Balance sheet strength
-- Returns on capital
-
-### Red Flags and Concerns
-- Business model risks
-- Competitive vulnerabilities
-- Industry headwinds
-- Other concerns identified
-
-### Decision and Rationale
-- Clear recommendation: PASS / INVESTIGATE / FAIL
-- Supporting reasoning
-- If PASS/INVESTIGATE: Areas to focus on in deep dive
-- If FAIL: Why investment doesn't meet standards
-
-### Sources
-- SEC filings referenced
-- Web sources used
-- Data accessed
+The report-writing skill is the **single source of truth** for:
+- Section structure and required content
+- Citation formats and standards
+- Evidence requirements (especially for moat assessment)
+- Quality standards and formatting
+- Examples of properly formatted content
 
 ## Decision Criteria
 
@@ -310,7 +275,13 @@ Use the **value-investing** skill for:
 - Value trap identification
 - Investment checklists
 
-This provides the theoretical foundation for your practical analysis.
+Use the **report-writing** skill for:
+- Complete report structure and section requirements
+- Citation formats and evidence standards
+- Moat assessment evidence requirements
+- Format examples and quality standards
+
+The value-investing skill provides the theoretical foundation; the report-writing skill defines how to structure and document your analysis.
 
 ## Example Analysis Flow
 

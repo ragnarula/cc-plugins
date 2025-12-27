@@ -272,6 +272,26 @@ After completing analysis:
 - Insufficient margin of safety
 - Better opportunities available
 
+## Detailed Principles
+
+For deep dives into each core principle with examples and anti-examples:
+
+1. **`principles/01-investment-philosophy.md`** - Think like an owner, not a trader; patience and continuous learning
+2. **`principles/02-good-business-criteria.md`** - Characteristics of businesses worth owning long-term
+3. **`principles/03-competitive-advantages.md`** - Economic moats and durable competitive advantages
+4. **`principles/04-management-quality.md`** - Evaluating management ability, integrity, and alignment
+5. **`principles/05-valuation-approaches.md`** - Multiple valuation methods and conservative assumptions
+6. **`principles/06-risk-management.md`** - Identifying and mitigating investment risks
+7. **`principles/07-time-horizon.md`** - Long-term thinking and holding forever
+8. **`principles/08-capital-allocation.md`** - The key to long-term wealth creation
+9. **`principles/09-what-to-avoid.md`** - Investment pitfalls and value traps
+10. **`principles/10-behavioral-psychology.md`** - Avoiding emotional and psychological investing mistakes
+
+Each principle file includes:
+- Core concept explanation with Buffett/Munger insights
+- Concrete examples of following the principle correctly
+- Anti-examples showing what violations look like in practice
+
 ## Additional Resources
 
 ### Reference Files

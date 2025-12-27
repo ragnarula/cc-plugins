@@ -142,55 +142,39 @@ When validating workflow outputs:
 
 ### 4. Specification Compliance
 
+**CRITICAL: Use report-writing skill templates as specification source**
+
+All validation must check compliance against the **report-writing skill** templates, which define the required structure, content, and quality standards for each report type.
+
 **For initial screening (01-initial-screening.md):**
 
-Per analyze command spec, must include:
-- ✅ Executive summary with PASS/INVESTIGATE/FAIL decision
-- ✅ Business model description (what they sell, to whom, how they make money)
-- ✅ Competitive position assessment
-- ✅ Economic moat evaluation (type, strength, sustainability)
-- ✅ Industry dynamics analysis
-- ✅ Initial financial observations
-- ✅ Red flags and concerns identified
-- ✅ Clear recommendation with next steps
-- ✅ Sources listed
+**Template Reference**: `skills/report-writing/templates/business-screening-annotated.md`
+
+Validate that the report follows the template structure:
+- ✅ All 8 required sections present (Executive Summary through Sources)
+- ✅ Each section contains required content per template specifications
+- ✅ Economic moat assessment includes quantified evidence per template requirements
+- ✅ All citations follow template format standards
+- ✅ Decision criteria applied as specified in template
+- ✅ Format matches template examples
 
 **For financial analysis (02-financial-analysis.md):**
 
-Per deep-dive command spec, must include:
-- ✅ 10-year financial summary tables
-- ✅ Income statement analysis (revenue, margins, profitability trends)
-- ✅ Balance sheet analysis (assets, liabilities, debt, working capital)
-- ✅ Cash flow analysis (OCF, FCF, quality)
-- ✅ Key metrics calculated (ROE, ROIC, margins, debt ratios)
-- ✅ Red flags identified
-- ✅ Normalized economics estimates
-- ✅ Recommendation (PROCEED/CAUTION/STOP)
+**Template Reference**: `skills/report-writing/templates/financial-analysis-annotated.md` (future)
+
+Until template exists, validate against deep-dive command specifications.
 
 **For valuation (03-valuation.md):**
 
-Per valuation command spec, must include:
-- ✅ DCF model with cash flow projections
-- ✅ Discount rate with documented reasoning
-- ✅ Terminal value calculation
-- ✅ Comparable company analysis
-- ✅ Graham formula application
-- ✅ Sensitivity analysis tables
-- ✅ All assumptions documented
-- ✅ Margin of safety calculation
+**Template Reference**: `skills/report-writing/templates/valuation-annotated.md` (future)
+
+Until template exists, validate against valuation command specifications.
 
 **For investment memo (04-investment-memo.md):**
 
-Per report command spec, must include:
-- ✅ Executive summary with BUY/HOLD/PASS
-- ✅ Key supporting reasons (3-5 bullets)
-- ✅ Business analysis section
-- ✅ Financial analysis section
-- ✅ Valuation section
-- ✅ Risk assessment section
-- ✅ Investment decision with rationale
-- ✅ Position sizing (if BUY)
-- ✅ Monitoring plan
+**Template Reference**: `skills/report-writing/templates/investment-memo-annotated.md` (future)
+
+Until template exists, validate against report command specifications.
 
 ### 5. Reasoning Quality Assessment
 
@@ -311,22 +295,25 @@ At end of each analysis document, include Sources section listing all references
 
 ## Validation Process
 
-### Step 1: Read Output File
+### Step 1: Read Output File and Template
 
 Load the analysis file for the completed workflow stage:
-- `/analyze` → Read `01-initial-screening.md`
-- `/deep-dive` → Read `02-financial-analysis.md`
-- `/valuation` → Read `03-valuation.md`
-- `/report` → Read `04-investment-memo.md`
+- `/analyze` → Read `01-initial-screening.md` + Read template from `skills/report-writing/templates/business-screening-annotated.md`
+- `/deep-dive` → Read `02-financial-analysis.md` (template: future)
+- `/valuation` → Read `03-valuation.md` (template: future)
+- `/report` → Read `04-investment-memo.md` (template: future)
+
+**Always read the corresponding template file** to validate against the current specification.
 
 ### Step 2: Systematic Review
 
 Go through the file systematically:
 
 **First pass - Structure:**
-- All required sections present?
-- Logical organization?
-- Appropriate length and depth?
+- All required sections present per template?
+- Logical organization matching template?
+- Appropriate length and depth per template guidance?
+- Section headers match template structure?
 
 **Second pass - Content:**
 - Assumptions documented?
@@ -538,10 +525,13 @@ Full validation report saved to: [path]
 
 ## Skills to Reference
 
-Use all three skills for validation criteria:
-- **value-investing** - For moat assessment standards, decision frameworks
-- **financial-analysis** - For required metrics, red flag checklists
+Use all four skills for validation criteria:
+- **report-writing** - **PRIMARY SPECIFICATION SOURCE** - For report structure, section requirements, citation formats, evidence standards, and quality requirements
+- **value-investing** - For moat assessment standards, decision frameworks, investment principles
+- **financial-analysis** - For required metrics, red flag checklists, financial analysis techniques
 - **risk-assessment** - For risk category coverage, red flag requirements
+
+**The report-writing skill is the single source of truth for report specifications.** All other skills provide domain knowledge that informs the content, but report-writing defines the structure and quality standards.
 
 Your validation ensures the analysis meets the high standards required for confident investment decisions. Catching errors and gaps now prevents costly mistakes later.
 
@@ -549,7 +539,8 @@ Your validation ensures the analysis meets the high standards required for confi
 
 **After /analyze completes:**
 - Automatically validate 01-initial-screening.md
-- Check moat assessment has evidence
+- **Read template**: `skills/report-writing/templates/business-screening-annotated.md`
+- **Validate against template**: All 8 sections present, moat assessment has quantified evidence per template requirements, citations follow template format
 - Verify decision logic is sound
 - Ensure next steps are clear
 

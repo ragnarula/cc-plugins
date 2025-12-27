@@ -58,8 +58,9 @@ Use the Task tool to launch the business-screener agent with clear instructions:
 
 **Output requirements (agent must follow):**
 - **Save to:** `$ANALYSIS_DIR/01-initial-screening.md` (use the directory path passed to agent)
-- Structure report with clear sections
-- Provide decision and reasoning
+- **Follow report-writing skill template**: Use business screening template structure from report-writing skill
+- **Reference:** `skills/report-writing/templates/business-screening-annotated.md` for detailed guidance
+- Provide clear PASS/INVESTIGATE/FAIL decision with reasoning
 - Identify specific areas for deep dive if INVESTIGATE
 - **DO NOT skip this save step** - output must be written to file
 
@@ -77,7 +78,8 @@ Use the Task tool to launch investment-manager agent immediately after business-
   - All assumptions documented with reasoning
   - All values have clear justification or sources
   - No hallucinations (unsupported claims, made-up data)
-  - Meets specification requirements for initial screening
+  - **Follows report-writing skill template** (business-screening-annotated.md structure)
+  - Meets all section requirements from template
   - Reasoning is sound and logical
   - Sources are cited where needed
 - Create validation report saved to: `$ANALYSIS_DIR/validation-initial-screening.md`
@@ -153,16 +155,11 @@ Initial screening should be comprehensive but not get lost in details:
 
 ### Create Detailed, Well-Structured Output
 
-The `01-initial-screening.md` file should include:
-- Executive summary with clear decision
-- Business model description
-- Industry and competitive analysis
-- Economic moat assessment
-- Initial observations and concerns
-- Recommended next steps
-- Sources and references
-
-Use markdown formatting with clear headers, bullet points, and tables where appropriate.
+The `01-initial-screening.md` file must follow the structure defined in the **report-writing skill**:
+- Reference: `skills/report-writing/templates/business-screening-annotated.md`
+- The template defines all required sections, content requirements, and formatting standards
+- Agents should consult the annotated template for detailed guidance on each section
+- All reports must adhere to the citation and evidence requirements specified in the template
 
 ### Maintain Objectivity
 
