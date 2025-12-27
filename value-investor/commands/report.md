@@ -39,8 +39,9 @@ Read all three files to understand:
 
 Use the Task tool to launch the risk-assessor agent to perform comprehensive risk analysis:
 
-**Agent prompt should include:**
+**Agent prompt MUST include:**
 - Company name, ticker, and analysis summary
+- **ANALYSIS_DIR path** (same analysis directory from /analyze) - agent uses this path for output
 - Instruction to perform systematic risk assessment using risk-assessment skill:
 
   **Identify and assess risks across five categories:**
@@ -88,9 +89,10 @@ This information will feed into the final investment memo.
 
 Use the Task tool to launch the report-generator agent to compile comprehensive investment memo:
 
-**Agent prompt should include:**
+**Agent prompt MUST include:**
 - Company name, ticker
-- Access to all prior analysis files (01, 02, 03)
+- **ANALYSIS_DIR path** (same analysis directory from /analyze) - agent uses this path for output
+- Access to all prior analysis files (01, 02, 03) within the analysis directory
 - Risk assessment from risk-assessor agent
 - Instruction to create comprehensive investment memo:
 
@@ -161,21 +163,24 @@ Use the Task tool to launch the report-generator agent to compile comprehensive 
   - Risk/reward unfavorable
   - Better opportunities available
 
-**Output requirements:**
-- Save to `./analysis/[TICKER]-[DATE]/04-investment-memo.md`
+**Output requirements (agent must follow):**
+- **Save to:** `$ANALYSIS_DIR/04-investment-memo.md` (use the directory path passed to agent)
 - Clear, well-structured markdown
 - Include all relevant data and analysis
 - Professional format suitable for reference
 - Clear recommendation with supporting evidence
+- **DO NOT skip this save step** - output must be written to file
 
-### 4. Validate Output with Investment Manager
+### 4. Automatic Validation and Iteration Loop (Mandatory)
 
-**CRITICAL:** After report-generator completes, automatically invoke investment-manager agent to validate the final investment memo.
+**This step is AUTOMATIC and MANDATORY** - runs without user intervention after report-generator completes.
 
-Use the Task tool to launch investment-manager agent:
+**First validation pass:**
 
-**Validation prompt should include:**
-- Path to output file: `./analysis/[TICKER]-[DATE]/04-investment-memo.md`
+Use the Task tool to launch investment-manager agent immediately after report-generator finishes:
+
+**Validation prompt must include:**
+- Path to output file: `$ANALYSIS_DIR/04-investment-memo.md`
 - Instruction to perform comprehensive validation checking:
   - BUY/HOLD/PASS decision properly supported with reasoning
   - All key sections complete (business, financial, valuation, risk)
@@ -183,27 +188,25 @@ Use the Task tool to launch investment-manager agent:
   - Key supporting reasons are factual and well-documented
   - No unsupported claims in final recommendation
   - Meets specification requirements for investment memo
-- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-investment-memo.md`
+- Create validation report saved to: `$ANALYSIS_DIR/validation-investment-memo.md`
 
-**Review validation results:**
-- If status is **PASS**: Proceed to step 5 (present results)
-- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
-- If status is **FAIL**: Must fix issues before proceeding
+**Handle validation results automatically:**
 
-**Fix Issues Until Validation Passes:**
+**If PASS:**
+- ✅ Validation successful - proceed to step 5 (present results to user)
 
-If validation identifies issues:
+**If FAIL or critical warnings found:**
+- ⚠️ Read validation report to identify issues
+- ⚠️ Fix the issues in the analysis file using Write tool:
+  - For weak recommendations: Strengthen reasoning with specific evidence
+  - For missing sections: Add required content per specification
+  - For unsupported claims: Add sources or remove claims
+  - For unclear decision rationale: Make explicit connection to value investing principles
+- ⚠️ Re-invoke investment-manager on the updated file (automatic re-validation)
+- ⚠️ Iterate: Keep fixing and re-validating until PASS (maximum 3 iterations)
+- ⚠️ If still FAIL after 3 iterations: Present issue to user with explanation, ask how to proceed
 
-1. **Review validation report** - Understand what's missing or unsupported
-2. **Fix the issues**:
-   - For weak recommendations: Strengthen reasoning with specific evidence
-   - For missing sections: Add required content per specification
-   - For unsupported claims: Add sources or remove claims
-   - For unclear decision rationale: Make explicit connection to value investing principles
-3. **Re-validate** - Invoke investment-manager again
-4. **Iterate** - Keep fixing until PASS (max 3 iterations)
-
-**Important:** Do NOT present final recommendation until validation passes. This is the most critical validation as it determines the investment decision.
+**Important:** The command does NOT proceed to step 5 until validation passes. This is the most critical validation as it determines the investment decision.
 
 ### 5. Present Results to User
 

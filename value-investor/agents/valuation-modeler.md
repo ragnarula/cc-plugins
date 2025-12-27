@@ -172,9 +172,16 @@ Why this rate? What drives business risk up or down?
 - Lower exit multiples
 - Don't assume permanent advantages
 
-## Output Requirements
+## Output Requirements (MANDATORY)
 
-Create valuation report saved to `./analysis/[TICKER]-[DATE]/03-valuation.md`
+**CRITICAL: You MUST save your complete valuation report to the file path provided to you.**
+
+The file path will be passed to you in the prompt as `$ANALYSIS_DIR/03-valuation.md`
+
+You MUST:
+1. Use the Write tool to save your analysis to this exact path
+2. Ensure the save happens BEFORE any other action
+3. Do NOT proceed until file is saved successfully
 
 **Report Structure:**
 

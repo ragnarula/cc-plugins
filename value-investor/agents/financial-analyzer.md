@@ -127,9 +127,16 @@ Apply industry-specific analysis from financial-analysis skill:
 - Financial Services: NIM, loan loss provisions, capital ratios
 - etc.
 
-## Output Requirements
+## Output Requirements (MANDATORY)
 
-Create comprehensive analysis report saved to `./analysis/[TICKER]-[DATE]/02-financial-analysis.md`
+**CRITICAL: You MUST save your complete financial analysis report to the file path provided to you.**
+
+The file path will be passed to you in the prompt as `$ANALYSIS_DIR/02-financial-analysis.md`
+
+You MUST:
+1. Use the Write tool to save your analysis to this exact path
+2. Ensure the save happens BEFORE any other action
+3. Do NOT proceed until file is saved successfully
 
 **Report Structure:**
 

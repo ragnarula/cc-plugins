@@ -41,8 +41,9 @@ If initial screening decision was FAIL:
 
 Use the Task tool to launch the financial-analyzer agent with instructions:
 
-**Agent prompt should include:**
+**Agent prompt MUST include:**
 - Company name and ticker from initial screening
+- **ANALYSIS_DIR path** (same analysis directory from /analyze) - agent uses this path for output
 - Instruction to perform comprehensive financial analysis:
   - Gather 5-10 years of financial statements (10-K filings)
   - Analyze income statement trends (revenue, margins, profitability)
@@ -58,22 +59,25 @@ Use the Task tool to launch the financial-analyzer agent with instructions:
 - Include specific areas flagged for investigation in initial screening
 - Address any concerns or questions raised
 
-**Output requirements:**
-- Save findings to `./analysis/[TICKER]-[DATE]/02-financial-analysis.md`
+**Output requirements (agent must follow):**
+- **Save to:** `$ANALYSIS_DIR/02-financial-analysis.md` (use the directory path passed to agent)
 - Include 10-year financial summary tables
 - Calculate and trend key metrics
 - Provide clear assessment of financial quality
 - Identify concerns or red flags
 - Give recommendation on proceeding to valuation
+- **DO NOT skip this save step** - output must be written to file
 
-### 4. Validate Output with Investment Manager
+### 4. Automatic Validation and Iteration Loop (Mandatory)
 
-**CRITICAL:** After financial-analyzer completes, automatically invoke investment-manager agent to validate the output.
+**This step is AUTOMATIC and MANDATORY** - runs without user intervention after financial-analyzer completes.
 
-Use the Task tool to launch investment-manager agent:
+**First validation pass:**
 
-**Validation prompt should include:**
-- Path to output file: `./analysis/[TICKER]-[DATE]/02-financial-analysis.md`
+Use the Task tool to launch investment-manager agent immediately after financial-analyzer finishes:
+
+**Validation prompt must include:**
+- Path to output file: `$ANALYSIS_DIR/02-financial-analysis.md`
 - Instruction to perform comprehensive validation checking:
   - All financial metrics properly calculated and sourced
   - Assumptions documented (normalized adjustments, growth rates, etc.)
@@ -81,39 +85,27 @@ Use the Task tool to launch investment-manager agent:
   - Meets specification requirements for financial analysis
   - 10-year tables complete and accurate
   - Red flags properly identified
-- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-financial-analysis.md`
+- Create validation report saved to: `$ANALYSIS_DIR/validation-financial-analysis.md`
 
-**Review validation results:**
-- If status is **PASS**: Proceed to step 5 (present results)
-- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
-- If status is **FAIL**: Must fix issues before proceeding
+**Handle validation results automatically:**
 
-### 5. Fix Issues Until Validation Passes
+**If PASS:**
+- ✅ Validation successful - proceed to step 5 (present results to user)
 
-**If validation identifies issues (FAIL or critical warnings):**
+**If FAIL or critical warnings found:**
+- ⚠️ Read validation report to identify issues
+- ⚠️ Fix the issues in the analysis file using Write tool:
+  - For missing calculations: Add ROE, ROIC, margin calculations with formulas
+  - For unsourced data: Add "per 10-K filing FY20XX" or verify accuracy
+  - For missing assumptions: Document why normalizations were made
+  - For incomplete sections: Add required balance sheet, cash flow analysis
+- ⚠️ Re-invoke investment-manager on the updated file (automatic re-validation)
+- ⚠️ Iterate: Keep fixing and re-validating until PASS (maximum 3 iterations)
+- ⚠️ If still FAIL after 3 iterations: Present issue to user with explanation, ask how to proceed
 
-1. **Review validation report** to understand specific issues:
-   - Missing metric calculations
-   - Unsourced financial data
-   - Undocumented normalization adjustments
-   - Incomplete analysis sections
+**Important:** The command does NOT proceed to step 5 until validation passes. The investment-manager acts as an automatic quality gate that must be cleared before results are shown to user.
 
-2. **Fix the issues** by updating the analysis file:
-   - For missing calculations: Add ROE, ROIC, margin calculations with formulas
-   - For unsourced data: Add "per 10-K filing FY20XX" or verify accuracy
-   - For missing assumptions: Document why normalizations were made
-   - For incomplete sections: Add required balance sheet, cash flow analysis
-
-3. **Re-validate** by invoking investment-manager again on the updated file
-
-4. **Iterate** until validation status is PASS:
-   - Keep fixing and re-validating
-   - Don't proceed until all critical issues resolved
-   - Maximum 3 iterations (if still failing after 3, escalate to user)
-
-**Important:** Do NOT present results to user until validation passes.
-
-### 6. Present Results to User
+### 5. Present Results to User
 
 After validation PASSES:
 

@@ -1,6 +1,9 @@
 {
-  "name": "Claude Code Plugin Marketplace",
+  "name": "claude-code-plugin-marketplace",
   "version": "1.0.0",
+  "owner": {
+    "name": "yourusername"
+  },
   "description": "A curated collection of high-quality plugins for Claude Code",
   "repository": {
     "type": "git",
@@ -9,7 +12,7 @@
   "plugins": [
     {
       "name": "value-investor",
-      "path": "./value-investor",
+      "source": "./value-investor",
       "version": "0.1.0",
       "description": "Comprehensive investment analysis workflow for evaluating publicly traded companies using Warren Buffett and Charlie Munger's value investing principles",
       "author": {

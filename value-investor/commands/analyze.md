@@ -11,41 +11,41 @@ This command initiates a comprehensive investment analysis workflow for a public
 
 ## Execution Steps
 
-### 1. Parse Arguments and Gather Context
+### 1. Parse Arguments and Extract Ticker
 
 Extract the ticker symbol from user input:
 - Required: Stock ticker (e.g., AAPL, MSFT, BRK.B)
-- Optional: --notes flag with user's initial thesis or context
+- Optional: --notes flag with user's initial thesis or context (captured if provided, but NOT requested if missing)
 
-If user provides notes about why they're interested in the company, capture this context. If not provided, ask:
-- "What attracted you to [COMPANY]?"
-- "What's your initial investment thesis or reason for looking at this company?"
-- "Any specific concerns or areas you'd like me to focus on?"
+Begin analysis immediately without asking questions. The analysis will proceed from first principles, researching the company systematically without bias from user's initial expectations. Optional notes (if provided) are captured but analysis doesn't depend on them.
 
-This helps understand the user's perspective and ensures analysis addresses their specific interests.
+### 2. Create Analysis Directory and Prepare for Output
 
-### 2. Create Analysis Directory Structure
-
-Create a timestamped directory for this analysis:
+**IMMEDIATELY create** a timestamped directory for this analysis:
 
 ```bash
-mkdir -p ./analysis/[TICKER]-[YYYY-MM-DD]
+ANALYSIS_DIR="./analysis/[TICKER]-[YYYY-MM-DD]"
+mkdir -p "$ANALYSIS_DIR"
 ```
 
 Example: `./analysis/AAPL-2025-12-26/`
 
-This directory will contain all analysis outputs:
-- 01-initial-screening.md
-- 02-financial-analysis.md (from deep-dive command)
-- 03-valuation.md (from valuation command)
-- 04-investment-memo.md (from report command)
+**This step happens first**, before launching agents. The directory path is then **passed to all agents** to ensure they save outputs correctly.
+
+This directory will contain all analysis outputs across the workflow:
+- 01-initial-screening.md (from /analyze)
+- 02-financial-analysis.md (from /deep-dive)
+- 03-valuation.md (from /valuation)
+- 04-investment-memo.md (from /report)
+- validation-*.md files (from investment-manager validation)
 
 ### 3. Launch business-screener Agent
 
 Use the Task tool to launch the business-screener agent with clear instructions:
 
-**Agent prompt should include:**
+**Agent prompt MUST include:**
 - Stock ticker and company name
+- **ANALYSIS_DIR path** (the directory created in step 2) - agent uses this path for output
 - User's initial thesis/notes (if provided)
 - Instruction to perform comprehensive initial screening:
   - Fetch latest 10-K from SEC EDGAR
@@ -56,20 +56,23 @@ Use the Task tool to launch the business-screener agent with clear instructions:
   - Apply value investing principles from value-investing skill
   - Give clear PASS/INVESTIGATE/FAIL decision with reasoning
 
-**Output requirements:**
-- Save findings to `./analysis/[TICKER]-[DATE]/01-initial-screening.md`
+**Output requirements (agent must follow):**
+- **Save to:** `$ANALYSIS_DIR/01-initial-screening.md` (use the directory path passed to agent)
 - Structure report with clear sections
 - Provide decision and reasoning
 - Identify specific areas for deep dive if INVESTIGATE
+- **DO NOT skip this save step** - output must be written to file
 
-### 4. Validate Output with Investment Manager
+### 4. Automatic Validation and Iteration Loop (Mandatory)
 
-**CRITICAL:** After business-screener completes, automatically invoke investment-manager agent to validate the output.
+**This step is AUTOMATIC and MANDATORY** - runs without user intervention after business-screener completes.
 
-Use the Task tool to launch investment-manager agent:
+**First validation pass:**
 
-**Validation prompt should include:**
-- Path to output file: `./analysis/[TICKER]-[DATE]/01-initial-screening.md`
+Use the Task tool to launch investment-manager agent immediately after business-screener finishes:
+
+**Validation prompt must include:**
+- Path to output file: `$ANALYSIS_DIR/01-initial-screening.md`
 - Instruction to perform comprehensive validation checking:
   - All assumptions documented with reasoning
   - All values have clear justification or sources
@@ -77,38 +80,27 @@ Use the Task tool to launch investment-manager agent:
   - Meets specification requirements for initial screening
   - Reasoning is sound and logical
   - Sources are cited where needed
-- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-initial-screening.md`
+- Create validation report saved to: `$ANALYSIS_DIR/validation-initial-screening.md`
 
-**Review validation results:**
-- If status is **PASS**: Proceed to step 5 (present results)
-- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
-- If status is **FAIL**: Must fix issues before proceeding
+**Handle validation results automatically:**
 
-### 5. Fix Issues Until Validation Passes
+**If PASS:**
+- ✅ Validation successful - proceed to step 5 (present results to user)
 
-**If validation identifies issues (FAIL or critical warnings):**
+**If FAIL or critical warnings found:**
+- ⚠️ Read validation report to identify issues
+- ⚠️ Fix the issues in the analysis file using Write tool:
+  - For missing assumptions: Add reasoning (e.g., "5% growth based on historical 3-year average")
+  - For unsourced values: Add citations (e.g., "per 10-K filing") or verify/remove
+  - For hallucinations: Remove unsupported claims or find proper sources
+  - For missing sections: Add required content per specification
+- ⚠️ Re-invoke investment-manager on the updated file (automatic re-validation)
+- ⚠️ Iterate: Keep fixing and re-validating until PASS (maximum 3 iterations)
+- ⚠️ If still FAIL after 3 iterations: Present issue to user with explanation, ask how to proceed
 
-1. **Review validation report** to understand specific issues:
-   - Read the detailed validation report
-   - Identify critical and major issues
-   - Understand what needs to be fixed
+**Important:** The command does NOT proceed to step 5 until validation passes. The investment-manager acts as an automatic quality gate that must be cleared before results are shown to user.
 
-2. **Fix the issues** by updating the analysis file:
-   - For missing assumptions: Add reasoning (e.g., "5% growth based on historical 3-year average")
-   - For unsourced values: Add citations (e.g., "per 10-K filing") or verify/remove
-   - For hallucinations: Remove unsupported claims or find proper sources
-   - For missing sections: Add required content per specification
-
-3. **Re-validate** by invoking investment-manager again on the updated file
-
-4. **Iterate** until validation status is PASS:
-   - Keep fixing and re-validating
-   - Don't proceed until all critical issues resolved
-   - Maximum 3 iterations (if still failing after 3, escalate to user)
-
-**Important:** Do NOT present results to user until validation passes. The investment-manager acts as a quality gate that must be cleared.
-
-### 6. Present Results to User
+### 5. Present Results to User
 
 After validation PASSES:
 

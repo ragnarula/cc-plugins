@@ -115,9 +115,16 @@ From 10-K, check:
 
 This is preliminary - detailed financial analysis happens in next phase.
 
-## Output Requirements
+## Output Requirements (MANDATORY)
 
-Create comprehensive screening report saved to `./analysis/[TICKER]-[DATE]/01-initial-screening.md`
+**CRITICAL: You MUST save your complete screening report to the file path provided to you.**
+
+The file path will be passed to you in the prompt as `$ANALYSIS_DIR/01-initial-screening.md`
+
+You MUST:
+1. Use the Write tool to save your analysis to this exact path
+2. Ensure the save happens BEFORE any other action
+3. Do NOT proceed until file is saved successfully
 
 **Report Structure:**
 

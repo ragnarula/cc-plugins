@@ -334,9 +334,16 @@ Based on business quality:
 - Expected return >15% annually
 - Better than alternatives (opportunity cost)
 
-## Output Requirements
+## Output Requirements (MANDATORY)
 
-Save comprehensive investment memo to `./analysis/[TICKER]-[DATE]/04-investment-memo.md`
+**CRITICAL: You MUST save your complete investment memo to the file path provided to you.**
+
+The file path will be passed to you in the prompt as `$ANALYSIS_DIR/04-investment-memo.md`
+
+You MUST:
+1. Use the Write tool to save your memo to this exact path
+2. Ensure the save happens BEFORE any other action
+3. Do NOT proceed until file is saved successfully
 
 **Requirements:**
 - Professional structure and tone

@@ -38,8 +38,9 @@ Read both files to understand:
 
 Use the Task tool to launch the valuation-modeler agent with comprehensive instructions:
 
-**Agent prompt should include:**
+**Agent prompt MUST include:**
 - Company name, ticker, and business summary from prior analysis
+- **ANALYSIS_DIR path** (same analysis directory from /analyze) - agent uses this path for output
 - Instruction to perform multi-method valuation:
 
   **A. Discounted Cash Flow (DCF) Analysis:**
@@ -80,22 +81,25 @@ Use the Task tool to launch the valuation-modeler agent with comprehensive instr
 - Enable easy recalculation with different inputs
 - Compare all three methods for triangulation
 
-**Output requirements:**
-- Save findings to `./analysis/[TICKER]-[DATE]/03-valuation.md`
+**Output requirements (agent must follow):**
+- **Save to:** `$ANALYSIS_DIR/03-valuation.md` (use the directory path passed to agent)
 - Include clear summary of intrinsic value range
 - Show all calculations and assumptions
 - Provide sensitivity analysis tables
 - Compare to current market price
 - Calculate margin of safety
+- **DO NOT skip this save step** - output must be written to file
 
-### 3. Validate Output with Investment Manager
+### 3. Automatic Validation and Iteration Loop (Mandatory)
 
-**CRITICAL:** After valuation-modeler completes, automatically invoke investment-manager agent to validate the output.
+**This step is AUTOMATIC and MANDATORY** - runs without user intervention after valuation-modeler completes.
 
-Use the Task tool to launch investment-manager agent:
+**First validation pass:**
 
-**Validation prompt should include:**
-- Path to output file: `./analysis/[TICKER]-[DATE]/03-valuation.md`
+Use the Task tool to launch investment-manager agent immediately after valuation-modeler finishes:
+
+**Validation prompt must include:**
+- Path to output file: `$ANALYSIS_DIR/03-valuation.md`
 - Instruction to perform comprehensive validation checking:
   - All valuation assumptions fully documented with reasoning
   - Growth rates, discount rates justified
@@ -103,27 +107,25 @@ Use the Task tool to launch investment-manager agent:
   - Comparable analysis properly sourced
   - Sensitivity analysis complete
   - No hallucinated valuation figures
-- Create validation report saved to: `./analysis/[TICKER]-[DATE]/validation-valuation.md`
+- Create validation report saved to: `$ANALYSIS_DIR/validation-valuation.md`
 
-**Review validation results:**
-- If status is **PASS**: Proceed to step 4 (present results)
-- If status is **PASS WITH WARNINGS**: Review warnings, fix if critical, then proceed
-- If status is **FAIL**: Must fix issues before proceeding
+**Handle validation results automatically:**
 
-**Fix Issues Until Validation Passes:**
+**If PASS:**
+- ✅ Validation successful - proceed to step 4 (present results to user)
 
-If validation identifies issues:
+**If FAIL or critical warnings found:**
+- ⚠️ Read validation report to identify issues
+- ⚠️ Fix the issues in the analysis file using Write tool:
+  - For undocumented assumptions: Add clear reasoning ("10% discount rate because...")
+  - For missing calculations: Show DCF formula and step-by-step math
+  - For unsourced comps: Cite where peer multiples came from
+  - For hallucinated values: Verify or recalculate properly
+- ⚠️ Re-invoke investment-manager on the updated file (automatic re-validation)
+- ⚠️ Iterate: Keep fixing and re-validating until PASS (maximum 3 iterations)
+- ⚠️ If still FAIL after 3 iterations: Present issue to user with explanation, ask how to proceed
 
-1. **Review validation report** - Understand what's missing or wrong
-2. **Fix the issues**:
-   - For undocumented assumptions: Add clear reasoning ("10% discount rate because...")
-   - For missing calculations: Show DCF formula and step-by-step math
-   - For unsourced comps: Cite where peer multiples came from
-   - For hallucinated values: Verify or recalculate properly
-3. **Re-validate** - Invoke investment-manager again
-4. **Iterate** - Keep fixing until PASS (max 3 iterations)
-
-**Important:** Do NOT present results until validation passes.
+**Important:** The command does NOT proceed to step 4 until validation passes. The investment-manager acts as an automatic quality gate that must be cleared before results are shown to user.
 
 ### 4. Present Results to User
 
