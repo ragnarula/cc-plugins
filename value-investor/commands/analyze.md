@@ -9,11 +9,9 @@ Perform initial investment screening for: $ARGUMENTS
 
 STEP 1 - EXTRACT TICKER:
 Parse the stock ticker from the first argument.
-If --notes flag is provided, capture the user's context.
-Do NOT ask questions - proceed immediately with analysis.
 
 STEP 2 - CREATE ANALYSIS DIRECTORY:
-Execute the following bash command NOW (do not just describe it):
+Execute the following bash command
 
 ```bash
 # Extract ticker and create timestamped analysis directory
@@ -29,32 +27,16 @@ Use the Task tool to invoke the business-screener agent with the following promp
 
 "Perform initial investment screening for [TICKER].
 
-Analysis directory: [provide the ANALYSIS_DIR path created above]
-
-Your tasks:
-- Fetch latest 10-K filing from SEC EDGAR
-- Research business model and revenue sources
-- Analyze competitive position and industry dynamics
-- Identify economic moat (if any) using value-investing skill principles
-- Apply value investing frameworks from value-investing skill
-- Make clear PASS/INVESTIGATE/FAIL decision with reasoning
-
-Output requirements:
-- Save to: [ANALYSIS_DIR]/01-initial-screening.md
-- Follow template from report-writing skill (business-screening-annotated.md)
-- Include proper citations for all data (10-K references, etc.)
-- Provide 8 required sections per template"
+Save the Business Sreening report in: [ANALYSIS_DIR]
 
 STEP 4 - AUTOMATIC VALIDATION LOOP:
-After business-screener completes:
-
-1. Invoke investment-manager agent to validate the output file
-2. If validation returns FAIL:
-   - Read the validation report
-   - Fix identified issues in the screening file
-   - Re-invoke investment-manager (max 3 iterations)
-3. If still FAIL after 3 iterations: present issues to user and ask how to proceed
-4. If PASS: proceed to Step 5
+1. Invoke investment-manager agent to validate the output file in [ANALYSIS_DIR]
+2. If validation returns FAIL se the Task tool to invoke the business-screener agent with the following prompt:
+   - Read the validation report for [TICKER] in [ANALYSIS_DIR]
+   - Fix identified issues in the business screenign report
+3. Re-invoke investment-manager (max 3 iterations)
+4. If still FAIL after 3 iterations: present issues to user and ask how to proceed
+5. If PASS: proceed to Step 5
 
 STEP 5 - PRESENT RESULTS:
 After validation passes, summarize for the user:
