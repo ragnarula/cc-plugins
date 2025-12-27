@@ -2,315 +2,109 @@
 name: report
 description: Generate comprehensive investment memo with final BUY/HOLD/PASS recommendation. Performs risk assessment across all categories, compiles all prior analysis, and provides clear decision with supporting reasons.
 argument-hint: (continues from last analysis)
-allowed-tools: ["Read", "Write", "Bash", "Task", "Glob"]
+allowed-tools: ["Read", "Write", "Bash", "Task", "Glob", "Grep"]
 ---
 
-# Investment Report Generation Command
+Generate final investment memo with comprehensive risk assessment and recommendation.
 
-This command completes the investment analysis workflow by performing comprehensive risk assessment and generating a final investment memo with clear recommendation. Uses risk-assessor and report-generator agents to compile findings and make final decision.
-
-## Execution Steps
-
-### 1. Locate Analysis and Verify All Prerequisites
-
-Find the most recent analysis directory and verify all prior steps are complete:
+STEP 1 - FIND ANALYSIS AND VERIFY ALL PREREQUISITES:
+Execute bash to locate analysis directory:
 
 ```bash
-ls -t ./analysis/ | head -1
+LATEST=$(ls -t ./analysis/ 2>/dev/null | head -1)
+if [ -z "$LATEST" ]; then
+  echo "ERROR: No analysis found. Run /analyze first."
+  exit 1
+fi
+ANALYSIS_DIR="./analysis/$LATEST"
+echo "Generating report for: $ANALYSIS_DIR"
 ```
 
-Check that these files exist:
-- `01-initial-screening.md` (from /analyze)
-- `02-financial-analysis.md` (from /deep-dive)
-- `03-valuation.md` (from /valuation)
+STEP 2 - VERIFY ALL PRIOR STEPS COMPLETE:
+Check that all three files exist:
+- Read $ANALYSIS_DIR/01-initial-screening.md
+- Read $ANALYSIS_DIR/02-financial-analysis.md
+- Read $ANALYSIS_DIR/03-valuation.md
 
-If any are missing:
-- Inform user which steps are missing
-- Request they complete prior steps first
-- Do not proceed
+If any missing: inform user which steps to complete first and stop.
 
-Read all three files to understand:
-- Business model and competitive position
-- Financial quality and historical performance
-- Valuation analysis and margin of safety
-- Concerns identified at each stage
+Extract company name, ticker, and key findings from all prior analysis.
 
-### 2. Launch risk-assessor Agent
+STEP 3 - LAUNCH RISK-ASSESSOR AGENT:
+Use the Task tool to invoke the risk-assessor agent:
 
-Use the Task tool to launch the risk-assessor agent to perform comprehensive risk analysis:
+"Perform comprehensive risk assessment for [COMPANY/TICKER from prior analysis].
 
-**Agent prompt MUST include:**
-- Company name, ticker, and analysis summary
-- **ANALYSIS_DIR path** (same analysis directory from /analyze) - agent uses this path for output
-- Instruction to perform systematic risk assessment using risk-assessment skill:
+Analysis directory: [provide ANALYSIS_DIR path]
 
-  **Identify and assess risks across five categories:**
+Read prior analysis files (01, 02, 03) to understand the company.
 
-  1. **Business Risks:** Product, customer, supplier, operational, revenue model risks
-  2. **Financial Risks:** Leverage, liquidity, capital allocation, accounting risks
-  3. **Competitive Risks:** Market share, moat erosion, disruption, industry changes
-  4. **Management Risks:** Capability, integrity, compensation, governance concerns
-  5. **Macro Risks:** Economic cycle, regulatory, interest rate, geopolitical exposure
+Your tasks:
+Assess risks across five categories:
+1. Business risks (product, customer, operational)
+2. Financial risks (leverage, liquidity, capital allocation)
+3. Competitive risks (moat erosion, disruption, market share)
+4. Management risks (capability, integrity, governance)
+5. Macro risks (economic cycle, regulatory, interest rates)
 
-  **For each risk:**
-  - Assess severity (High/Medium/Low impact on value)
-  - Estimate probability (High/Medium/Low likelihood)
-  - Prioritize critical risks requiring attention
+For each risk: assess severity and probability.
 
-  **Run red flag checklist:**
-  - Automatic disqualifiers (fraud, no moat, bankruptcy risk)
-  - Serious concerns (high debt + declining FCF, market share losses, etc.)
-  - Warning signs (customer concentration, rising DSO, etc.)
+Run red flag checklist from risk-assessment skill.
 
-  **Perform downside scenario analysis:**
-  - Base case (most likely outcome)
-  - Downside case (things go poorly)
-  - Severe downside (worst realistic scenario)
-  - Probability-weighted expected value
-  - Maximum potential loss estimate
+Perform downside scenario analysis:
+- Base case
+- Downside case
+- Severe downside case
+- Probability-weighted expected value
 
-  **Stress testing:**
-  - Revenue decline scenarios
-  - Margin compression scenarios
-  - Financial stress tests (rates, recession, refinancing)
-  - Competitive response scenarios
+This risk assessment will be used by report-generator agent."
 
-**Output requirements:**
-- Identify all material risks
-- Assess severity and probability
-- Flag any automatic disqualifiers
-- Model downside scenarios
-- Calculate probability-weighted value
-- Provide risk assessment summary
+STEP 4 - LAUNCH REPORT-GENERATOR AGENT:
+After risk-assessor completes, use the Task tool to invoke the report-generator agent:
 
-This information will feed into the final investment memo.
+"Generate comprehensive investment memo for [COMPANY/TICKER].
 
-### 3. Launch report-generator Agent
+Analysis directory: [provide ANALYSIS_DIR path]
 
-Use the Task tool to launch the report-generator agent to compile comprehensive investment memo:
-
-**Agent prompt MUST include:**
-- Company name, ticker
-- **ANALYSIS_DIR path** (same analysis directory from /analyze) - agent uses this path for output
-- Access to all prior analysis files (01, 02, 03) within the analysis directory
+Read all prior analysis:
+- 01-initial-screening.md (business model, moat)
+- 02-financial-analysis.md (historical performance, metrics)
+- 03-valuation.md (intrinsic value, margin of safety)
 - Risk assessment from risk-assessor agent
-- Instruction to create comprehensive investment memo:
 
-  **Investment Memo Structure:**
+Compile final investment memo with:
+- Executive summary
+- Investment thesis (why invest or why pass)
+- Business quality assessment
+- Financial quality summary
+- Valuation summary with margin of safety
+- Risk assessment
+- Clear recommendation: BUY / HOLD / PASS
+- Supporting reasons for recommendation
 
-  **I. Executive Summary (1 page)**
-  - Company overview (1-2 sentences)
-  - Investment thesis (2-3 sentences)
-  - Clear recommendation: BUY / HOLD / PASS
-  - Key supporting reasons (3-5 bullets)
-  - Margin of safety and expected return
+Output requirements:
+- Save to: [ANALYSIS_DIR]/04-investment-memo.md
+- Follow investment memo template from report-writing skill
+- Provide clear, actionable recommendation
+- Include key supporting evidence"
 
-  **II. Business Analysis**
-  - Business model and revenue streams
-  - Competitive position and economic moat
-  - Industry dynamics and trends
-  - Key strengths and weaknesses
+STEP 5 - AUTOMATIC VALIDATION:
+After report-generator completes:
 
-  **III. Financial Analysis**
-  - Historical performance summary (5-10 years)
-  - Profitability trends and margins
-  - Returns on capital (ROE, ROIC)
-  - Cash flow generation and quality
-  - Balance sheet strength
-  - Peer comparison
+1. Invoke investment-manager agent to validate output
+2. If FAIL: fix issues and re-validate (max 3 iterations)
+3. If still FAIL after 3 iterations: present to user
+4. If PASS: proceed to Step 6
 
-  **IV. Valuation**
-  - Intrinsic value estimate and methodology
-  - Current market price
-  - Margin of safety
-  - Key assumptions and sensitivities
-  - Valuation risks and opportunities
+STEP 6 - PRESENT FINAL RECOMMENDATION:
+Present the investment decision:
 
-  **V. Risk Assessment**
-  - Critical risks identified
-  - Downside scenarios
-  - Mitigating factors
-  - Maximum loss potential
-  - Risk/reward assessment
+- Clear recommendation: BUY / HOLD / PASS
+- Key supporting reasons (top 3)
+- Primary risks identified
+- Margin of safety (if BUY)
+- Validation status: "✅ Quality validation: PASSED"
+- Report location: [ANALYSIS_DIR]/04-investment-memo.md
+- Analysis complete message
 
-  **VI. Investment Decision**
-  - Final recommendation with rationale
-  - Position sizing suggestion
-  - Monitoring plan
-  - Exit criteria
-
-  **Recommendation Criteria:**
-
-  **BUY if:**
-  - Business quality good (moat, ROIC >12%, consistent performance)
-  - Management able and trustworthy
-  - Adequate margin of safety (25-50% depending on quality)
-  - Favorable risk/reward (2:1 or better upside/downside)
-  - No automatic disqualifiers
-  - Better opportunity than alternatives
-
-  **HOLD/WATCH if:**
-  - Business quality excellent but price too high (insufficient margin)
-  - Minor concerns need monitoring
-  - Waiting for better entry point
-  - Keep on watchlist for future opportunity
-
-  **PASS if:**
-  - Any automatic disqualifiers present
-  - Business quality insufficient (no moat, poor returns, declining)
-  - Management concerns
-  - Insufficient margin of safety
-  - Risk/reward unfavorable
-  - Better opportunities available
-
-**Output requirements (agent must follow):**
-- **Save to:** `$ANALYSIS_DIR/04-investment-memo.md` (use the directory path passed to agent)
-- Clear, well-structured markdown
-- Include all relevant data and analysis
-- Professional format suitable for reference
-- Clear recommendation with supporting evidence
-- **DO NOT skip this save step** - output must be written to file
-
-### 4. Automatic Validation and Iteration Loop (Mandatory)
-
-**This step is AUTOMATIC and MANDATORY** - runs without user intervention after report-generator completes.
-
-**First validation pass:**
-
-Use the Task tool to launch investment-manager agent immediately after report-generator finishes:
-
-**Validation prompt must include:**
-- Path to output file: `$ANALYSIS_DIR/04-investment-memo.md`
-- Instruction to perform comprehensive validation checking:
-  - BUY/HOLD/PASS decision properly supported with reasoning
-  - All key sections complete (business, financial, valuation, risk)
-  - Decision criteria from value-investing skill applied correctly
-  - Key supporting reasons are factual and well-documented
-  - No unsupported claims in final recommendation
-  - Meets specification requirements for investment memo
-- Create validation report saved to: `$ANALYSIS_DIR/validation-investment-memo.md`
-
-**Handle validation results automatically:**
-
-**If PASS:**
-- ✅ Validation successful - proceed to step 5 (present results to user)
-
-**If FAIL or critical warnings found:**
-- ⚠️ Read validation report to identify issues
-- ⚠️ Fix the issues in the analysis file using Write tool:
-  - For weak recommendations: Strengthen reasoning with specific evidence
-  - For missing sections: Add required content per specification
-  - For unsupported claims: Add sources or remove claims
-  - For unclear decision rationale: Make explicit connection to value investing principles
-- ⚠️ Re-invoke investment-manager on the updated file (automatic re-validation)
-- ⚠️ Iterate: Keep fixing and re-validating until PASS (maximum 3 iterations)
-- ⚠️ If still FAIL after 3 iterations: Present issue to user with explanation, ask how to proceed
-
-**Important:** The command does NOT proceed to step 5 until validation passes. This is the most critical validation as it determines the investment decision.
-
-### 5. Present Results to User
-
-After validation PASSES:
-
-1. **Headline Recommendation:**
-   - **BUY** / **HOLD** / **PASS**: [Company Name] ([TICKER])
-
-2. **Key Supporting Reasons (3-5 bullets):**
-   - Most important factors driving recommendation
-   - E.g., "Wide moat from network effects and brand", "Trading at 35% discount to intrinsic value", "Consistent 20% ROE over 10 years"
-
-3. **Valuation Summary:**
-   - Intrinsic value estimate: $XX - $YY
-   - Current price: $XX
-   - Margin of safety: XX%
-   - Expected annual return: XX%
-
-4. **Key Risks:**
-   - Top 3 risks to thesis
-   - Mitigating factors
-
-5. **If BUY:**
-   - Position sizing suggestion
-   - Monitoring plan summary
-   - Entry price target (if current price not ideal)
-
-6. **If HOLD:**
-   - What would make it a BUY (e.g., "Would buy at $XX for 30% margin of safety")
-   - Monitoring plan
-
-7. **If PASS:**
-   - Primary reasons for passing
-   - What would need to change for reconsideration (if anything)
-
-8. **Validation status:**
-   - "✅ Quality validation: PASSED"
-   - "All analysis validated and decision criteria met"
-   - "Issues found and resolved: [count]"
-
-9. **Location of full memo:**
-   - "Complete investment memo saved to: ./analysis/[TICKER]-[DATE]/04-investment-memo.md"
-   - "Validation report: ./analysis/[TICKER]-[DATE]/validation-investment-memo.md"
-   - "All validation reports available in analysis directory"
-
-## Important Guidelines
-
-### Apply Rigorous Value Investing Standards
-
-Use value-investing skill principles for decision:
-- Four essential questions must be answered satisfactorily
-- Require clear competitive advantage
-- Demand adequate margin of safety
-- Focus on avoiding losses, not chasing gains
-
-Don't compromise standards - passing on good companies at high prices is good discipline.
-
-### Be Decisive and Clear
-
-The recommendation should be unambiguous:
-- Not "could be interesting if..." → Pick BUY, HOLD, or PASS
-- Not "depends on your risk tolerance" → Make a call based on value principles
-- Not hedging with excessive caveats → Clear stance with clear reasoning
-
-Clarity is more valuable than hedging.
-
-### Provide Actionable Recommendations
-
-If BUY:
-- Suggest position size (% of portfolio) based on conviction and risk
-- Provide price target or entry range
-- Outline what to monitor
-
-If HOLD:
-- Specify price at which it becomes BUY
-- Explain what you're watching for
-
-If PASS:
-- Explain why clearly
-- State what would need to change (if anything)
-
-### Maintain Intellectual Honesty
-
-The memo should:
-- Acknowledge uncertainties and what you don't know
-- Present balanced view (not just bullish or bearish)
-- Address counterarguments to thesis
-- Note where judgment calls were made
-- Be honest about confidence level
-
-Overconfidence is dangerous - be realistic about limitations of analysis.
-
-### Create Professional, Referenceable Document
-
-The investment memo should be:
-- Comprehensive enough to stand alone
-- Well-organized with clear sections
-- Suitable for review months later
-- Professional in tone and structure
-- Factual and data-driven
-
-This is a document you'll reference when monitoring the investment and when reviewing decisions later.
-
-## Example Usage
-
-```
-User: /report
+Congratulate user on completing thorough analysis!

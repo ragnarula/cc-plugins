@@ -2,249 +2,87 @@
 name: valuation
 description: Run comprehensive valuation models (DCF, comparable analysis, Graham formula) with sensitivity analysis. Determines appropriate growth and discount rates with documented reasoning, calculates intrinsic value and margin of safety.
 argument-hint: (continues from last analysis)
-allowed-tools: ["Read", "Write", "Bash", "Task", "Glob"]
+allowed-tools: ["Read", "Write", "Bash", "Task", "Glob", "Grep", "WebSearch", "WebFetch"]
 ---
 
-# Valuation Modeling Command
+Perform valuation analysis using multiple methodologies.
 
-This command performs comprehensive valuation analysis using multiple methodologies. Use the valuation-modeler agent to build models, determine appropriate assumptions, and calculate intrinsic value with sensitivity analysis.
-
-## Execution Steps
-
-### 1. Locate Analysis and Verify Prerequisites
-
-Find the most recent analysis directory and verify that both prior steps are complete:
+STEP 1 - FIND ANALYSIS AND VERIFY PREREQUISITES:
+Execute bash to locate analysis directory:
 
 ```bash
-ls -t ./analysis/ | head -1
+LATEST=$(ls -t ./analysis/ 2>/dev/null | head -1)
+if [ -z "$LATEST" ]; then
+  echo "ERROR: No analysis found. Run /analyze first."
+  exit 1
+fi
+ANALYSIS_DIR="./analysis/$LATEST"
+echo "Found analysis: $ANALYSIS_DIR"
 ```
 
-Check that these files exist:
-- `01-initial-screening.md` (from /analyze)
-- `02-financial-analysis.md` (from /deep-dive)
+STEP 2 - VERIFY PRIOR STEPS COMPLETE:
+Check that both files exist:
+- Read $ANALYSIS_DIR/01-initial-screening.md (verify exists)
+- Read $ANALYSIS_DIR/02-financial-analysis.md (verify exists)
 
-If either is missing:
-- Inform user which step is missing
-- Request they complete prior steps first
-- Do not proceed
+If either missing: inform user which step to complete first and stop.
 
-Read both files to understand:
-- Company and ticker
-- Business model and competitive position
-- Financial quality and normalized economics
-- Concerns or red flags identified
+Extract company name, ticker, and key context from prior analysis.
 
-### 2. Launch valuation-modeler Agent
+STEP 3 - LAUNCH VALUATION-MODELER AGENT:
+Use the Task tool to invoke the valuation-modeler agent:
 
-Use the Task tool to launch the valuation-modeler agent with comprehensive instructions:
+"Perform comprehensive valuation for [COMPANY/TICKER from prior analysis].
 
-**Agent prompt MUST include:**
-- Company name, ticker, and business summary from prior analysis
-- **ANALYSIS_DIR path** (same analysis directory from /analyze) - agent uses this path for output
-- Instruction to perform multi-method valuation:
+Analysis directory: [provide ANALYSIS_DIR path]
 
-  **A. Discounted Cash Flow (DCF) Analysis:**
-  - Project free cash flows for 10 years
-  - Determine appropriate discount rate based on business risk, considering:
-    - Company's financial leverage
-    - Business model stability
-    - Competitive position strength
-    - Earnings quality and cash conversion
-  - Estimate terminal value using conservative assumptions
-  - Document all assumptions and reasoning
-  - Provide sensitivity table varying growth and discount rates
+Your tasks:
+Build three valuation models:
 
-  **B. Comparable Company Analysis:**
-  - Identify appropriate peer companies
-  - Calculate relevant multiples (P/E, EV/EBITDA, P/FCF, etc.)
-  - Adjust for differences in quality, growth, margins
-  - Apply multiples to company's normalized metrics
-  - Document comparability assessment
+A. Discounted Cash Flow (DCF):
+   - Project 10-year free cash flows
+   - Determine discount rate (document reasoning based on business risk)
+   - Calculate terminal value conservatively
+   - Provide sensitivity analysis (varying growth and discount rates)
 
-  **C. Benjamin Graham Formula:**
-  - Calculate intrinsic value using Graham's formula:
-    Value = EPS × (8.5 + 2g)
-    Where g = expected growth rate
-  - Use conservative growth assumptions
-  - Adjust for current interest rate environment if appropriate
+B. Comparable Company Analysis:
+   - Identify peer companies
+   - Calculate multiples (P/E, EV/EBITDA, P/FCF)
+   - Adjust for quality differences
+   - Apply to normalized metrics
 
-  **D. Sensitivity Analysis:**
-  - Show how intrinsic value changes with different assumptions
-  - Test range of growth rates (e.g., 0%, 3%, 5%, 7%, 10%)
-  - Test range of discount rates (e.g., 8%, 10%, 12%, 15%)
-  - Identify assumptions with highest impact on value
+C. Benjamin Graham Formula:
+   - Value = EPS × (8.5 + 2g)
+   - Use conservative growth assumptions
 
-**Key requirements:**
-- Document reasoning for all key assumptions (growth rates, discount rates, terminal values)
-- Use conservative assumptions consistent with value investing principles
-- Be explicit about uncertainties and sensitivities
-- Enable easy recalculation with different inputs
-- Compare all three methods for triangulation
+All assumptions must be:
+- Documented with clear reasoning
+- Conservative per value investing principles
+- Supported by prior financial analysis
 
-**Output requirements (agent must follow):**
-- **Save to:** `$ANALYSIS_DIR/03-valuation.md` (use the directory path passed to agent)
-- Include clear summary of intrinsic value range
+Output requirements:
+- Save to: [ANALYSIS_DIR]/03-valuation.md
 - Show all calculations and assumptions
-- Provide sensitivity analysis tables
+- Include sensitivity analysis tables
 - Compare to current market price
 - Calculate margin of safety
-- **DO NOT skip this save step** - output must be written to file
+- Triangulate across all three methods"
 
-### 3. Automatic Validation and Iteration Loop (Mandatory)
+STEP 4 - AUTOMATIC VALIDATION:
+After valuation-modeler completes:
 
-**This step is AUTOMATIC and MANDATORY** - runs without user intervention after valuation-modeler completes.
+1. Invoke investment-manager agent to validate output
+2. If FAIL: fix issues and re-validate (max 3 iterations)
+3. If still FAIL after 3 iterations: present to user
+4. If PASS: proceed to Step 5
 
-**First validation pass:**
+STEP 5 - PRESENT RESULTS:
+Summarize valuation analysis:
 
-Use the Task tool to launch investment-manager agent immediately after valuation-modeler finishes:
-
-**Validation prompt must include:**
-- Path to output file: `$ANALYSIS_DIR/03-valuation.md`
-- Instruction to perform comprehensive validation checking:
-  - All valuation assumptions fully documented with reasoning
-  - Growth rates, discount rates justified
-  - DCF calculations shown step-by-step
-  - Comparable analysis properly sourced
-  - Sensitivity analysis complete
-  - No hallucinated valuation figures
-- Create validation report saved to: `$ANALYSIS_DIR/validation-valuation.md`
-
-**Handle validation results automatically:**
-
-**If PASS:**
-- ✅ Validation successful - proceed to step 4 (present results to user)
-
-**If FAIL or critical warnings found:**
-- ⚠️ Read validation report to identify issues
-- ⚠️ Fix the issues in the analysis file using Write tool:
-  - For undocumented assumptions: Add clear reasoning ("10% discount rate because...")
-  - For missing calculations: Show DCF formula and step-by-step math
-  - For unsourced comps: Cite where peer multiples came from
-  - For hallucinated values: Verify or recalculate properly
-- ⚠️ Re-invoke investment-manager on the updated file (automatic re-validation)
-- ⚠️ Iterate: Keep fixing and re-validating until PASS (maximum 3 iterations)
-- ⚠️ If still FAIL after 3 iterations: Present issue to user with explanation, ask how to proceed
-
-**Important:** The command does NOT proceed to step 4 until validation passes. The investment-manager acts as an automatic quality gate that must be cleared before results are shown to user.
-
-### 4. Present Results to User
-
-After validation PASSES:
-
-1. **Summarize valuation results:**
-   - DCF intrinsic value: $XX - $YY range
-   - Comparable companies value: $XX - $YY range
-   - Graham formula value: $XX
-   - Weighted or triangulated estimate: $XX
-
-2. **Current market assessment:**
-   - Current market price: $XX
-   - Margin of safety: XX% (if positive)
-   - Or premium to estimated value: XX% (if negative)
-
-3. **Key assumptions:**
-   - Growth rate used: X%
-   - Discount rate used: X%
-   - Terminal multiple: Xx
-   - Reasoning for these assumptions (brief summary)
-
-4. **Sensitivity insights:**
-   - Value range under different assumptions
-   - Which assumptions matter most
-   - Break-even scenarios
-
-5. **Valuation assessment:**
-   - ATTRACTIVE: Significant margin of safety (>25%)
-   - FAIR: Reasonable margin (10-25%)
-   - EXPENSIVE: Limited margin or premium to value (<10% margin)
-   - OVERVALUED: Trading above intrinsic value
-
-6. **Validation status:**
-   - "✅ Quality validation: PASSED"
-   - "Issues found and resolved: [count]"
-
-7. **Next steps:**
-   - "Run `/report` to complete comprehensive risk assessment and generate final investment memo"
-   - Or if overvalued: "Company trading above intrinsic value. Consider adding to watchlist for better entry point."
-
-8. **Location of detailed models:**
-   - "Full valuation analysis saved to: ./analysis/[TICKER]-[DATE]/03-valuation.md"
-   - "Validation report: ./analysis/[TICKER]-[DATE]/validation-valuation.md"
-
-## Important Guidelines
-
-### Use Value Investing Valuation Principles
-
-Apply principles from value-investing skill:
-- Conservative assumptions (err on side of caution)
-- Multiple valuation methods for triangulation
-- Margin of safety requirement (25-50%)
-- Focus on normalized, sustainable economics
-- Discount rate reflects business risk
-
-### Determine Appropriate Growth Rates
-
-Growth assumptions should be:
-- **Anchored in historical performance:** Can't sustainably grow faster than history without clear reason
-- **Industry-realistic:** Consider industry growth rate, market size constraints
-- **Quality-adjusted:** Higher quality businesses (wide moats, high ROIC) can sustain growth longer
-- **Conservative:** Use lower end of reasonable range
-- **Finite:** High growth periods should be limited (typically 5-10 years), then fade to GDP growth
-
-Document reasoning:
-- Why is X% growth rate appropriate?
-- What drives this growth (market growth, share gains, pricing, new products)?
-- How long can this rate be sustained?
-- What's terminal growth rate assumption?
-
-### Determine Appropriate Discount Rates
-
-Discount rate should reflect:
-- **Business risk:** More stable businesses → lower rate (8-10%)
-- **Financial risk:** Higher leverage → higher rate
-- **Opportunity cost:** Should exceed market return expectation (~10%)
-- **Quality premium:** Higher quality → potentially lower rate
-
-Typical ranges:
-- Exceptional business, fortress balance sheet: 8-9%
-- High-quality, moderate leverage: 10%
-- Good business, some leverage: 11-12%
-- Fair business or higher risk: 12-15%
-
-Document reasoning for chosen rate.
-
-### Conservative Terminal Value Assumptions
-
-Terminal value often represents >50% of DCF value, so be conservative:
-- Use modest terminal growth rate (GDP growth or less: 2-3%)
-- Or use exit multiple approach (10-15x terminal FCF typical)
-- Consider competitive position sustainability
-- Don't assume permanent high growth or multiples
-
-### Enable Reassessment with Different Assumptions
-
-Structure valuation output to allow easy recalculation:
-- Clear summary of all assumptions
-- Sensitivity tables showing impact of changes
-- Instructions for how to adjust key inputs
-- Formulas and calculations documented
-
-User may want to test different scenarios or update as new information emerges.
-
-### Create Comprehensive Output
-
-The `03-valuation.md` file should include:
-- Executive summary with valuation range
-- Detailed DCF model with all assumptions
-- Comparable company analysis
-- Graham formula calculation
-- Sensitivity analysis tables
-- Comparison to market price
-- Margin of safety calculation
-- Discussion of key value drivers and risks
-- Recommendations
-
-## Example Usage
-
-```
-User: /valuation
+- Intrinsic value range (from three methods)
+- Current market price vs. intrinsic value
+- Margin of safety percentage
+- Key assumptions and their impact
+- Validation status: "✅ Quality validation: PASSED"
+- Next step: "Run `/report` for final investment memo"
+- Report location: [ANALYSIS_DIR]/03-valuation.md

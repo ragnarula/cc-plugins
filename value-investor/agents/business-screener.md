@@ -57,6 +57,7 @@ When screening an investment:
 5. **Apply value investing principles** - Use value-investing skill for framework
 6. **Identify red flags** - Business model concerns, competitive vulnerabilities, structural issues
 7. **Make clear recommendation** - PASS (proceed to deep analysis), INVESTIGATE (mixed signals), or FAIL (fundamental issues)
+8. **Generate a Business Screening report** - Write a report according to the standard business screening report template
 
 ## Analysis Framework
 
