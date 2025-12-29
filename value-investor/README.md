@@ -17,33 +17,31 @@ The plugin embodies value investing principles:
 
 ## Features
 
-### Multi-Stage Analysis Workflow
+### Current Stage: Initial Screening
 
-1. **Initial Screening** (`/analyze`) - Business model, competitive position, industry analysis
-2. **Deep Financial Analysis** (`/deep-dive`) - 5-10 year financial history, key metrics, trends
-3. **Valuation Modeling** (`/valuation`) - DCF, comparable analysis, Graham formula with sensitivity
-4. **Risk Assessment & Report** (`/report`) - Comprehensive risk analysis with clear BUY/HOLD/PASS recommendation
+**Implemented:**
+1. **Initial Screening** (`/analyze`) - Business model, competitive position, industry analysis using SEC filings
+
+**Planned (Future Stages):**
+2. Deep Financial Analysis - 5-10 year financial history, key metrics, trends
+3. Valuation Modeling - DCF, comparable analysis, Graham formula with sensitivity
+4. Risk Assessment & Final Report - Comprehensive risk analysis with BUY/HOLD/PASS recommendation
 
 ### Autonomous Agents
 
-- **business-screener**: Initial research on company business model, competition, and industry
-- **financial-analyzer**: Deep dive into financial statements and key value metrics (ROE, ROIC, margins)
-- **valuation-modeler**: Multiple valuation approaches with documented assumptions
-- **risk-assessor**: Comprehensive risk analysis across all categories
-- **report-generator**: Investment memo compilation with clear recommendations
+- **business-screener**: Initial research on company business model, competition, and industry using SEC EDGAR filings
+- **investment-manager**: Quality control validation ensuring analysis follows value investing principles
 
 ### Knowledge Skills
 
-- **value-investing**: Buffett/Munger mental models, frameworks, and principles
-- **financial-analysis**: Statement analysis, industry-specific guidance, red flags
-- **risk-assessment**: Risk frameworks and red flag checklists
+- **value-investing**: Buffett/Munger mental models, frameworks, and principles with 10 core principles, examples, and references
 
 ## Prerequisites
 
 ### Required
 
 - Claude Code CLI
-- API access to financial data services (see Configuration below)
+- No API keys required (SEC EDGAR is free and public)
 
 ### Recommended
 
@@ -68,18 +66,13 @@ cp -r value-investor /path/to/your/project/.claude-plugin/
 
 ## Configuration
 
-Create a settings file at `.claude/value-investor.local.md` in your project:
+(Optional) Create a settings file at `.claude/value-investor.local.md` to store preferences:
 
 ```markdown
 ---
-api_keys:
-  sec_edgar: "your-api-key-here"  # Optional, SEC EDGAR is public
-  alpha_vantage: "your-api-key-here"  # Free tier available
-  yahoo_finance: ""  # No key needed for basic access
-
 preferences:
-  margin_of_safety: 0.25  # 25% margin of safety
-  discount_rate: 0.10     # 10% default discount rate
+  margin_of_safety: 0.25  # 25% margin of safety (for future valuation stages)
+  discount_rate: 0.10     # 10% default discount rate (for future valuation stages)
   risk_tolerance: "conservative"  # conservative, moderate, aggressive
 
 industries_to_avoid:
@@ -92,15 +85,11 @@ industries_to_avoid:
 This file configures your value-investor plugin preferences.
 ```
 
-### Getting API Keys
-
-- **SEC EDGAR**: Public access, no key needed for basic usage
-- **Alpha Vantage**: Free tier at https://www.alphavantage.co/support/#api-key
-- **Yahoo Finance**: No authentication required for basic data
+**Note:** SEC EDGAR filings are free and public - no API keys required.
 
 ## Usage
 
-### 1. Initial Analysis
+### Initial Screening (Currently Implemented)
 
 Start analyzing a company by ticker symbol:
 
@@ -109,82 +98,28 @@ Start analyzing a company by ticker symbol:
 ```
 
 The plugin will:
-- Ask clarifying questions about your investment thesis
-- Create an analysis directory: `./analysis/AAPL-2025-12-26/`
-- Fetch the latest 10-K from SEC EDGAR
-- Research business model, competitive position, and industry
-- Save findings with clear PASS/INVESTIGATE/FAIL decision
+- Create an analysis directory: `./analysis/AAPL-2025-12-29/`
+- Fetch the latest 10-K, 10-Q, and other SEC EDGAR filings
+- Research business model, competitive position, and industry dynamics
+- Apply value investing principles from the value-investing skill
+- Identify economic moats and competitive advantages
+- Check for red flags
+- Provide clear PASS/INVESTIGATE/FAIL decision
 
-**Output**: `./analysis/AAPL-2025-12-26/01-initial-screening.md`
+**Output**: `./analysis/AAPL-2025-12-29/01-initial-screening.md`
 
-### 2. Deep Financial Analysis
-
-After reviewing initial screening and deciding to proceed:
-
-```bash
-/deep-dive
-```
-
-The plugin will:
-- Continue from most recent analysis
-- Analyze 5-10 years of financial history
-- Calculate key metrics (ROE, ROIC, profit margins, debt levels, earnings consistency)
-- Identify trends and potential red flags
-- Save comprehensive financial analysis
-
-**Output**: `./analysis/AAPL-2025-12-26/02-financial-analysis.md`
-
-### 3. Valuation
-
-After reviewing financials and deciding to proceed:
-
-```bash
-/valuation
-```
-
-The plugin will:
-- Determine appropriate growth and discount rates with documented reasoning
-- Run multiple valuation models:
-  - Discounted Cash Flow (DCF)
-  - Comparable company analysis
-  - Benjamin Graham formula
-- Perform sensitivity analysis
-- Allow rerunning with different assumptions
-
-**Output**: `./analysis/AAPL-2025-12-26/03-valuation.md`
-
-### 4. Final Report
-
-Generate comprehensive investment memo:
-
-```bash
-/report
-```
-
-The plugin will:
-- Assess all risk categories (business, financial, competitive, management, macro)
-- Run through red flag checklist
-- Compile all previous analysis
-- Provide clear BUY/HOLD/PASS recommendation with key supporting reasons
-
-**Output**: `./analysis/AAPL-2025-12-26/04-investment-memo.md`
+The analysis is validated by the investment-manager agent to ensure quality and compliance with value investing principles.
 
 ## Workflow Example
 
 ```bash
-# Start analysis
-/analyze BRK.B --notes "Legendary value investor's company, circular reference?"
+# Analyze a company
+/analyze BRK.B --notes "Legendary value investor's company"
 
-# Review initial screening, then continue
-/deep-dive
+# Review the screening results in:
+# ./analysis/BRK.B-2025-12-29/01-initial-screening.md
 
-# Review financials, then run valuation
-/valuation
-
-# Generate final report
-/report
-
-# All analysis saved in ./analysis/BRK.B-2025-12-26/
+# Decide whether to PASS, INVESTIGATE further, or FAIL based on screening
 ```
 
 ## Analysis Output Structure
@@ -194,39 +129,31 @@ Each analysis creates a timestamped directory:
 ```
 analysis/
 └── TICKER-YYYY-MM-DD/
-    ├── 01-initial-screening.md
-    ├── 02-financial-analysis.md
-    ├── 03-valuation.md
-    └── 04-investment-memo.md
+    ├── 01-initial-screening.md     # Business model, competitive position, screening decision
+    └── validation-*.md              # Quality control validation reports
 ```
 
 ## Best Practices
 
-1. **Start with screening**: Always run `/analyze` first to avoid analysis paralysis
-2. **Review between stages**: Use the human approval gates to stay objective
-3. **Question assumptions**: Review the reasoning behind discount rates and growth assumptions
-4. **Check red flags**: Pay special attention to risk assessment and red flag sections
-5. **Compare valuations**: Look at all three valuation methods for convergence/divergence
-6. **Be patient**: Thorough analysis takes time; resist the urge to rush
+1. **Focus on business quality**: The screening focuses on business model and competitive advantages first
+2. **Check red flags**: Pay attention to red flag warnings in the analysis
+3. **Review the sources**: All analysis references specific SEC filings - review the source documents
+4. **Be skeptical**: The plugin is designed to help you avoid bad investments, not find good ones
+5. **Use the PASS/INVESTIGATE/FAIL framework**: Trust the screening recommendation but do your own research
 
 ## Commands Reference
 
 | Command | Description | Arguments |
 |---------|-------------|-----------|
-| `/analyze` | Start initial screening | `TICKER --notes "optional context"` |
-| `/deep-dive` | Deep financial analysis | None (continues from last analysis) |
-| `/valuation` | Run valuation models | None (uses analyzed company) |
-| `/report` | Generate investment memo | None (compiles all analysis) |
+| `/analyze` | Initial business screening | `TICKER --notes "optional context"` |
 
 ## Troubleshooting
 
-**"No previous analysis found"**: Run `/analyze TICKER` first before `/deep-dive`
+**"Cannot fetch 10-K"**: Check that the ticker symbol is correct and the company files with the SEC (U.S. publicly traded companies)
 
-**"API rate limit exceeded"**: Free tier API limits reached, wait or upgrade to paid tier
+**"SEC rate limit exceeded"**: SEC limits requests to 10 per second. The plugin respects this limit, but if you see this error, wait a few moments and try again.
 
-**"Cannot fetch 10-K"**: Check ticker symbol is correct and company files with SEC
-
-**"Missing settings file"**: Create `.claude/value-investor.local.md` with API keys
+**Analysis seems incomplete**: Review the validation report (`validation-*.md`) to see quality control feedback
 
 ## Contributing
 

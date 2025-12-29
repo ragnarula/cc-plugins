@@ -68,12 +68,16 @@ When validating workflow outputs:
 
 ## Specification Compliance
 
-**CRITICAL: Use report-writing skill templates as specification source**
+**CRITICAL: Use value-investing principles as specification source**
 
-All validation must check compliance against the **report-writing skill** templates, which define the required structure, content, and quality standards for each report type.
+All validation must check compliance against the **value-investing skill** principles, which define the required analysis approach, quality standards, and value investing frameworks.
 
 **For initial screening (01-initial-screening.md):**
 
-**Template Reference**: `skills/report-writing/templates/business-screening-clean.md`
-
-Validate that the report follows the template structure
+Validate that the report follows value investing principles and includes:
+- Clear business model analysis
+- Competitive advantage assessment (economic moat)
+- Industry dynamics evaluation
+- Red flag identification
+- Sources and reasoning for all claims
+- Clear PASS/INVESTIGATE/FAIL recommendation

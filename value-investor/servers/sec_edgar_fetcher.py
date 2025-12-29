@@ -19,7 +19,6 @@ import requests
 import time
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Literal
-from pathlib import Path
 
 from html_cleaner import HTMLCleaner
 

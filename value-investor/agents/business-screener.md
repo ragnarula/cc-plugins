@@ -182,13 +182,9 @@ When screening an investment:
 Use the **value-investing** skill for:
 - Four essential questions framework
 - Economic moat evaluation criteria
-- Value trap identification
-- Investment checklists
+- Value trap identification and red flags
+- Investment checklists and assessment frameworks
+- Report structure and quality standards
+- Citation formats and evidence requirements
 
-Use the **report-writing** skill for:
-- Complete report structure and section requirements
-- Citation formats and evidence standards
-- Moat assessment evidence requirements
-- Format examples and quality standards
-
-The value-investing skill provides the theoretical foundation; the report-writing skill defines how to structure and document your analysis.
+The value-investing skill provides both the theoretical foundation and practical guidance for structuring your analysis.

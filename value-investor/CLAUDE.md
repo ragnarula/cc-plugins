@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a Claude Code plugin that implements a comprehensive investment analysis workflow based on Warren Buffett and Charlie Munger's value investing principles. The plugin uses a multi-stage analysis approach with autonomous agents, validation checkpoints, and structured output generation.
+This is a Claude Code plugin that implements an initial investment screening workflow based on Warren Buffett and Charlie Munger's value investing principles. The plugin uses autonomous agents, validation checkpoints, and structured output generation.
+
+**Current Status**: Stage 1 (Initial Screening) is fully implemented. Stages 2-4 (Financial Analysis, Valuation, Final Report) are planned for future development.
 
 ## Plugin Architecture
 
@@ -30,46 +32,37 @@ This validation loop is **mandatory and automatic** - users never see invalid ou
 ```
 .claude-plugin/
   plugin.json           # Plugin metadata
-.mcp.json              # MCP server configuration (financial data access)
-agents/                # Autonomous analysis agents (6 total)
-  business-screener.md
-  financial-analyzer.md
-  valuation-modeler.md
-  risk-assessor.md
-  report-generator.md
-  investment-manager.md  # Quality control (special role)
-commands/              # User-invocable slash commands (4 total)
+.mcp.json              # MCP server configuration (SEC EDGAR filing access)
+agents/                # Autonomous analysis agents (2 implemented)
+  business-screener.md  # Initial business screening
+  investment-manager.md # Quality control (special role)
+commands/              # User-invocable slash commands (1 implemented)
   analyze.md           # /analyze - initial screening
-  deep-dive.md         # /deep-dive - financial analysis
-  valuation.md         # /valuation - valuation modeling
-  report.md            # /report - final investment memo
-skills/                # Knowledge bases (3 domains)
-  value-investing/     # Buffett/Munger principles
-  financial-analysis/  # Statement analysis, metrics
-  risk-assessment/     # Risk frameworks
+skills/                # Knowledge bases (1 domain)
+  value-investing/     # Buffett/Munger principles (10 principles + examples + references)
 servers/               # MCP server implementations
   financial_data_server.py  # Python MCP server for SEC EDGAR filings
   sec_edgar_fetcher.py      # SEC API client
   html_cleaner.py           # HTML cleaning utilities
 analysis/              # Generated output directory
   [TICKER]-YYYY-MM-DD/ # One directory per analysis
-    01-initial-screening.md
-    02-financial-analysis.md
-    03-valuation.md
-    04-investment-memo.md
-    validation-*.md    # Quality control reports
+    01-initial-screening.md  # Business screening output
+    validation-*.md          # Quality control reports
 ```
 
 ### Analysis Workflow
 
-**Four-stage sequential workflow** (user must complete each stage before proceeding):
+**Current Implementation** (Stage 1 only):
 
-1. `/analyze TICKER` → business-screener → 01-initial-screening.md
-2. `/deep-dive` → financial-analyzer → 02-financial-analysis.md
-3. `/valuation` → valuation-modeler → 03-valuation.md
-4. `/report` → risk-assessor + report-generator → 04-investment-memo.md
+1. `/analyze TICKER` → business-screener → 01-initial-screening.md ✅ **IMPLEMENTED**
 
-**State management**: Workflow state is tracked via file existence in analysis directories. Commands check for prior stages before executing.
+**Planned Future Stages**:
+
+2. `/deep-dive` → financial-analyzer → 02-financial-analysis.md ⏳ PLANNED
+3. `/valuation` → valuation-modeler → 03-valuation.md ⏳ PLANNED
+4. `/report` → risk-assessor + report-generator → 04-investment-memo.md ⏳ PLANNED
+
+**State management**: When future stages are implemented, workflow state will be tracked via file existence in analysis directories.
 
 ### Agent System Design
 
@@ -276,17 +269,12 @@ Agents use MCP tools to fetch SEC filings (10-K, 10-Q, 8-K, DEF 14A, 13F, etc.) 
 
 ## Common Development Tasks
 
-**Test the workflow end-to-end:**
+**Test the implemented workflow:**
 ```bash
 cc
 /analyze AAPL --notes "test analysis"
 # Review output in ./analysis/AAPL-YYYY-MM-DD/01-initial-screening.md
-/deep-dive
-# Review 02-financial-analysis.md
-/valuation
-# Review 03-valuation.md
-/report
-# Review 04-investment-memo.md
+# Check validation report in ./analysis/AAPL-YYYY-MM-DD/validation-initial-screening.md
 ```
 
 **Check validation reports:**
