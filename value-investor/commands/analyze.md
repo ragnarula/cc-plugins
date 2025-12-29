@@ -25,16 +25,17 @@ echo "Created analysis directory: $ANALYSIS_DIR"
 STEP 3 - LAUNCH BUSINESS-SCREENER AGENT:
 Use the Task tool to invoke the business-screener agent with the following prompt:
 
-"Perform initial investment screening for [TICKER].
-
-Save the Business Sreening report in: [ANALYSIS_DIR]
+- Perform initial investment screening for [TICKER] and write the business screening report as a file in [ANALYSIS_DIR] in markdown format
+- The output report must be saved to disk
+- Always save the report
 
 STEP 4 - AUTOMATIC VALIDATION LOOP:
-1. Invoke investment-manager agent to validate the output file in [ANALYSIS_DIR]
-2. If validation returns FAIL se the Task tool to invoke the business-screener agent with the following prompt:
-   - Read the validation report for [TICKER] in [ANALYSIS_DIR]
-   - Fix identified issues in the business screenign report
-3. Re-invoke investment-manager (max 3 iterations)
+1. Invoke investment-manager agent with the following prompt
+  - "Validate the business screening report in [ANALYSIS_DIR] providing feedback according investment standards for citations and value principles"
+2. If validation returns FAIL use the Task tool to invoke the business-screener agent with the following prompt as well as the feedback from 1 above:
+   - "Fix identified issues in the business screening report in [ANALYSIS_DIR]"
+   - Feedback from above
+3. Re-invoke investment-manager up to 3 times until all validations are sucessful (max 3 iterations)
 4. If still FAIL after 3 iterations: present issues to user and ask how to proceed
 5. If PASS: proceed to Step 5
 
@@ -47,5 +48,4 @@ After validation passes, summarize for the user:
 - Key concerns or red flags
 - Screening decision: PASS / INVESTIGATE / FAIL
 - Validation status
-- Next step: "Run `/deep-dive` to continue with financial analysis" (unless FAIL)
-- Report location: ./analysis/[TICKER]-[DATE]/01-initial-screening.md
+- Report file location

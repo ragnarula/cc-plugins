@@ -74,24 +74,6 @@ All validation must check compliance against the **report-writing skill** templa
 
 **For initial screening (01-initial-screening.md):**
 
-**Template Reference**: `skills/report-writing/templates/business-screening-annotated.md`
+**Template Reference**: `skills/report-writing/templates/business-screening-clean.md`
 
 Validate that the report follows the template structure
-
-**For financial analysis (02-financial-analysis.md):**
-
-**Template Reference**: `skills/report-writing/templates/financial-analysis-annotated.md` (future)
-
-Until template exists, validate against deep-dive command specifications.
-
-**For valuation (03-valuation.md):**
-
-**Template Reference**: `skills/report-writing/templates/valuation-annotated.md` (future)
-
-Until template exists, validate against valuation command specifications.
-
-**For investment memo (04-investment-memo.md):**
-
-**Template Reference**: `skills/report-writing/templates/investment-memo-annotated.md` (future)
-
-Until template exists, validate against report command specifications.

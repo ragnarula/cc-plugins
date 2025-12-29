@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+value_investor_mcp_server.egg-info/PKG-INFO
+value_investor_mcp_server.egg-info/SOURCES.txt
+value_investor_mcp_server.egg-info/dependency_links.txt
+value_investor_mcp_server.egg-info/requires.txt
+value_investor_mcp_server.egg-info/top_level.txt
