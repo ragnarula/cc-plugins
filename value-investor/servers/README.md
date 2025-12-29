@@ -5,64 +5,19 @@ This directory contains the MCP (Model Context Protocol) server for fetching fin
 ## Overview
 
 The value-investor plugin uses an MCP server to access:
-- SEC EDGAR filings (10-K, 10-Q, 8-K)
-- Stock prices and historical data
-- Financial metrics and ratios
-- Company information
+- SEC EDGAR filings (10-K, 10-Q, 8-K, DEF 14A, 13F, and other filing types)
 
-## Free Data Sources
+## Data Source
 
-### 1. SEC EDGAR API
+### SEC EDGAR API
 - **URL**: https://www.sec.gov/edgar/sec-api-documentation
 - **Authentication**: None required (rate limited)
-- **Data**: Official SEC filings (10-K, 10-Q, 8-K, etc.)
+- **Data**: Official SEC filings (10-K, 10-Q, 8-K, DEF 14A, 13F, etc.)
 - **Rate Limit**: 10 requests/second
-
-### 2. Alpha Vantage API
-- **URL**: https://www.alphavantage.co/
-- **Authentication**: Free API key required
-- **Data**: Stock prices, financial metrics, company overview
-- **Rate Limit**: 25 requests/day (free tier)
-- **Get Key**: https://www.alphavantage.co/support/#api-key
-
-### 3. Yahoo Finance (via yfinance Python library)
-- **Library**: yfinance
-- **Authentication**: None required
-- **Data**: Stock prices, financial statements, company info
-- **Rate Limit**: Reasonable use
 
 ## Installation
 
-### Prerequisites
-
-```bash
-# Install Node.js (if not installed)
-# macOS:
-brew install node
-
-# Install Python 3 (if not installed)
-# macOS:
-brew install python3
-
-# Install required Python libraries
-pip3 install yfinance requests pandas
-```
-
-### Configuration
-
-1. **Get API Keys** (optional but recommended):
-   - Alpha Vantage: https://www.alphavantage.co/support/#api-key
-   - No key needed for SEC EDGAR or Yahoo Finance
-
-2. **Set Environment Variables**:
-   ```bash
-   export ALPHA_VANTAGE_API_KEY="your-key-here"
-   ```
-
-   Or add to your `.claude/value-investor.local.md` settings file.
-
-3. **Update .mcp.json**:
-   The plugin's `.mcp.json` is pre-configured to use the financial data server.
+The MCP server uses `uv` for dependency management - no manual installation needed. Dependencies are automatically managed when the server starts.
 
 ## MCP Server Implementation
 
@@ -70,47 +25,45 @@ The MCP server provides these tools:
 
 ### Available Tools
 
-**1. `get_sec_filing`**
-- Fetches SEC filings (10-K, 10-Q, etc.) for a company
-- Parameters: ticker, filing_type, year (optional)
-- Returns: Filing content or URL
+**1. `fetch_sec_filings`**
+- Fetches SEC filings for a company with up to 10 years of historical data
+- Parameters:
+  - `ticker` (required): Stock ticker symbol (e.g., "AAPL", "MSFT")
+  - `filing_types` (optional): List of filing types, defaults to ["10-K", "10-Q"]
+  - `years` (optional): Number of years of history (1-10, default: 10)
+  - `limit_per_type` (optional): Maximum filings per type
+- Returns: Metadata and URLs for all matching filings
 
-**2. `get_stock_price`**
-- Gets current or historical stock prices
-- Parameters: ticker, start_date (optional), end_date (optional)
-- Returns: Price data
+**2. `get_filing_content`**
+- Retrieves the full text content of a specific SEC filing
+- Parameters:
+  - `url` (required): URL to the filing document (from fetch_sec_filings result)
+  - `extract_text` (optional): Strip HTML and return plain text (default: false)
+  - `clean_html` (optional): Return cleaned HTML with styling removed (default: false)
+- Returns: Filing content with metadata
 
-**3. `get_financials`**
-- Retrieves financial statements
-- Parameters: ticker, statement_type (income, balance, cash_flow)
-- Returns: Financial data as JSON
-
-**4. `get_company_info`**
-- Gets company overview and metrics
-- Parameters: ticker
-- Returns: Company description, sector, metrics
-
-**5. `search_company`**
-- Searches for company by name
-- Parameters: company_name
-- Returns: Ticker symbol and basic info
+**3. `list_filing_types`**
+- Lists all available SEC filing types with descriptions for value investing
+- Parameters: None
+- Returns: Comprehensive information about each filing type including use cases and importance
 
 ## Usage in Plugin
 
 The agents (business-screener, financial-analyzer, etc.) automatically use these MCP tools when needed:
 
 ```python
-# Example: Agent fetches 10-K
-result = use_tool("get_sec_filing", {
-    "ticker": "AAPL",
-    "filing_type": "10-K"
-})
+# Example: Agent fetches 10-K and 10-Q filings
+filings = fetch_sec_filings(
+    ticker="AAPL",
+    filing_types=["10-K", "10-Q", "DEF 14A"],
+    years=10
+)
 
-# Example: Agent gets historical financials
-financials = use_tool("get_financials", {
-    "ticker": "AAPL",
-    "statement_type": "income"
-})
+# Example: Agent gets full content of a specific filing
+content = get_filing_content(
+    url=filings["filings"]["10-K"][0]["primaryDocUrl"],
+    clean_html=True  # Remove styling for smaller size
+)
 ```
 
 ## Development Status
@@ -322,12 +275,3 @@ See [TESTING.md](./TESTING.md) for comprehensive testing guide including:
 - Returns both metadata and full filing content
 - Supports all major filing types for value investing
 
-## Future Enhancements
-
-- Add stock price fetching (Alpha Vantage/Yahoo Finance integration)
-- Add financial statements extraction from XBRL
-- Add caching layer to reduce API calls
-- Add company search by name
-- Support additional data sources (Financial Modeling Prep, Polygon.io)
-- Implement data normalization and cleaning
-- Add BeautifulSoup for better HTML text extraction

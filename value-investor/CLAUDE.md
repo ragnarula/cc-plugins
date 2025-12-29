@@ -48,7 +48,9 @@ skills/                # Knowledge bases (3 domains)
   financial-analysis/  # Statement analysis, metrics
   risk-assessment/     # Risk frameworks
 servers/               # MCP server implementations
-  financial-data-server.js
+  financial_data_server.py  # Python MCP server for SEC EDGAR filings
+  sec_edgar_fetcher.py      # SEC API client
+  html_cleaner.py           # HTML cleaning utilities
 analysis/              # Generated output directory
   [TICKER]-YYYY-MM-DD/ # One directory per analysis
     01-initial-screening.md
@@ -208,24 +210,20 @@ industries_to_avoid:
 
 ### MCP Server Integration
 
-`.mcp.json` configures financial data access:
+`.mcp.json` configures SEC EDGAR filing data access:
 
 ```json
 {
   "mcpServers": {
     "financial-data": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/financial-data-server.js"],
-      "env": {
-        "SEC_EDGAR_API_KEY": "${SEC_EDGAR_API_KEY}",
-        "ALPHA_VANTAGE_API_KEY": "${ALPHA_VANTAGE_API_KEY}"
-      }
+      "command": "uv",
+      "args": ["run", "--directory", "${CLAUDE_PLUGIN_ROOT}/servers", "python", "financial_data_server.py"]
     }
   }
 }
 ```
 
-Agents use MCP tools to fetch 10-K filings, financial data, and market information.
+Agents use MCP tools to fetch SEC filings (10-K, 10-Q, 8-K, DEF 14A, 13F, etc.) from the SEC EDGAR database.
 
 ## Development Guidelines
 

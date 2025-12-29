@@ -221,38 +221,3 @@ class HTMLCleaner:
             'reduction_percent': reduction_percent,
             'compression_ratio': compression_ratio
         }
-
-
-def main():
-    """Example usage of HTMLCleaner."""
-    import sys
-
-    if len(sys.argv) < 2:
-        print("Usage: python html_cleaner.py <input_file> [output_file]")
-        print("\nExample:")
-        print("  python html_cleaner.py filing.html")
-        print("  python html_cleaner.py filing.html cleaned_filing.html")
-        sys.exit(1)
-
-    input_path = Path(sys.argv[1])
-    output_path = Path(sys.argv[2]) if len(sys.argv) > 2 else input_path.with_stem(f"{input_path.stem}_cleaned")
-
-    if not input_path.exists():
-        print(f"Error: Input file not found: {input_path}")
-        sys.exit(1)
-
-    print(f"Cleaning {input_path}...")
-
-    cleaner = HTMLCleaner()
-    stats = cleaner.clean_file(input_path, output_path)
-
-    print(f"\nResults:")
-    print(f"  Original size: {stats['original_size']:,} bytes")
-    print(f"  Cleaned size:  {stats['cleaned_size']:,} bytes")
-    print(f"  Reduction:     {stats['reduction_bytes']:,} bytes ({stats['reduction_percent']:.1f}%)")
-    print(f"  Ratio:         {stats['compression_ratio']:.2f}x")
-    print(f"\nCleaned file saved to: {output_path}")
-
-
-if __name__ == "__main__":
-    main()

@@ -2,11 +2,7 @@
   "mcpServers": {
     "financial-data": {
       "command": "uv",
-      "args": ["run", "--directory", "${CLAUDE_PLUGIN_ROOT}/servers", "python", "financial_data_server.py"],
-      "env": {
-        "SEC_EDGAR_API_KEY": "${SEC_EDGAR_API_KEY}",
-        "ALPHA_VANTAGE_API_KEY": "${ALPHA_VANTAGE_API_KEY}"
-      }
+      "args": ["run", "--directory", "${CLAUDE_PLUGIN_ROOT}/servers", "python", "financial_data_server.py"]
     }
   }
 }

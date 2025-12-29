@@ -17,10 +17,8 @@ https://www.sec.gov/developer
 
 import requests
 import time
-import re
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Literal
-import json
 from pathlib import Path
 
 from html_cleaner import HTMLCleaner
@@ -307,38 +305,3 @@ class SECEdgarFetcher:
         """
         html_content = self.get_filing_content(url)
         return self._cleaner.extract_text(html_content)
-
-
-def main():
-    """Example usage of SEC EDGAR fetcher."""
-    fetcher = SECEdgarFetcher()
-
-    # Example: Fetch Apple's 10-K and 10-Q filings from last 5 years
-    ticker = "AAPL"
-    print(f"Fetching filings for {ticker}...")
-
-    filings = fetcher.fetch_filings(
-        ticker=ticker,
-        filing_types=["10-K", "10-Q", "DEF 14A"],
-        years=5
-    )
-
-    print(f"\nFound filings:")
-    for filing_type, filing_list in filings.items():
-        print(f"\n{filing_type}: {len(filing_list)} filings")
-        for filing in filing_list[:3]:  # Show first 3
-            print(f"  - {filing['filingDate']}: {filing['primaryDocUrl']}")
-
-    # Example: Fetch content of most recent 10-K
-    if filings["10-K"]:
-        latest_10k = filings["10-K"][0]
-        print(f"\n\nFetching content of latest 10-K ({latest_10k['filingDate']})...")
-        print(f"URL: {latest_10k['primaryDocUrl']}")
-
-        # Uncomment to actually fetch content (can be large)
-        # content = fetcher.get_filing_content(latest_10k['primaryDocUrl'])
-        # print(f"Content length: {len(content)} characters")
-
-
-if __name__ == "__main__":
-    main()
