@@ -269,12 +269,13 @@ The specification is the single source of truth. Code implements it. Tests verif
 
 ### Project Structure
 
-- **`.ssd` folder** All artifacts created during Spec-Driven Development live in a `.ssd` folder also referenced as `SDD_FOLDER`. **Notice** the '.' before the folder name. The folder should be prefixed with a '.'.
+- **`.sdd` folder** All artifacts created during Spec-Driven Development live in a `.sdd` folder also referenced as `SDD_FOLDER`. **Notice** the '.' before the folder name. The folder should be prefixed with a '.'.
 - **Folder-per-feature** Within the `SDD_FOLDER` create a sub folder for each features's specification, plan, and task documents to live together
 
 ### Templates
 
 - `SDD_TEMPLATE_SPECIFICATION` located in `templates/specification.template.md` used for initial requirements gathering
+- `SDD_TEMPLATE_DESIGN` located in `templates/design.template.md` used for initial requirements gathering
 
 ### Leveraging AI in SDD
 

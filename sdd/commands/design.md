@@ -43,10 +43,17 @@ Create a design document for a feature according to the `design.template.md` tem
 
     Ensure the document follows sdd guidelines for sdd design documents.
 
-    Do **not** forget to actually save the document to disk. Don't just present it to the user.
+    CRITICAL: You MUST use the Write tool to save the completed document to [SDD_DESIGN_DOCUMENT].
+    Do NOT output the document content in your response - use the Write tool instead.
+    Your response text is not visible to the user. Only the file you write will be seen.
+    Call Write(file_path="[SDD_DESIGN_DOCUMENT]", content="<full document>") as your final action.
 
 ## STEP 4 - Ensure design document is complete
-- Ensure [SDD_DESIGN_DOCUMENT] is completed and saved to disk and all placeholders from the template have been replaced with actual design information
-- If the document is not saved to disk, ask the agent from STEP 3 to write it to disk and re-check
+- Read [SDD_DESIGN_DOCUMENT] to verify it contains actual design content (not just the template)
+- If the file is empty or contains only template placeholders:
+  1. Resume the agent from STEP 3 using its agent ID
+  2. Tell it: "The design document was not saved. You MUST use the Write tool now. Call Write with file_path=[SDD_DESIGN_DOCUMENT] and the complete design content."
+  3. Re-check after the agent completes
+- If still not saved after retry, manually extract design from agent's response and use Write tool directly
 - Ensure [SDD_DESIGN_DOCUMENT] matches the [SDD_TEMPLATE_DESIGN] template. If it deviates ask the agent from STEP 3 to fix it
 - Verify that all requirements from the specification are covered in the Requirements Validation section

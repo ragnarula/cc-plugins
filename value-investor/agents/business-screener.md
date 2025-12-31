@@ -21,17 +21,7 @@ whenToUse: |
   The request for competitive advantage analysis matches the agent's expertise
   </commentary>
   </example>
-tools:
-  - Read
-  - Write
-  - WebSearch
-  - WebFetch
-  - Bash
-  - Glob
-  - Grep
-  - fetch_sec_filings  # MCP: Fetch SEC filing metadata (10-K, 10-Q, etc.)
-  - get_filing_content  # MCP: Retrieve full filing text for analysis
-  - list_filing_types  # MCP: List available filing types with descriptions
+tools: Read, Write, WebSearch, WebFetch, Bash, Glob, Grep, fetch_sec_filings, get_filing_content, list_filing_types
 model: sonnet
 color: blue
 ---

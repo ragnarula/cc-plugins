@@ -39,15 +39,7 @@ whenToUse: |
   Ambiguous requirements are the agent's specialty - it probes until clarity emerges
   </commentary>
   </example>
-tools:
-  - Read
-  - Write
-  - WebSearch
-  - WebFetch
-  - Bash
-  - Glob
-  - Grep
-  - AskUserQuestion
+tools: Read, Write, WebSearch, WebFetch, Bash, Glob, Grep, AskUserQuestion
 model: sonnet
 color: blue
 ---

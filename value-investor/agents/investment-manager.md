@@ -28,11 +28,7 @@ whenToUse: |
   Proactive quality control before user proceeds to final report
   </commentary>
   </example>
-tools:
-  - Read
-  - Write
-  - Grep
-  - Glob
+tools: Read, Write, Grep, Glob
 model: sonnet
 color: orange
 ---
