@@ -3,7 +3,6 @@
 **Version:** 1.0
 **Date:** YYYY-MM-DD
 **Status:** Draft | Under Review | Approved | Implemented
-**Owner:** [Name/Team]
 
 ---
 

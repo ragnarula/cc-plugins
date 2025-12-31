@@ -145,6 +145,7 @@ In SDD, the specification is not just documentation—it is the single source of
    - Identify dependencies and risks
    - Establish checkpoints and validation gates
    - Plan for iterative refinement
+   - explicitly ensure **all** requirements from the specification have a solution in the plan
 
 **Deliverable:** A clear implementation roadmap that connects the specification to concrete technical decisions.
 
