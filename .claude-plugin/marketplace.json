@@ -28,6 +28,18 @@
         "munger"
       ],
       "category": "finance"
+    },
+    {
+      "name": "sdd",
+      "source": "./sdd",
+      "version": "0.1.1",
+      "description": "Spec Driven Development",
+      "author": {
+        "name": "Raghav Narula",
+        "email": "ai@raghavnarula.co.uk"
+      },
+      "keywords": ["sdd", "software engineering"],
+      "category": "finance"
     }
   ],
   "categories": [
