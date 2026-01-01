@@ -2,7 +2,7 @@
 
 **Version:** 1.0
 **Date:** 2025-12-31
-**Status:** Draft
+**Status:** Approved
 **Linked Specification** `.sdd/yahoo-finance-mcp/specification.md`
 
 ---
@@ -631,19 +631,19 @@ This feature is fully implementable with existing infrastructure:
 **Goal**: Prepare development environment and add dependencies
 
 - Task 1.1: Add yfinance dependency to pyproject.toml
-  - Status: Backlog
+  - Status: Complete
   - Update dependencies list with `yfinance>=0.2.40`
   - Run `uv sync` to install and generate lock file
   - Verify installation with `uv run python -c "import yfinance"`
 
 - Task 1.2: Update .mcp.json with yahoo-finance server configuration
-  - Status: Backlog
+  - Status: Complete
   - Add new server entry: `"yahoo-finance": {"command": "uv", "args": [...]}`
   - Verify JSON syntax is valid
   - Test that server path resolves correctly
 
 - Task 1.3: Create test fixtures directory structure
-  - Status: Backlog
+  - Status: Complete
   - Create `tests/unit/` if not exists
   - Create `tests/integration/` if not exists
   - Create `tests/fixtures/yahoo_finance/` for mock data
