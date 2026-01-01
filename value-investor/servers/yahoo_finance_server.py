@@ -28,7 +28,7 @@ class MCPServer:
         self.tools = {}
         self.fetcher = YahooFinanceFetcher()
 
-    def tool(self, name: str, description: str, parameters: Dict):
+    def tool(self, name: str, description: str, parameters: Dict, required: Optional[List[str]] = None):
         """Register a tool."""
 
         def decorator(func):
@@ -36,6 +36,7 @@ class MCPServer:
                 "name": name,
                 "description": description,
                 "parameters": parameters,
+                "required": required or [],
                 "func": func,
             }
             return func
@@ -153,6 +154,7 @@ server = MCPServer(name="yahoo-finance", version="0.1.0")
             "description": "Stock ticker symbol (e.g., 'AAPL', 'MSFT'). Must contain only letters, numbers, hyphens, and periods.",
         }
     },
+    required=["ticker"],
 )
 async def get_financial_statements(self, ticker: str) -> Dict:
     """Fetch financial statements for value investing analysis."""
