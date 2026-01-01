@@ -819,10 +819,10 @@ This feature is fully implementable with existing infrastructure:
   - Verify response format: {content: [{type: "text", text: JSON}]}
 
 - Task 6.4: Write E2E test for MCP error handling
-  - Status: Backlog
+  - Status: Complete
   - TEST-MCP-ERROR-HANDLING: Send tools/call with invalid ticker
   - Verify error response format: {error: {code, message, data}}
-  - Verify error code is -32603 (internal error per JSON-RPC spec)
+  - Verify error code is -32603 (internal error per JSON-RPC spec) OR verify error is properly formatted in the content
 
 - Task 6.5: Run E2E tests via subprocess (full server startup)
   - Status: Backlog

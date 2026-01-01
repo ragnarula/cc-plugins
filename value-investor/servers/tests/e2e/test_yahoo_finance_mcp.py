@@ -349,3 +349,56 @@ class TestMCPErrorHandling:
                 "DATA_UNAVAILABLE",
                 "INVALID_TICKER_FORMAT"
             ], f"Unexpected error code: {error['code']}"
+
+
+@pytest.mark.e2e
+class TestServerLifecycle:
+    """Test server startup and shutdown behavior."""
+
+    def test_server_shutdown_on_eof(self, server_path):
+        """Verify server shuts down cleanly on EOF."""
+        # Launch server
+        process = subprocess.Popen(
+            [sys.executable, str(server_path)],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1,
+        )
+
+        # Send initialize request to confirm server is running
+        request = {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {"protocolVersion": "2024-11-05", "capabilities": {}}
+        }
+        process.stdin.write(json.dumps(request) + "\n")
+        process.stdin.flush()
+
+        # Read response to confirm server is active
+        response_line = process.stdout.readline()
+        assert response_line, "Server should respond to initialize"
+        response = json.loads(response_line)
+        assert "result" in response, "Initialize should succeed"
+
+        # Close stdin to signal EOF
+        process.stdin.close()
+
+        # Wait for server to exit gracefully
+        try:
+            exit_code = process.wait(timeout=5)
+            # Server should exit with code 0 (clean shutdown)
+            assert exit_code == 0, f"Server exited with code {exit_code}"
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
+            pytest.fail("Server did not shut down within 5 seconds after EOF")
+
+        # Verify no errors in stderr (warnings are okay)
+        stderr_output = process.stderr.read()
+        # Acceptable stderr: "Server stopped" message
+        # Not acceptable: tracebacks, exceptions
+        assert "Traceback" not in stderr_output, \
+            f"Server had unexpected errors:\n{stderr_output}"
