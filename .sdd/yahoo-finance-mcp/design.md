@@ -825,11 +825,12 @@ This feature is fully implementable with existing infrastructure:
   - Verify error code is -32603 (internal error per JSON-RPC spec) OR verify error is properly formatted in the content
 
 - Task 6.5: Run E2E tests via subprocess (full server startup)
-  - Status: Backlog
+  - Status: Complete
   - Launch server via subprocess with stdin/stdout pipes
   - Send JSON-RPC requests to stdin
   - Read JSON-RPC responses from stdout
   - Verify server shuts down cleanly on EOF
+  - All E2E tests should pass
 
 ### Phase 7: Documentation and Polish
 
