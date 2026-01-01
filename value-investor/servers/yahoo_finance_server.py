@@ -144,6 +144,25 @@ class MCPServer:
 server = MCPServer(name="yahoo-finance", version="0.1.0")
 
 
+@server.tool(
+    name="get_financial_statements",
+    description="Fetch all three major financial statements (income statement, balance sheet, cash flow statement) for a given stock ticker. Returns up to 5 years of annual historical data and current fiscal year quarterly data. Data includes revenue, expenses, assets, liabilities, cash flows, and other key financial metrics. Missing data is marked with 'MISSING' string to maintain consistent schema.",
+    parameters={
+        "ticker": {
+            "type": "string",
+            "description": "Stock ticker symbol (e.g., 'AAPL', 'MSFT'). Must contain only letters, numbers, hyphens, and periods.",
+        }
+    },
+)
+async def get_financial_statements(self, ticker: str) -> Dict:
+    """Fetch financial statements for value investing analysis."""
+    try:
+        result = self.fetcher.get_financial_statements(ticker)
+        return result
+    except Exception as e:
+        return {"error": str(e), "ticker": ticker}
+
+
 def main():
     """Run the MCP server."""
     try:
