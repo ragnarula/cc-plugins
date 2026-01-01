@@ -813,7 +813,7 @@ This feature is fully implementable with existing infrastructure:
   - Verify tool has name, description, inputSchema
 
 - Task 6.3: Write E2E test for MCP tools/call
-  - Status: Backlog
+  - Status: Complete
   - TEST-MCP-TOOL-CALL: Send tools/call request with ticker=AAPL
   - Verify successful response with financial data
   - Verify response format: {content: [{type: "text", text: JSON}]}

@@ -269,3 +269,83 @@ class TestMCPToolCall:
             assert "income_statement" in statements
             assert "balance_sheet" in statements
             assert "cash_flow" in statements
+
+
+@pytest.mark.e2e
+class TestMCPErrorHandling:
+    """Test MCP error handling for invalid inputs."""
+
+    def test_invalid_ticker_error_response(self, server_process):
+        """TEST-MCP-ERROR-HANDLING: Send tools/call with invalid ticker, verify error response."""
+        # Initialize server first
+        send_request(
+            server_process,
+            method="initialize",
+            params={"protocolVersion": "2024-11-05", "capabilities": {}}
+        )
+
+        # Send tools/call request with invalid ticker
+        response = send_request(
+            server_process,
+            method="tools/call",
+            params={
+                "name": "get_financial_statements",
+                "arguments": {"ticker": "INVALID999"}
+            },
+            request_id=2
+        )
+
+        # Verify JSON-RPC structure
+        assert response["jsonrpc"] == "2.0"
+        assert response["id"] == 2
+
+        # The design says errors can be in two formats:
+        # 1. JSON-RPC error: {error: {code, message, data}}
+        # 2. Content with error: {content: [{type: "text", text: JSON with error field}]}
+
+        # Check if it's a JSON-RPC error response
+        if "error" in response:
+            # Format: {error: {code, message, data}}
+            error = response["error"]
+            assert "code" in error, "Error missing code field"
+            assert "message" in error, "Error missing message field"
+
+            # Verify error code is -32603 (internal error per JSON-RPC spec)
+            assert error["code"] == -32603, \
+                f"Expected error code -32603, got {error['code']}"
+
+            # Message should be informative
+            assert len(error["message"]) > 0, "Error message should not be empty"
+
+        # Otherwise, check if error is in content
+        elif "result" in response:
+            result = response["result"]
+            assert "content" in result
+            content = result["content"]
+            assert len(content) > 0
+
+            content_item = content[0]
+            assert content_item["type"] == "text"
+
+            # Parse the JSON from text
+            data = json.loads(content_item["text"])
+
+            # Should have error field
+            assert "error" in data, "Expected error field in response data"
+            error = data["error"]
+
+            # Verify error has required fields
+            assert "code" in error, "Error missing code field"
+            assert "message" in error, "Error missing message field"
+            assert "ticker" in error or "ticker" in data, \
+                "Error should include ticker information"
+
+            # Message should be informative
+            assert len(error["message"]) > 0, "Error message should not be empty"
+
+            # Error code should indicate the problem
+            assert error["code"] in [
+                "TICKER_NOT_FOUND",
+                "DATA_UNAVAILABLE",
+                "INVALID_TICKER_FORMAT"
+            ], f"Unexpected error code: {error['code']}"
