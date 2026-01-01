@@ -807,7 +807,7 @@ This feature is fully implementable with existing infrastructure:
   - Verify serverInfo contains name and version
 
 - Task 6.2: Write E2E test for MCP tools/list
-  - Status: Backlog
+  - Status: Complete
   - TEST-MCP-TOOLS-LIST: Send tools/list request
   - Verify get_financial_statements tool in response
   - Verify tool has name, description, inputSchema

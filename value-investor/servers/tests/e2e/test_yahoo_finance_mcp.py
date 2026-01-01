@@ -203,3 +203,69 @@ class TestMCPToolsList:
         # Verify required parameters
         assert "required" in input_schema
         assert "ticker" in input_schema["required"]
+
+
+@pytest.mark.e2e
+class TestMCPToolCall:
+    """Test MCP tools/call protocol."""
+
+    def test_tool_call_success(self, server_process):
+        """TEST-MCP-TOOL-CALL: Send tools/call request with ticker=AAPL, verify response."""
+        # Initialize server first
+        send_request(
+            server_process,
+            method="initialize",
+            params={"protocolVersion": "2024-11-05", "capabilities": {}}
+        )
+
+        # Send tools/call request for AAPL
+        response = send_request(
+            server_process,
+            method="tools/call",
+            params={
+                "name": "get_financial_statements",
+                "arguments": {"ticker": "AAPL"}
+            },
+            request_id=2
+        )
+
+        # Verify JSON-RPC structure
+        assert response["jsonrpc"] == "2.0"
+        assert response["id"] == 2
+        assert "result" in response, f"Expected result, got: {response}"
+        assert "error" not in response
+
+        result = response["result"]
+
+        # Verify response format: {content: [{type: "text", text: JSON}]}
+        assert "content" in result, "Missing content field in tools/call response"
+        content = result["content"]
+        assert isinstance(content, list), "content should be an array"
+        assert len(content) > 0, "content array should not be empty"
+
+        # Verify first content item
+        content_item = content[0]
+        assert "type" in content_item
+        assert content_item["type"] == "text"
+
+        assert "text" in content_item
+        text = content_item["text"]
+        assert isinstance(text, str), "text should be a string"
+
+        # Parse the JSON from the text field
+        data = json.loads(text)
+
+        # Verify financial data structure
+        assert "ticker" in data or "error" not in data, \
+            "Response should contain financial data or no error"
+
+        # If no error, verify it's financial data for AAPL
+        if "error" not in data:
+            assert data["ticker"] == "AAPL"
+            assert "currency" in data
+            assert "statements" in data
+
+            statements = data["statements"]
+            assert "income_statement" in statements
+            assert "balance_sheet" in statements
+            assert "cash_flow" in statements
