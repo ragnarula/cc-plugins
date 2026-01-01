@@ -735,27 +735,27 @@ This feature is fully implementable with existing infrastructure:
 **Goal**: Achieve comprehensive unit test coverage with mocked dependencies
 
 - Task 4.1: Create test_yahoo_finance_fetcher.py with pytest fixtures
-  - Status: Backlog
+  - Status: Complete
   - Create file in tests/unit/
   - Define pytest fixture for YahooFinanceFetcher instance
   - Define mock yfinance.Ticker fixture
   - Mark tests with @pytest.mark.unit
 
 - Task 4.2: Write unit tests for successful data retrieval
-  - Status: Backlog
+  - Status: Complete
   - TEST-UNIT-VALID-TICKER: Mock successful response, verify JSON structure
   - TEST-UNIT-DATE-TRANSFORMATION: Verify ISO 8601 date format
   - TEST-UNIT-CURRENCY-EXTRACTION: Verify ISO 4217 currency code
   - TEST-UNIT-DATA-SORTING: Verify newest-first ordering
 
 - Task 4.3: Write unit tests for missing data handling
-  - Status: Backlog
+  - Status: Complete
   - TEST-UNIT-MISSING-FIELDS: Mock response with NaN values
   - TEST-UNIT-MISSING-MARKER: Verify "MISSING" string insertion
   - TEST-UNIT-SCHEMA-CONSISTENCY: Verify same fields present with/without data
 
 - Task 4.4: Write unit tests for error conditions
-  - Status: Backlog
+  - Status: Complete
   - TEST-UNIT-INVALID-TICKER: Verify TICKER_NOT_FOUND error code
   - TEST-UNIT-TIMEOUT: Mock timeout exception, verify API_TIMEOUT
   - TEST-UNIT-SANITIZATION: Test ticker validation regex
