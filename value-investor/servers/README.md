@@ -4,16 +4,24 @@ This directory contains the MCP (Model Context Protocol) server for fetching fin
 
 ## Overview
 
-The value-investor plugin uses an MCP server to access:
+The value-investor plugin uses MCP servers to access:
 - SEC EDGAR filings (10-K, 10-Q, 8-K, DEF 14A, 13F, and other filing types)
+- Yahoo Finance financial statements (income statement, balance sheet, cash flow statement)
 
-## Data Source
+## Data Sources
 
 ### SEC EDGAR API
 - **URL**: https://www.sec.gov/edgar/sec-api-documentation
 - **Authentication**: None required (rate limited)
 - **Data**: Official SEC filings (10-K, 10-Q, 8-K, DEF 14A, 13F, etc.)
 - **Rate Limit**: 10 requests/second
+
+### Yahoo Finance API
+- **Library**: yfinance Python library (https://github.com/ranaroussi/yfinance)
+- **Authentication**: None required (free data access)
+- **Data**: Financial statements (income statement, balance sheet, cash flow statement)
+- **Historical Data**: Up to 5 years annual data + current year quarterly data
+- **Rate Limit**: No explicit limit (handled internally by yfinance)
 
 ## Installation
 
@@ -46,6 +54,153 @@ The MCP server provides these tools:
 - Lists all available SEC filing types with descriptions for value investing
 - Parameters: None
 - Returns: Comprehensive information about each filing type including use cases and importance
+
+### Yahoo Finance MCP Server
+
+The Yahoo Finance MCP server provides quantitative financial data to complement the qualitative narrative data from SEC EDGAR filings.
+
+**Tool: `get_financial_statements`**
+- Fetches all three major financial statements for value investing analysis
+- Parameters:
+  - `ticker` (required): Stock ticker symbol (e.g., "AAPL", "MSFT")
+- Returns: Complete financial statement data with consistent JSON schema
+
+**Response Structure:**
+```json
+{
+  "ticker": "AAPL",
+  "currency": "USD",
+  "fiscal_year_end": "September",
+  "retrieved_at": "2025-12-31T15:30:00Z",
+  "statements": {
+    "income_statement": {
+      "annual": [/* up to 5 years */],
+      "quarterly": [/* current fiscal year */]
+    },
+    "balance_sheet": {
+      "annual": [/* up to 5 years */],
+      "quarterly": [/* current fiscal year */]
+    },
+    "cash_flow": {
+      "annual": [/* up to 5 years */],
+      "quarterly": [/* current fiscal year */]
+    }
+  }
+}
+```
+
+**Data Features:**
+- **ISO 8601 Dates**: All period dates in YYYY-MM-DD format
+- **ISO 4217 Currency**: Currency codes (USD, EUR, JPY, etc.)
+- **Missing Data Handling**: Fields with unavailable data marked as "MISSING" string (not null)
+- **Schema Consistency**: Same fields present regardless of data availability
+- **30-Second Timeout**: All requests timeout after 30 seconds
+- **Input Sanitization**: Ticker validation prevents injection attacks
+
+**Error Handling:**
+
+The tool returns clear error codes for different failure scenarios:
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "ticker": "TICKER"
+  }
+}
+```
+
+**Error Codes:**
+- `INVALID_TICKER_FORMAT`: Ticker contains invalid characters (only alphanumeric, hyphens, periods allowed)
+- `TICKER_NOT_FOUND`: Ticker symbol not found in Yahoo Finance database
+- `DATA_UNAVAILABLE`: Ticker exists but has no financial statement data (e.g., ETFs, non-public companies)
+- `API_TIMEOUT`: Request exceeded 30-second timeout
+- `API_ERROR`: Unexpected error from Yahoo Finance API
+
+**Usage Examples:**
+
+```python
+# Basic usage - fetch Apple's financial statements
+result = get_financial_statements(ticker="AAPL")
+
+# Access income statement data
+annual_income = result["statements"]["income_statement"]["annual"]
+latest_year = annual_income[0]  # Most recent year
+revenue = latest_year["Total Revenue"]
+net_income = latest_year["Net Income"]
+
+# Access balance sheet data
+annual_balance = result["statements"]["balance_sheet"]["annual"]
+latest_balance = annual_balance[0]
+total_assets = latest_balance["Total Assets"]
+total_liabilities = latest_balance["Total Liabilities Net Minority Interest"]
+
+# Access cash flow data
+annual_cashflow = result["statements"]["cash_flow"]["annual"]
+latest_cashflow = annual_cashflow[0]
+operating_cashflow = latest_cashflow["Operating Cash Flow"]
+free_cashflow = latest_cashflow["Free Cash Flow"]
+
+# Handle missing data
+if revenue == "MISSING":
+    # Data not available for this period
+    pass
+```
+
+**Integration with SEC EDGAR Server:**
+
+The Yahoo Finance and SEC EDGAR servers are designed to complement each other:
+
+```python
+# Combined workflow example
+# 1. Get quantitative financial data from Yahoo Finance
+financials = get_financial_statements(ticker="AAPL")
+revenue_5yr = [period["Total Revenue"] for period in financials["statements"]["income_statement"]["annual"]]
+
+# 2. Get qualitative narrative from SEC EDGAR 10-K
+filings = fetch_sec_filings(ticker="AAPL", filing_types=["10-K"], years=5)
+latest_10k = get_filing_content(url=filings["filings"]["10-K"][0]["primaryDocUrl"], clean_html=True)
+
+# 3. Combine for comprehensive analysis
+# - Yahoo Finance: Revenue trend showing 15% CAGR over 5 years
+# - SEC EDGAR 10-K: Management explains revenue growth drivers
+# - Value investing decision: Assess business quality + financial performance
+```
+
+**Installation and Testing:**
+
+The Yahoo Finance server is automatically configured in `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "yahoo-finance": {
+      "command": "uv",
+      "args": ["run", "--directory", "${CLAUDE_PLUGIN_ROOT}/servers", "python", "yahoo_finance_server.py"]
+    }
+  }
+}
+```
+
+To test the server standalone:
+
+```bash
+# Navigate to servers directory
+cd value-investor/servers
+
+# Run the server (reads JSON-RPC from stdin, writes to stdout)
+uv run python yahoo_finance_server.py
+
+# Send test request (in another terminal):
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' | uv run python yahoo_finance_server.py
+
+# Run integration tests
+uv run pytest tests/integration/test_yahoo_statements.py -v
+
+# Run all Yahoo Finance tests (unit + integration + e2e)
+uv run pytest -k yahoo -v
+```
 
 ## Usage in Plugin
 
@@ -252,26 +407,47 @@ See [TESTING.md](./TESTING.md) for comprehensive testing guide including:
 
 ## Resources
 
+**SEC EDGAR:**
 - **SEC EDGAR API**: https://www.sec.gov/edgar/sec-api-documentation
 - **SEC Developer Resources**: https://www.sec.gov/developer
 - **Company Tickers JSON**: https://www.sec.gov/files/company_tickers.json
 - **Submissions API**: https://data.sec.gov/submissions/
+
+**Yahoo Finance:**
+- **yfinance Library**: https://github.com/ranaroussi/yfinance
+- **Yahoo Finance**: https://finance.yahoo.com/
+- **yfinance Documentation**: https://pypi.org/project/yfinance/
+
+**Protocols and Tools:**
 - **MCP Protocol Spec**: https://spec.modelcontextprotocol.io/
 - **uv (Python Package Manager)**: https://docs.astral.sh/uv/
+- **JSON-RPC 2.0 Specification**: https://www.jsonrpc.org/specification
 
 ## Architecture
 
-**Files:**
-- `sec_edgar_fetcher.py` - Core SEC EDGAR API client with rate limiting
-- `financial_data_server.py` - MCP server implementation (stdio transport)
+**MCP Server Files:**
+- `financial_data_server.py` - SEC EDGAR MCP server (stdio transport)
+- `yahoo_finance_server.py` - Yahoo Finance MCP server (stdio transport)
+- `sec_edgar_fetcher.py` - SEC EDGAR API client with rate limiting
+- `yahoo_finance_fetcher.py` - Yahoo Finance data fetcher using yfinance library
+- `html_cleaner.py` - HTML cleaning utilities (shared)
 - `pyproject.toml` - Python dependencies managed by uv
 - `requirements.txt` - Legacy pip requirements (use uv instead)
 
-**Key Features:**
+**SEC EDGAR Server Features:**
 - Respects SEC rate limit (10 requests/second)
 - Proper User-Agent header (SEC requirement)
 - CIK lookup from ticker symbol
 - Fetches up to 10 years of historical filings
 - Returns both metadata and full filing content
 - Supports all major filing types for value investing
+
+**Yahoo Finance Server Features:**
+- 30-second timeout on all HTTP requests
+- Ticker sanitization prevents injection attacks
+- Consistent JSON schema with MISSING markers
+- ISO 8601 date format (YYYY-MM-DD)
+- ISO 4217 currency codes (USD, EUR, JPY)
+- Clear error codes for all failure scenarios
+- Up to 5 years annual + current year quarterly data
 
