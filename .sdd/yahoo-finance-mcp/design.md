@@ -837,7 +837,7 @@ This feature is fully implementable with existing infrastructure:
 **Goal**: Complete documentation and prepare for release
 
 - Task 7.1: Update value-investor/servers/README.md
-  - Status: Backlog
+  - Status: Complete
   - Add new section: "Yahoo Finance MCP Server"
   - Document get_financial_statements tool with examples
   - Document error codes and handling
