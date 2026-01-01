@@ -256,3 +256,76 @@ class TestSuccessfulDataRetrieval:
             quarterly_dates = [datetime.strptime(p['period_end'], '%Y-%m-%d') for p in income_quarterly]
             for i in range(len(quarterly_dates) - 1):
                 assert quarterly_dates[i] >= quarterly_dates[i + 1]
+
+
+@pytest.mark.unit
+class TestMissingDataHandling:
+    """Test handling of missing or incomplete financial data."""
+
+    def test_missing_fields_replaced_with_missing_marker(self, fetcher, mock_ticker_with_missing_data):
+        """TEST-UNIT-MISSING-FIELDS: Mock response with NaN values."""
+        with patch('yahoo_finance_fetcher.yf.Ticker', return_value=mock_ticker_with_missing_data):
+            result = fetcher.get_financial_statements('TEST')
+
+        # Verify no error
+        assert 'error' not in result
+
+        # Check income statement has data
+        income_annual = result['statements']['income_statement']['annual']
+        assert len(income_annual) > 0
+
+        # Verify that NaN values are replaced with "MISSING" string
+        period = income_annual[0]
+        assert period['Total Revenue'] == 100000000  # Has value
+        assert period['Cost Of Revenue'] == 'MISSING'  # Was NaN
+        assert period['Gross Profit'] == 'MISSING'  # Was NaN
+        assert period['Net Income'] == 10000000  # Has value
+
+    def test_missing_marker_is_string(self, fetcher, mock_ticker_with_missing_data):
+        """TEST-UNIT-MISSING-MARKER: Verify "MISSING" string insertion."""
+        with patch('yahoo_finance_fetcher.yf.Ticker', return_value=mock_ticker_with_missing_data):
+            result = fetcher.get_financial_statements('TEST')
+
+        income_annual = result['statements']['income_statement']['annual']
+        period = income_annual[0]
+
+        # Verify MISSING is a string, not None or null
+        missing_fields = [k for k, v in period.items() if v == 'MISSING']
+        assert len(missing_fields) > 0
+
+        for field in missing_fields:
+            assert isinstance(period[field], str)
+            assert period[field] == 'MISSING'
+
+    def test_schema_consistency_with_and_without_data(self, fetcher, mock_ticker, mock_ticker_with_missing_data):
+        """TEST-UNIT-SCHEMA-CONSISTENCY: Verify same fields present with/without data."""
+        # Get result with complete data
+        with patch('yahoo_finance_fetcher.yf.Ticker', return_value=mock_ticker):
+            result_complete = fetcher.get_financial_statements('AAPL')
+
+        # Get result with missing data
+        with patch('yahoo_finance_fetcher.yf.Ticker', return_value=mock_ticker_with_missing_data):
+            result_missing = fetcher.get_financial_statements('TEST')
+
+        # Both should have the same top-level structure
+        assert set(result_complete.keys()) == set(result_missing.keys())
+
+        # Both should have statements with same structure
+        assert 'statements' in result_complete
+        assert 'statements' in result_missing
+
+        # Income statement fields should be present in both
+        complete_income = result_complete['statements']['income_statement']['annual'][0]
+        missing_income = result_missing['statements']['income_statement']['annual'][0]
+
+        # Both should have period_end field
+        assert 'period_end' in complete_income
+        assert 'period_end' in missing_income
+
+        # Missing data period should have same financial line items (just with MISSING values)
+        for field in missing_income:
+            if field != 'period_end':
+                # Field exists in result with missing data
+                assert field in missing_income
+                # Value is either a number or "MISSING" string
+                assert isinstance(missing_income[field], (int, float, str))
