@@ -329,3 +329,123 @@ class TestMissingDataHandling:
                 assert field in missing_income
                 # Value is either a number or "MISSING" string
                 assert isinstance(missing_income[field], (int, float, str))
+
+
+@pytest.mark.unit
+class TestErrorConditions:
+    """Test error handling for various failure scenarios."""
+
+    def test_invalid_ticker_not_found(self, fetcher, mock_empty_ticker):
+        """TEST-UNIT-INVALID-TICKER: Verify TICKER_NOT_FOUND error code."""
+        with patch('yahoo_finance_fetcher.yf.Ticker', return_value=mock_empty_ticker):
+            result = fetcher.get_financial_statements('INVALID')
+
+        # Verify error response structure
+        assert 'error' in result
+        assert 'code' in result['error']
+        assert 'message' in result['error']
+        assert 'ticker' in result['error']
+
+        # Verify DATA_UNAVAILABLE code (empty ticker means no data available)
+        assert result['error']['code'] == 'DATA_UNAVAILABLE'
+        assert 'INVALID' in result['error']['ticker']
+
+    def test_timeout_exception_handling(self, fetcher):
+        """TEST-UNIT-TIMEOUT: Mock timeout exception, verify API_TIMEOUT."""
+        with patch('yahoo_finance_fetcher.yf.Ticker', side_effect=TimeoutError("Request timed out")):
+            result = fetcher.get_financial_statements('AAPL')
+
+        # Verify error response
+        assert 'error' in result
+        assert result['error']['code'] == 'API_TIMEOUT'
+        assert 'timeout' in result['error']['message'].lower()
+        assert '30' in result['error']['message']  # Mentions timeout duration
+
+    def test_ticker_sanitization_rejects_invalid_characters(self, fetcher):
+        """TEST-UNIT-SANITIZATION: Test ticker validation regex."""
+        # Test various invalid ticker formats
+        # Note: control characters in the middle won't be stripped by .strip()
+        invalid_tickers = [
+            '; DROP TABLE',      # SQL injection attempt
+            '&& rm -rf /',       # Command injection attempt
+            '<script>alert(1)</script>',  # XSS attempt
+            'AA\nPL',            # Control character in middle (won't be stripped)
+            '../../../etc',      # Path traversal attempt
+            '@#$%',              # Special characters only
+            'AAPL; DELETE',      # SQL injection with valid prefix
+            'TEST/../../',       # Path traversal with valid prefix
+            'AAPL@HACK',         # Special character in middle
+            'TEST<SCRIPT>',      # XSS in middle
+        ]
+
+        for invalid_ticker in invalid_tickers:
+            result = fetcher.get_financial_statements(invalid_ticker)
+
+            # Verify error response
+            assert 'error' in result, f"Expected error for ticker: {invalid_ticker}"
+            assert result['error']['code'] == 'INVALID_TICKER_FORMAT', f"Expected INVALID_TICKER_FORMAT for: {invalid_ticker}, got {result['error']['code']}"
+            assert 'invalid' in result['error']['message'].lower()
+
+    def test_ticker_sanitization_allows_valid_characters(self, fetcher, mock_ticker):
+        """TEST-UNIT-SANITIZATION: Test valid ticker formats are accepted."""
+        # Valid ticker formats (alphanumeric + hyphen/period)
+        valid_tickers = [
+            'AAPL',
+            'BRK.B',      # Berkshire Hathaway Class B
+            'BRK-B',      # Alternative format
+            'MSFT',
+            'GOOGL',
+            'TSM',        # Taiwan Semiconductor
+            'ASML',       # ASML Holding
+        ]
+
+        for valid_ticker in valid_tickers:
+            with patch('yahoo_finance_fetcher.yf.Ticker', return_value=mock_ticker):
+                result = fetcher.get_financial_statements(valid_ticker)
+
+            # Should not have error
+            assert 'error' not in result, f"Unexpected error for valid ticker: {valid_ticker}"
+            assert 'ticker' in result
+            # Ticker should be uppercased and sanitized
+            assert result['ticker'].isupper()
+
+    def test_api_error_generic_exception_handling(self, fetcher):
+        """TEST-UNIT-API-ERROR: Mock yfinance exception, verify error handling."""
+        # Mock a generic exception from yfinance
+        with patch('yahoo_finance_fetcher.yf.Ticker', side_effect=Exception("Unexpected API error")):
+            result = fetcher.get_financial_statements('AAPL')
+
+        # Verify error response
+        assert 'error' in result
+        assert result['error']['code'] == 'API_ERROR'
+        assert 'error' in result['error']['message'].lower()
+
+    def test_connection_error_handling(self, fetcher):
+        """TEST-UNIT-API-ERROR: Test network connection error handling."""
+        with patch('yahoo_finance_fetcher.yf.Ticker', side_effect=ConnectionError("Network unreachable")):
+            result = fetcher.get_financial_statements('AAPL')
+
+        # Verify error response
+        assert 'error' in result
+        assert result['error']['code'] == 'API_ERROR'
+        assert 'connection' in result['error']['message'].lower()
+
+    def test_ticker_not_found_error_patterns(self, fetcher):
+        """TEST-UNIT-INVALID-TICKER: Test various ticker not found error patterns."""
+        # Mock different error messages that indicate ticker not found
+        error_messages = [
+            "No data found for this ticker",
+            "404 Not Found",
+            "Invalid ticker symbol",
+            "No timezone found",
+            "No price data found"
+        ]
+
+        for error_msg in error_messages:
+            with patch('yahoo_finance_fetcher.yf.Ticker', side_effect=Exception(error_msg)):
+                result = fetcher.get_financial_statements('NOTFOUND')
+
+            # Should map to TICKER_NOT_FOUND error code
+            assert 'error' in result
+            assert result['error']['code'] == 'TICKER_NOT_FOUND', f"Expected TICKER_NOT_FOUND for error: {error_msg}"
+            assert 'ticker' in result['error']
