@@ -700,14 +700,14 @@ This feature is fully implementable with existing infrastructure:
 **Goal**: Create MCP server following financial_data_server.py pattern
 
 - Task 3.1: Create yahoo_finance_server.py with MCPServer class
-  - Status: Backlog
+  - Status: Complete
   - Copy MCPServer base class from financial_data_server.py
   - Update server name to "yahoo-finance"
   - Update server version to "0.1.0"
   - Instantiate YahooFinanceFetcher in `__init__`
 
 - Task 3.2: Register get_financial_statements MCP tool
-  - Status: Backlog
+  - Status: Complete
   - Use `@server.tool` decorator
   - Define tool name: "get_financial_statements"
   - Define description: detailed explanation of tool purpose
@@ -715,7 +715,7 @@ This feature is fully implementable with existing infrastructure:
   - Implement tool handler that calls YahooFinanceFetcher
 
 - Task 3.3: Implement JSON-RPC protocol handlers
-  - Status: Backlog
+  - Status: Complete
   - Handle "initialize" method (return server info and capabilities)
   - Handle "tools/list" method (return tool metadata)
   - Handle "tools/call" method (route to tool handler)
@@ -723,7 +723,7 @@ This feature is fully implementable with existing infrastructure:
   - Format errors as JSON-RPC error objects (not exceptions)
 
 - Task 3.4: Implement stdio transport
-  - Status: Backlog
+  - Status: Complete
   - Read JSON-RPC requests from stdin line-by-line
   - Write JSON-RPC responses to stdout with flush
   - Write error logs to stderr (not stdout)
