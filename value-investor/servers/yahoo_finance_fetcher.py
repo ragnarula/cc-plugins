@@ -214,18 +214,10 @@ class YahooFinanceFetcher:
             TimeoutError: If request exceeds timeout
             Exception: For other API errors
         """
-        # Configure yfinance to use our timeout
-        # yfinance uses requests internally, and we can configure timeout via session
-        import requests
-
-        # Create a session with timeout
-        session = requests.Session()
-        session.request = lambda *args, **kwargs: requests.Session.request(
-            session, *args, **{**kwargs, 'timeout': self.timeout}
-        )
-
-        # Create ticker with custom session
-        ticker_obj = yf.Ticker(ticker, session=session)
+        # Create ticker object
+        # Note: yfinance v1.0+ uses curl_cffi internally and handles timeouts automatically
+        # The timeout configuration is set via environment or yfinance's internal defaults
+        ticker_obj = yf.Ticker(ticker)
 
         return ticker_obj
 
