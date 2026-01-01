@@ -70,6 +70,8 @@
 - TEST-NAME-1: [Short description of the test]
 - TEST-NAME-2: [Short description of the test]
 
+---
+
 ## Added Components
 
 ### [Added Component 1]
@@ -108,6 +110,14 @@
 
 ---
 
+## Documentation Considerations
+- [Developer docs that need to be created/updated]
+- [API docs that need to be created/updated]
+- [Readme's docs that need to be created/updated]
+- [Any other documentation considerations?]
+
+---
+
 ## Test Strategy
 
 ### Test Pyramid
@@ -141,6 +151,7 @@
 - [Large missing infrastructure that needs to be available first as separate iteration]
 
 ---
+
 
 ## Task Breakdown
 
