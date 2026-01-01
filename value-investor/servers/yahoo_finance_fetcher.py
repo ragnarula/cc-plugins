@@ -361,7 +361,7 @@ class YahooFinanceFetcher:
             return result
 
         except ValueError as e:
-            # Ticker sanitization failed
+            # Ticker sanitization failed (INVALID_TICKER_FORMAT)
             return {
                 "error": {
                     "code": "INVALID_TICKER_FORMAT",
@@ -370,19 +370,60 @@ class YahooFinanceFetcher:
                 }
             }
         except TimeoutError:
+            # Request exceeded timeout (API_TIMEOUT)
             return {
                 "error": {
                     "code": "API_TIMEOUT",
-                    "message": f"Request timeout after {self.timeout} seconds",
+                    "message": f"Request timeout after {self.timeout} seconds. Please try again later or check your network connection.",
+                    "ticker": ticker
+                }
+            }
+        except ConnectionError as e:
+            # Network connection error (API_ERROR)
+            return {
+                "error": {
+                    "code": "API_ERROR",
+                    "message": f"Network connection error: {str(e)}",
                     "ticker": ticker
                 }
             }
         except Exception as e:
-            # Generic error handling - will be refined in Task 2.5
+            # Map yfinance-specific errors to appropriate codes
+            error_str = str(e).lower()
+
+            # Check for ticker not found patterns
+            # yfinance may raise various errors when ticker doesn't exist
+            if any(pattern in error_str for pattern in [
+                'no data found',
+                'not found',
+                'invalid ticker',
+                '404',
+                'no timezone found',
+                'no price data found'
+            ]):
+                return {
+                    "error": {
+                        "code": "TICKER_NOT_FOUND",
+                        "message": f"No financial data found for ticker '{ticker}'. Please verify the ticker symbol is correct and the company is publicly traded.",
+                        "ticker": ticker
+                    }
+                }
+
+            # Check for timeout patterns (in case TimeoutError not raised directly)
+            if any(pattern in error_str for pattern in ['timeout', 'timed out']):
+                return {
+                    "error": {
+                        "code": "API_TIMEOUT",
+                        "message": f"Request timeout after {self.timeout} seconds. Please try again later.",
+                        "ticker": ticker
+                    }
+                }
+
+            # Generic API error for all other cases
             return {
                 "error": {
                     "code": "API_ERROR",
-                    "message": str(e),
+                    "message": f"Unexpected error while fetching data: {str(e)}",
                     "ticker": ticker
                 }
             }
