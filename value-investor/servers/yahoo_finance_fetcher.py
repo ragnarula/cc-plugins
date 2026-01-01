@@ -18,9 +18,11 @@ https://github.com/ranaroussi/yfinance
 """
 
 import re
-from typing import Dict, Optional
+from datetime import datetime
+from typing import Dict, Optional, List
 
 import yfinance as yf
+import pandas as pd
 
 
 class YahooFinanceFetcher:
@@ -59,6 +61,127 @@ class YahooFinanceFetcher:
             )
 
         return ticker
+
+    def _transform_dataframe_to_json(self, df: pd.DataFrame, limit_years: Optional[int] = None) -> List[Dict]:
+        """
+        Transform pandas DataFrame to list of JSON dictionaries.
+
+        Args:
+            df: Pandas DataFrame with dates as columns
+            limit_years: Limit to N most recent years (default: None = all data)
+
+        Returns:
+            List of dictionaries with period_end and financial line items
+        """
+        if df is None or df.empty:
+            return []
+
+        result = []
+
+        # DataFrame columns are dates (pandas Timestamp objects)
+        # Rows are financial line items
+        # We need to transpose to get one dict per period
+        for col in df.columns:
+            # Convert date to ISO 8601 format (YYYY-MM-DD)
+            if isinstance(col, pd.Timestamp):
+                period_end = col.strftime('%Y-%m-%d')
+            else:
+                # Handle edge case where column is already a string
+                period_end = str(col)
+
+            # Create dict for this period
+            period_data = {"period_end": period_end}
+
+            # Add all financial line items
+            for row_name in df.index:
+                value = df.loc[row_name, col]
+
+                # Convert pandas types to native Python types
+                if pd.isna(value):
+                    # Will be replaced with "MISSING" in Task 2.4
+                    period_data[row_name] = None
+                elif isinstance(value, (pd.Int64Dtype, pd.Float64Dtype)):
+                    period_data[row_name] = float(value)
+                else:
+                    # Try to convert to float if numeric
+                    try:
+                        period_data[row_name] = float(value)
+                    except (ValueError, TypeError):
+                        period_data[row_name] = str(value)
+
+            result.append(period_data)
+
+        # Sort by date (newest first)
+        result.sort(key=lambda x: x['period_end'], reverse=True)
+
+        # Limit to specified number of years
+        if limit_years:
+            result = result[:limit_years]
+
+        return result
+
+    def _extract_currency(self, ticker_obj) -> str:
+        """
+        Extract currency code from ticker info.
+
+        Args:
+            ticker_obj: yfinance Ticker object
+
+        Returns:
+            ISO 4217 currency code (e.g., 'USD', 'EUR', 'JPY')
+        """
+        try:
+            info = ticker_obj.info
+            currency = info.get('currency', 'USD')
+            # Ensure uppercase for ISO 4217 compliance
+            return currency.upper()
+        except Exception:
+            # Default to USD if unable to extract
+            return 'USD'
+
+    def _extract_fiscal_year_end(self, ticker_obj) -> Optional[str]:
+        """
+        Extract fiscal year end month from ticker info.
+
+        Args:
+            ticker_obj: yfinance Ticker object
+
+        Returns:
+            Month name (e.g., 'September', 'December') or None
+        """
+        try:
+            info = ticker_obj.info
+            # Yahoo Finance provides fiscal year end as a timestamp or month
+            fiscal_year_end = info.get('lastFiscalYearEnd')
+            if fiscal_year_end:
+                # Convert timestamp to month name
+                if isinstance(fiscal_year_end, int):
+                    dt = datetime.fromtimestamp(fiscal_year_end)
+                    return dt.strftime('%B')
+            return None
+        except Exception:
+            return None
+
+    def _limit_quarterly_to_current_year(self, quarterly_data: List[Dict]) -> List[Dict]:
+        """
+        Limit quarterly data to current fiscal year only.
+
+        Args:
+            quarterly_data: List of quarterly period dictionaries
+
+        Returns:
+            Filtered list containing only current year quarters
+        """
+        if not quarterly_data:
+            return []
+
+        # Get current year
+        current_year = datetime.now().year
+
+        # Filter to current year only
+        # Yahoo Finance typically provides last 4 quarters, which is usually the current fiscal year
+        # We'll take the first 4 quarters (most recent) to ensure we get current year data
+        return quarterly_data[:4]
 
     def _fetch_ticker_data(self, ticker: str):
         """
@@ -153,21 +276,45 @@ class YahooFinanceFetcher:
             # Fetch ticker data with timeout
             ticker_obj = self._fetch_ticker_data(sanitized_ticker)
 
-            # Fetch all financial statements
+            # Fetch all financial statements (pandas DataFrames)
             # Annual data
-            income_annual = ticker_obj.financials  # Income statement annual
-            balance_annual = ticker_obj.balance_sheet  # Balance sheet annual
-            cashflow_annual = ticker_obj.cashflow  # Cash flow annual
+            income_annual_df = ticker_obj.financials  # Income statement annual
+            balance_annual_df = ticker_obj.balance_sheet  # Balance sheet annual
+            cashflow_annual_df = ticker_obj.cashflow  # Cash flow annual
 
             # Quarterly data
-            income_quarterly = ticker_obj.quarterly_financials  # Income statement quarterly
-            balance_quarterly = ticker_obj.quarterly_balance_sheet  # Balance sheet quarterly
-            cashflow_quarterly = ticker_obj.quarterly_cashflow  # Cash flow quarterly
+            income_quarterly_df = ticker_obj.quarterly_financials  # Income statement quarterly
+            balance_quarterly_df = ticker_obj.quarterly_balance_sheet  # Balance sheet quarterly
+            cashflow_quarterly_df = ticker_obj.quarterly_cashflow  # Cash flow quarterly
 
-            # This is a placeholder - data transformation will be implemented in Task 2.3
-            # For now, just return the raw data to verify fetching works
+            # Extract metadata
+            currency = self._extract_currency(ticker_obj)
+            fiscal_year_end = self._extract_fiscal_year_end(ticker_obj)
+            retrieved_at = datetime.now().isoformat() + 'Z'
+
+            # Transform DataFrames to JSON
+            # Annual data: limit to 5 years
+            income_annual = self._transform_dataframe_to_json(income_annual_df, limit_years=5)
+            balance_annual = self._transform_dataframe_to_json(balance_annual_df, limit_years=5)
+            cashflow_annual = self._transform_dataframe_to_json(cashflow_annual_df, limit_years=5)
+
+            # Quarterly data: limit to current fiscal year (4 quarters)
+            income_quarterly = self._limit_quarterly_to_current_year(
+                self._transform_dataframe_to_json(income_quarterly_df)
+            )
+            balance_quarterly = self._limit_quarterly_to_current_year(
+                self._transform_dataframe_to_json(balance_quarterly_df)
+            )
+            cashflow_quarterly = self._limit_quarterly_to_current_year(
+                self._transform_dataframe_to_json(cashflow_quarterly_df)
+            )
+
+            # Build final result
             result = {
                 "ticker": sanitized_ticker,
+                "currency": currency,
+                "fiscal_year_end": fiscal_year_end,
+                "retrieved_at": retrieved_at,
                 "statements": {
                     "income_statement": {
                         "annual": income_annual,
