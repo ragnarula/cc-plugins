@@ -30,4 +30,5 @@ markers = [
     "unit: fast unit tests with no I/O",
     "integration: integration tests with file I/O",
     "agent: tests requiring Claude API (slow, expensive)",
+    "e2e: end-to-end tests with full server startup",
 ]
