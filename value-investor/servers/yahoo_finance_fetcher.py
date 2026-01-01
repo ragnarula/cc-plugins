@@ -20,6 +20,8 @@ https://github.com/ranaroussi/yfinance
 import re
 from typing import Dict, Optional
 
+import yfinance as yf
+
 
 class YahooFinanceFetcher:
     """Fetches financial statement data from Yahoo Finance."""
@@ -57,6 +59,35 @@ class YahooFinanceFetcher:
             )
 
         return ticker
+
+    def _fetch_ticker_data(self, ticker: str):
+        """
+        Fetch ticker object from yfinance with timeout.
+
+        Args:
+            ticker: Sanitized ticker symbol
+
+        Returns:
+            yfinance Ticker object
+
+        Raises:
+            TimeoutError: If request exceeds timeout
+            Exception: For other API errors
+        """
+        # Configure yfinance to use our timeout
+        # yfinance uses requests internally, and we can configure timeout via session
+        import requests
+
+        # Create a session with timeout
+        session = requests.Session()
+        session.request = lambda *args, **kwargs: requests.Session.request(
+            session, *args, **{**kwargs, 'timeout': self.timeout}
+        )
+
+        # Create ticker with custom session
+        ticker_obj = yf.Ticker(ticker, session=session)
+
+        return ticker_obj
 
     def get_financial_statements(self, ticker: str) -> Dict:
         """
@@ -115,6 +146,69 @@ class YahooFinanceFetcher:
             - API_TIMEOUT: Request timeout after 30s
             - API_ERROR: Unexpected yfinance error
         """
-        # Placeholder implementation
-        # Will be implemented in subsequent tasks
-        pass
+        try:
+            # Sanitize ticker input
+            sanitized_ticker = self._sanitize_ticker(ticker)
+
+            # Fetch ticker data with timeout
+            ticker_obj = self._fetch_ticker_data(sanitized_ticker)
+
+            # Fetch all financial statements
+            # Annual data
+            income_annual = ticker_obj.financials  # Income statement annual
+            balance_annual = ticker_obj.balance_sheet  # Balance sheet annual
+            cashflow_annual = ticker_obj.cashflow  # Cash flow annual
+
+            # Quarterly data
+            income_quarterly = ticker_obj.quarterly_financials  # Income statement quarterly
+            balance_quarterly = ticker_obj.quarterly_balance_sheet  # Balance sheet quarterly
+            cashflow_quarterly = ticker_obj.quarterly_cashflow  # Cash flow quarterly
+
+            # This is a placeholder - data transformation will be implemented in Task 2.3
+            # For now, just return the raw data to verify fetching works
+            result = {
+                "ticker": sanitized_ticker,
+                "statements": {
+                    "income_statement": {
+                        "annual": income_annual,
+                        "quarterly": income_quarterly
+                    },
+                    "balance_sheet": {
+                        "annual": balance_annual,
+                        "quarterly": balance_quarterly
+                    },
+                    "cash_flow": {
+                        "annual": cashflow_annual,
+                        "quarterly": cashflow_quarterly
+                    }
+                }
+            }
+
+            return result
+
+        except ValueError as e:
+            # Ticker sanitization failed
+            return {
+                "error": {
+                    "code": "INVALID_TICKER_FORMAT",
+                    "message": str(e),
+                    "ticker": ticker
+                }
+            }
+        except TimeoutError:
+            return {
+                "error": {
+                    "code": "API_TIMEOUT",
+                    "message": f"Request timeout after {self.timeout} seconds",
+                    "ticker": ticker
+                }
+            }
+        except Exception as e:
+            # Generic error handling - will be refined in Task 2.5
+            return {
+                "error": {
+                    "code": "API_ERROR",
+                    "message": str(e),
+                    "ticker": ticker
+                }
+            }
