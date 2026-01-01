@@ -97,9 +97,9 @@ class YahooFinanceFetcher:
                 value = df.loc[row_name, col]
 
                 # Convert pandas types to native Python types
+                # Use "MISSING" string for NaN/None values (REQ-FN-02)
                 if pd.isna(value):
-                    # Will be replaced with "MISSING" in Task 2.4
-                    period_data[row_name] = None
+                    period_data[row_name] = "MISSING"
                 elif isinstance(value, (pd.Int64Dtype, pd.Float64Dtype)):
                     period_data[row_name] = float(value)
                 else:
@@ -182,6 +182,23 @@ class YahooFinanceFetcher:
         # Yahoo Finance typically provides last 4 quarters, which is usually the current fiscal year
         # We'll take the first 4 quarters (most recent) to ensure we get current year data
         return quarterly_data[:4]
+
+    def _check_data_availability(self, ticker_obj) -> bool:
+        """
+        Check if ticker has any financial data available.
+
+        Args:
+            ticker_obj: yfinance Ticker object
+
+        Returns:
+            True if at least one financial statement has data, False otherwise
+        """
+        # Check if any of the main financial statements have data
+        has_income = ticker_obj.financials is not None and not ticker_obj.financials.empty
+        has_balance = ticker_obj.balance_sheet is not None and not ticker_obj.balance_sheet.empty
+        has_cashflow = ticker_obj.cashflow is not None and not ticker_obj.cashflow.empty
+
+        return has_income or has_balance or has_cashflow
 
     def _fetch_ticker_data(self, ticker: str):
         """
@@ -275,6 +292,16 @@ class YahooFinanceFetcher:
 
             # Fetch ticker data with timeout
             ticker_obj = self._fetch_ticker_data(sanitized_ticker)
+
+            # Check if ticker has any financial data
+            if not self._check_data_availability(ticker_obj):
+                return {
+                    "error": {
+                        "code": "DATA_UNAVAILABLE",
+                        "message": f"Ticker '{sanitized_ticker}' is valid but has no financial statements available. This may occur for non-public companies, ETFs, or newly listed securities.",
+                        "ticker": sanitized_ticker
+                    }
+                }
 
             # Fetch all financial statements (pandas DataFrames)
             # Annual data
