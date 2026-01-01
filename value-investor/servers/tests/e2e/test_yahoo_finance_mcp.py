@@ -127,3 +127,79 @@ class TestMCPInitialize:
 
         # Verify capabilities present
         assert "capabilities" in result
+
+
+@pytest.mark.e2e
+class TestMCPToolsList:
+    """Test MCP tools/list protocol."""
+
+    def test_tools_list_response_structure(self, server_process):
+        """TEST-MCP-TOOLS-LIST: Send tools/list request, verify get_financial_statements tool."""
+        # Initialize server first
+        send_request(
+            server_process,
+            method="initialize",
+            params={"protocolVersion": "2024-11-05", "capabilities": {}}
+        )
+
+        # Send tools/list request
+        response = send_request(
+            server_process,
+            method="tools/list",
+            request_id=2
+        )
+
+        # Verify JSON-RPC structure
+        assert response["jsonrpc"] == "2.0"
+        assert response["id"] == 2
+        assert "result" in response
+        assert "error" not in response
+
+        result = response["result"]
+
+        # Verify tools array present
+        assert "tools" in result, "Missing tools array in tools/list response"
+        tools = result["tools"]
+        assert isinstance(tools, list), "tools should be an array"
+        assert len(tools) > 0, "tools array should not be empty"
+
+        # Verify get_financial_statements tool is in response
+        tool_names = [tool["name"] for tool in tools]
+        assert "get_financial_statements" in tool_names, \
+            "get_financial_statements tool not found in tools/list"
+
+        # Find the get_financial_statements tool
+        financial_tool = next(
+            (tool for tool in tools if tool["name"] == "get_financial_statements"),
+            None
+        )
+        assert financial_tool is not None
+
+        # Verify tool has name, description, inputSchema
+        assert "name" in financial_tool, "Tool missing name field"
+        assert financial_tool["name"] == "get_financial_statements"
+
+        assert "description" in financial_tool, "Tool missing description field"
+        assert isinstance(financial_tool["description"], str)
+        assert len(financial_tool["description"]) > 0, "Tool description should not be empty"
+
+        assert "inputSchema" in financial_tool, "Tool missing inputSchema field"
+        input_schema = financial_tool["inputSchema"]
+
+        # Verify inputSchema structure
+        assert "type" in input_schema
+        assert input_schema["type"] == "object"
+
+        assert "properties" in input_schema
+        properties = input_schema["properties"]
+
+        # Verify ticker parameter exists
+        assert "ticker" in properties, "Missing ticker parameter in inputSchema"
+        ticker_param = properties["ticker"]
+        assert "type" in ticker_param
+        assert ticker_param["type"] == "string"
+        assert "description" in ticker_param
+
+        # Verify required parameters
+        assert "required" in input_schema
+        assert "ticker" in input_schema["required"]

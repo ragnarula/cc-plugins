@@ -801,7 +801,7 @@ This feature is fully implementable with existing infrastructure:
 **Goal**: Validate MCP server protocol compliance and tool invocation
 
 - Task 6.1: Write E2E test for MCP initialize
-  - Status: Backlog
+  - Status: Complete
   - TEST-MCP-INITIALIZE: Send initialize request, verify server info response
   - Verify protocolVersion field present
   - Verify serverInfo contains name and version
