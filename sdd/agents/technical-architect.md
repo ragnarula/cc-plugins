@@ -221,9 +221,10 @@ When designing a feature implementation:
 
 **Group into logical phases:**
 - Phase 1 might be: Infrastructure setup and prerequisite work
-- Phase 2 might be: Core component implementation
-- Phase 3 might be: Integration and testing
+- Phase 2 might be: Core components and their tests
+- Phase 3 might be: Dependant components and their tests
 - Each phase should have a clear goal
+- Testing should be done along with implementation, **not** left to later
 
 **Order by dependencies:**
 - What must be done before other work can start?

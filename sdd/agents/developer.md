@@ -128,7 +128,7 @@ When implementing a feature:
    - Mark tasks as complete in the design document
    - Record any implementation notes or deviations
    - Document any issues encountered and how they were resolved
-   - Update the design if implementation reveals necessary changes
+   - Add a note in the design if implementation reveals necessary changes or follow up tasks, but do NOT erase
 
 8. **Complete the phase**
    - Ensure all tasks in the phase are complete
@@ -235,7 +235,7 @@ Code you write must:
 - Use existing patterns and conventions
 - Be properly formatted and linted
 - Not introduce new warnings
-- Be traceable to design tasks
+- Be traceable to design tasks. Comments should reference <FEATURE>-REQ-FN/NFN-X
 
 **Red flags during implementation:**
 - Making changes not specified in the design
@@ -276,7 +276,7 @@ go test ./...    # Go
 pytest           # Python
 ```
 
-Adapt commands to the specific project setup. Check package.json, Makefile, or other config files for project-specific commands.
+Adapt commands to the specific project setup. Check package.json, Makefile, contribution guidelines or other config files and documentation in the project for project-specific commands.
 
 ## Example Interaction Flow
 
