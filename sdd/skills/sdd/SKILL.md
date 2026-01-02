@@ -275,7 +275,17 @@ The specification is the single source of truth. Code implements it. Tests verif
 ### Templates
 
 - `SDD_TEMPLATE_SPECIFICATION` located in `templates/specification.template.md` used for initial requirements gathering
-- `SDD_TEMPLATE_DESIGN` located in `templates/design.template.md` used for initial requirements gathering
+- `SDD_TEMPLATE_DESIGN` located in `templates/design.template.md` used for design documents
+- `SDD_TEMPLATE_PROJECT_GUIDELINES` located in `templates/project-guidelines.template.md` used for project-specific conventions
+
+### Project Guidelines
+
+The `SDD_PROJECT_GUIDELINES` file (`.sdd/project-guidelines.md`) contains project-specific conventions that agents must follow during the design phase. This file can:
+
+1. **Reference existing documentation** - List paths to docs, READMEs, or other files containing conventions
+2. **Define inline guidelines** - Specify conventions directly in the file
+
+Agents read this file during exploration and apply these conventions to architectural decisions. The design-reviewer validates that designs comply with project guidelines.
 
 ### Leveraging AI in SDD
 

@@ -155,21 +155,30 @@
 
 ## Task Breakdown
 
+> **CRITICAL: Tests are written WITH implementation, not after.**
+> Each task that adds or modifies functionality MUST include writing tests as part of that task.
+> Do NOT create separate "Add tests" tasks or defer testing to later phases.
+> TDD approach: Write failing test → Implement → Verify test passes → Refactor.
+
 ### Phase [1] [Goal of this phase]
 - Task [1]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
+  - Tests: [Which test cases from component definitions are written in this task]
 - Task [2]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
-  
+  - Tests: [Which test cases from component definitions are written in this task]
+
 ### Phase [2] [Goal of this phase]
 - Task [1]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
+  - Tests: [Which test cases from component definitions are written in this task]
 - Task [2]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
+  - Tests: [Which test cases from component definitions are written in this task]
 
 ---
 

@@ -4,7 +4,7 @@ description: Implement a feature from its design document. Executes Phase 3 of S
 arguments:
   - FEATURE (The name of the feature)
   - PHASE (Optional - The phase number to implement, defaults to next incomplete phase)
-  - --review-only (Optional flag - Skip implementation and go straight to review stage. Use when implementation is already done and you want to run the review process.)
+  - --review-and-fix (Optional flag - Skip implementation and run the review→fix→re-review cycle. Use when implementation is already done and you want to review and fix any issues.)
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "LSP", "Task"]
 ---
 
@@ -37,16 +37,17 @@ Implement a feature according to the tasks defined in its design document. Work 
 - Check the Feasibility Review section for any blockers that need resolution
 - If there are unresolved blockers, present them to the user and ask how to proceed
 
-## STEP 4 - Check for review-only mode
+## STEP 4 - Check for review-and-fix mode
 
-- If the `--review-only` flag is present:
+- If the `--review-and-fix` flag is present:
   - Skip STEP 5 (implementation)
   - Go directly to STEP 6 (review)
+  - **IMPORTANT**: After review, automatically continue through STEP 7 to fix any issues found. Do NOT stop after the review - execute the full review→fix→re-review cycle until the code is APPROVED or the max retry limit is reached.
   - This is useful when:
     - Implementation was done manually or in a previous session
     - The user wants to re-run the review after fixing issues
     - Resuming after a partial implementation
-- If `--review-only` is NOT present, continue to STEP 5
+- If `--review-and-fix` is NOT present, continue to STEP 5
 
 ## STEP 5 - Implement the phase
 
@@ -173,9 +174,9 @@ Implement a feature according to the tasks defined in its design document. Work 
 # Implement a specific phase with automatic review
 /implement shopping-cart 2
 
-# Skip to review stage (when implementation is already done)
-/implement shopping-cart --review-only
+# Run review and fix cycle (when implementation is already done)
+/implement shopping-cart --review-and-fix
 
-# Review a specific phase that was implemented manually
-/implement shopping-cart 1 --review-only
+# Review and fix a specific phase that was implemented manually
+/implement shopping-cart 1 --review-and-fix
 ```

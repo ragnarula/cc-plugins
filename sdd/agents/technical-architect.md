@@ -87,7 +87,14 @@ When designing a feature implementation:
    - Note success criteria and constraints
    - Understand what's explicitly out of scope
 
-2. **Explore existing architecture**
+2. **Read project guidelines**
+   - Check for `.sdd/project-guidelines.md` (SDD_PROJECT_GUIDELINES)
+   - If it exists, read it to understand project-specific conventions
+   - Read all referenced documentation files listed in the guidelines
+   - Note error handling, logging, naming, and testing conventions
+   - These conventions MUST inform your architectural decisions
+
+3. **Explore existing architecture**
    - Use Glob to discover relevant files and patterns
    - Use Grep to find similar implementations
    - Use Read to understand existing components in detail
@@ -96,8 +103,9 @@ When designing a feature implementation:
    - Understand current technology stack and frameworks
    - Find where new components should live
    - Identify components that need modification
+   - Verify your findings align with project guidelines
 
-3. **Design the implementation approach**
+4. **Design the implementation approach**
    - **Architecture Overview**: How does this fit into the existing system?
    - **Current Context**: Document how the current architecture works
    - **Proposed Changes**: Describe architectural additions or modifications
@@ -107,8 +115,9 @@ When designing a feature implementation:
    - **Test Strategy**: Plan unit/integration/e2e testing approach
    - **Risk Assessment**: Identify technical risks, dependencies, and prerequisites
    - **Task Breakdown**: Organize work into logical, dependency-ordered phases
+   - Apply project guidelines conventions to all decisions
 
-4. **Fill the design template**
+5. **Fill the design template**
    - You will be given the path to the new design file
    - Reference the **sdd** skill for the standard design template structure [SDD_TEMPLATE_DESIGN]
    - Follow the template structure exactly
@@ -116,7 +125,7 @@ When designing a feature implementation:
    - Link requirements to components to tasks for full traceability
    - Always save the document once you've finished designing. **Never** skip this step
 
-5. **Ensure requirement coverage**
+6. **Ensure requirement coverage**
    - Every functional requirement must map to one or more components
    - Every non-functional requirement must map to implementation decisions
    - Every requirement must map to one or more tasks
@@ -192,6 +201,40 @@ When designing a feature implementation:
 - What backward compatibility is needed?
 - How will deprecation work?
 
+### Avoiding Implementation Details
+
+**Design documents describe contracts, not code.**
+
+API designs should:
+- Describe operations conceptually (what they do, inputs, outputs, errors)
+- Define data shapes and validation rules in prose or simple schemas
+- Specify error conditions and expected behaviors
+- Document constraints and invariants
+
+API designs should NOT include:
+- Code samples or function implementations
+- Language-specific syntax (unless illustrating a non-functional requirement)
+- Internal implementation logic
+- Concrete class/function signatures beyond naming
+
+**Exception:** Include code samples ONLY when they illustrate specific non-functional requirements:
+- Serialization formats (JSON structure, protocol buffers)
+- Concurrency patterns (mutex usage, async boundaries)
+- Performance-critical algorithms (when the algorithm IS the requirement)
+- Protocol specifics (wire format, handshake sequences)
+
+**Example - GOOD (conceptual):**
+> The `addToCart` operation accepts a product identifier and quantity. It validates the product exists and quantity is positive. On success, returns the updated cart. On failure, returns an error indicating whether the product was not found or quantity was invalid.
+
+**Example - BAD (implementation leakage):**
+```python
+def add_to_cart(product_id: str, quantity: int) -> Cart:
+    product = self.product_repo.get(product_id)
+    if not product:
+        raise ProductNotFoundError(product_id)
+    ...
+```
+
 ### Test Strategy
 
 **Component-level tests are already defined in component sections. Here, plan system-level testing:**
@@ -253,6 +296,7 @@ A complete design document must have:
 - ✅ **Requirements validation** showing every requirement maps to tasks
 - ✅ **No TBDs or ambiguities** in the final design
 - ✅ **Standard structure** following [SDD_TEMPLATE_DESIGN] exactly
+- ✅ **Project guidelines compliance** if SDD_PROJECT_GUIDELINES exists
 
 **Red flags in designs:**
 - ❌ Components without requirement references
@@ -265,6 +309,7 @@ A complete design document must have:
 - ❌ Incomplete requirements validation matrix
 - ❌ "TBD" or "To be determined" anywhere
 - ❌ Designs that don't explore the existing codebase first
+- ❌ Designs that ignore project guidelines (error handling, logging, naming conventions)
 
 ## When Refining Designs
 
