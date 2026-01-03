@@ -84,12 +84,12 @@ When implementing a feature:
    - Note which phase you are implementing
    - Identify any prerequisites or dependencies
 
-2. **Read codebase documentation**
-   - Find and read README.md files in relevant directories
-   - Find and read CLAUDE.md files if they exist
-   - Find and read CONSTITUTION.md files if they exist
-   - Find and read any files in docs/ folders
-   - **If documentation doesn't exist for critical patterns, STOP and ask the user to document them before proceeding**
+2. **Read project guidelines**
+   - Check for `.sdd/project-guidelines.md` (SDD_PROJECT_GUIDELINES)
+   - If it exists, read it to understand project-specific conventions
+   - Read all referenced documentation files listed in the guidelines
+   - Note error handling, logging, naming, and testing conventions
+   - **CRITICAL** These conventions MUST inform your implementation decisions
 
 3. **Understand established patterns**
    - How are errors propagated and handled?
@@ -166,6 +166,37 @@ When implementing a feature:
 - For integration tests, core logic should be tested first
 - Document why you deviated from TDD in your commit message
 
+**CRITICAL: No Test Stubs**
+
+Tests must be FULLY IMPLEMENTED as part of the task. Test stubs are NOT acceptable.
+
+A "test stub" is any test that doesn't actually verify behavior:
+- Tests marked with `skip`, `todo`, `pending`, `@pytest.mark.skip`, `@unittest.skip`, `it.skip`, `xit`
+- Tests with empty bodies or `pass` statements
+- Tests with placeholder assertions like `assert True` or `expect(true).toBe(true)`
+- Tests with comments like `// TODO: implement` or `# FIXME: add assertions`
+
+**If a test stub is absolutely unavoidable** (e.g., external dependency not configured in CI):
+1. Document the stub in the design document's "Test Stub Tracking" section
+2. Specify which phase will implement the full test
+3. Get explicit approval before committing a stub
+4. The stub MUST be resolved by the final phase
+
+**Never do this:**
+```python
+def test_user_authentication():
+    pass  # TODO: implement later
+```
+
+**Always do this:**
+```python
+def test_user_authentication():
+    user = create_test_user(email="test@example.com", password="secret")
+    result = authenticate(email="test@example.com", password="secret")
+    assert result.success is True
+    assert result.user.id == user.id
+```
+
 ### Following Existing Patterns
 
 **Error handling:**
@@ -230,21 +261,28 @@ When implementing a feature:
 
 Code you write must:
 - Pass all existing tests
-- Include tests for new functionality
+- Include FULLY IMPLEMENTED tests for new functionality (no stubs, no skips, no placeholders)
 - Follow the established code style
 - Use existing patterns and conventions
 - Be properly formatted and linted
 - Not introduce new warnings
 - Be traceable to design tasks. Comments should reference <FEATURE>-REQ-FN/NFN-X
+- Have no dead code in the final phase of a design. Intermediate phases may have dead code if it will be used in a later phase, but this must be tracked in the design document
+- Have no test stubs in the final phase of a design. Intermediate phases may have test stubs only if tracked in the design document's "Test Stub Tracking" section
 
 **Red flags during implementation:**
 - Making changes not specified in the design
 - Skipping tests to "save time"
+- Writing test stubs instead of fully implemented tests
+- Deferring test implementation to a "later phase" without tracking in design document
 - Ignoring linter warnings
 - Not committing after each task
 - Working on multiple tasks simultaneously
 - Deviating from established patterns without approval
 - Leaving TODOs for critical functionality
+- Introducing dead code without tracking it in the design document
+- Leaving dead code in the final phase of a design
+- Leaving test stubs in the final phase of a design
 
 ## Continuous Validation Commands
 

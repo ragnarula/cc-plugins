@@ -182,6 +182,31 @@
 
 ---
 
+## Intermediate Dead Code Tracking
+
+> Code introduced in earlier phases that will be used in later phases must be tracked here.
+> All entries must be resolved (code used or removed) by the final phase.
+
+| Phase Introduced | Description | Used In Phase | Status |
+|------------------|-------------|---------------|--------|
+| [Example: Phase 1] | [Example: Helper functions for data transformation] | [Example: Phase 3] | [Pending/Resolved] |
+
+---
+
+## Test Stub Tracking
+
+> **CRITICAL: Test stubs are NOT acceptable without explicit tracking.**
+> All tests MUST be fully implemented as part of the task that introduces the code they test.
+> If a test stub is absolutely necessary (e.g., external dependency not yet available), it MUST be tracked here.
+> All entries must be resolved (stub implemented or removed) by the final phase.
+> A "stub" includes: `skip`, `todo`, `pass`, `pytest.mark.skip`, `@unittest.skip`, `it.skip`, `xit`, `pending`, empty test bodies, or `assert True` placeholders.
+
+| Phase Introduced | Test Name | Reason for Stub | Implemented In Phase | Status |
+|------------------|-----------|-----------------|----------------------|--------|
+| [Example: Phase 1] | [Example: test_external_api_integration] | [Example: External API not yet configured in CI] | [Example: Phase 3] | [Pending/Resolved] |
+
+---
+
 ## Requirements Validation
 
 Ensure all requirements have matching tasks

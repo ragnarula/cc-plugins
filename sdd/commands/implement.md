@@ -98,7 +98,7 @@ Implement a feature according to the tasks defined in its design document. Work 
     1. Validate implementation matches the design document tasks
     2. Check for design alterations - if found, ensure workarounds are documented
     3. Verify tests are added for all new code
-    4. Check for dead code or commented-out blocks
+    4. Check for dead code or commented-out blocks (must be none in final phase; intermediate phase dead code must be tracked in design document)
     5. Verify code meets documented practices (error handling, logging, naming)
     6. Run all tests (unit, integration, etc.) and document any failures
     7. Run linters and quality checks, document any issues

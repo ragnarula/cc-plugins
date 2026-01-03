@@ -178,7 +178,18 @@ In SDD, the specification is not just documentation—it is the single source of
    - Verify performance and quality attributes
    - Conduct specification review
 
-**Deliverable:** Working software that demonstrably satisfies the specification, with executable tests proving correctness.
+5. **Clean Up Dead Code**
+   - Intermediate phases may introduce code that will be used in later phases; this must be tracked in the design document
+   - When completing the final phase of a design, ensure ALL dead code related to this design's work is removed
+   - Verify any previously tracked dead code markers in the design document have been resolved
+
+6. **Resolve Test Stubs**
+   - Tests must be fully implemented as part of each task, NOT stubbed out
+   - Test stubs (skip, pass, todo, placeholder assertions) are NOT acceptable unless tracked in the design document's "Test Stub Tracking" section
+   - Intermediate phases may have test stubs ONLY if: (1) there is a valid reason (e.g., external dependency unavailable), (2) they are tracked in the design document, (3) they have a clear plan for implementation
+   - When completing the final phase of a design, ensure ALL test stubs have been resolved with fully implemented tests
+
+**Deliverable:** Working software that demonstrably satisfies the specification, with executable tests proving correctness. All tests must be fully implemented—no stubs, no skips, no placeholders.
 
 ### Phase 4: Evolve
 
@@ -256,8 +267,11 @@ The specification is the single source of truth. Code implements it. Tests verif
 - **Code-First:** Starting implementation before specification exists
 - **Specification Ignorance:** Implementing without reading or understanding the spec
 - **Test-After:** Writing tests after implementation instead of from specifications
+- **Test Stub Deferral:** Writing test stubs (skip, pass, todo, placeholder assertions) and deferring implementation to "later" without tracking in the design document
 - **Gold Plating:** Adding features not in the specification
 - **Specification Drift:** Allowing implementation to diverge from specification without updating either
+- **Dead Code Accumulation:** Leaving unused code in the final phase, or introducing dead code in intermediate phases without tracking it in the design document
+- **Test Stub Accumulation:** Leaving unimplemented test stubs in the final phase, or introducing test stubs in intermediate phases without tracking them in the design document
 
 ### Process Anti-Patterns
 - **Waterfall Regression:** Treating SDD phases as sequential and inflexible
@@ -308,8 +322,10 @@ Agents read this file during exploration and apply these conventions to architec
 **Implementation Quality:**
 - All acceptance criteria have passing tests
 - No untested code paths
+- Tests are fully implemented (no stubs, skips, or placeholder assertions in the final phase; intermediate phase test stubs must be tracked in the design document)
 - Implementation aligns with design decisions
 - Code is readable and maintainable
+- No dead code in the final phase of a design (intermediate phase dead code must be tracked in the design document)
 
 **Process Quality:**
 - Specification exists before implementation starts

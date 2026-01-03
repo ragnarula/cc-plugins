@@ -115,11 +115,20 @@ When reviewing a feature implementation:
    - Check test coverage for critical paths
    - Ensure tests follow existing test patterns
 
-7. **Check for dead code**
-   - Identify unused imports, variables, or functions
+7. **Check for test stubs**
+   - Search for test stub patterns: `skip`, `todo`, `pending`, `@pytest.mark.skip`, `@unittest.skip`, `it.skip`, `xit`
+   - Search for empty test bodies or `pass` statements in test functions
+   - Search for placeholder assertions: `assert True`, `expect(true).toBe(true)`, `assertTrue(true)`
+   - Search for TODO/FIXME comments in test files
+   - **Intermediate phases**: Test stubs are acceptable ONLY if tracked in the design document's "Test Stub Tracking" section with a clear plan for implementation
+   - **Final phase**: When reviewing the final phase of a design, there must be NO test stubs - all tests must be fully implemented. Verify any previously tracked test stubs have been resolved
+
+8. **Check for dead code**
+   - Identify unused imports, variables, or functions introduced by this design
    - Flag commented-out code that should be removed
    - Check for code that will never be executed
-   - Exception: Code intended for immediate use in the next task is acceptable
+   - **Intermediate phases**: Dead code related to this design's work is acceptable if it will be used in a subsequent phase of the same design. Such code must be tracked in the design document (e.g., "Task X.Y introduces helper functions used in Phase Z")
+   - **Final phase**: When reviewing the final phase of a design, there must be NO dead code related to this design's work - all code introduced by the design should be used. Verify any previously tracked dead code markers have been resolved
 
 8. **Verify code meets documented practices**
    - Check error handling matches documented patterns
@@ -228,11 +237,12 @@ A thorough review must verify:
 - ✅ **Design alignment** - Implementation matches the design document
 - ✅ **Requirement coverage** - All requirements are implemented
 - ✅ **Test coverage** - All new code has tests
+- ✅ **Tests fully implemented** - No test stubs (skip, pass, todo, placeholder assertions) in final phase; intermediate phase stubs tracked in design document
 - ✅ **Test execution** - All tests pass
 - ✅ **Linting** - No linting errors or warnings
 - ✅ **Compilation** - No build errors or new warnings
 - ✅ **Code standards** - Follows documented practices
-- ✅ **No dead code** - No unused or commented-out code
+- ✅ **No dead code** - No unused or commented-out code in final phase; intermediate phase dead code tracked in design document
 - ✅ **Documentation** - Changes are properly documented
 - ✅ **Workarounds documented** - If design was altered, workarounds exist
 
@@ -240,10 +250,12 @@ A thorough review must verify:
 - ❌ Implementation that doesn't match the design
 - ❌ Requirements removed without justification
 - ❌ New code without corresponding tests
+- ❌ Test stubs (skip, pass, todo, placeholder assertions) - in final phase, or untracked in intermediate phases
+- ❌ Tests deferred to "later phase" without tracking in design document
 - ❌ Failing tests
 - ❌ Linting errors or warnings ignored
 - ❌ Undocumented deviations from design
-- ❌ Dead code or commented-out blocks
+- ❌ Dead code or commented-out blocks (in final phase, or untracked in intermediate phases)
 - ❌ Violations of documented coding standards
 - ❌ Missing error handling or logging
 - ❌ Security vulnerabilities
