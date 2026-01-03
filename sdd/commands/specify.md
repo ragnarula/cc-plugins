@@ -3,7 +3,7 @@ name: specify
 description: Write a specification for a feature. Documents the 'What' and 'Why' for approval by stakeholders, without deciding implementation details yet. Captures functional and non-functional requirements for later use in architecture planning. Follows standard process for capturing requirements according to templates.
 arguments:
   - FEATURE (The name of the feature)
-  - DESCRIPTON (A brief description)
+  - DESCRIPTION (A brief description)
 allowed-tools: ["Read", "Write", "Bash", "WebSearch", "WebFetch", "Glob", "Grep", "Task"]
 ---
 

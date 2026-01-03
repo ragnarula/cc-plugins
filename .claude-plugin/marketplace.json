@@ -1,53 +1,21 @@
 {
-  "name": "claude-code-plugin-marketplace",
-  "version": "1.0.0",
+  "name": "cc-plugins",
   "owner": {
-    "name": "yourusername"
+    "name": "Raghav Narula"
   },
   "description": "A curated collection of high-quality plugins for Claude Code",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/cc-plugins"
-  },
+
   "plugins": [
     {
       "name": "value-investor",
       "source": "./value-investor",
-      "version": "0.1.1",
-      "description": "Comprehensive investment analysis workflow for evaluating publicly traded companies using Warren Buffett and Charlie Munger's value investing principles",
-      "author": {
-        "name": "Investment Analyst",
-        "email": "analyst@example.com"
-      },
-      "keywords": [
-        "investing",
-        "value-investing",
-        "stock-analysis",
-        "financial-analysis",
-        "buffett",
-        "munger"
-      ],
-      "category": "finance"
+
+      "description": "Comprehensive investment analysis workflow for evaluating publicly traded companies using Warren Buffett and Charlie Munger's value investing principles"
     },
     {
       "name": "sdd",
       "source": "./sdd",
-      "version": "0.1.2",
-      "description": "Spec Driven Development",
-      "author": {
-        "name": "Raghav Narula",
-        "email": "ai@raghavnarula.co.uk"
-      },
-      "keywords": ["sdd", "software engineering"],
-      "category": "finance"
+      "description": "Spec Driven Development (SDD) methodology for Claude Code. Provides a structured workflow for specification, design, and implementation phases with automated reviews, test-driven development enforcement, and requirements traceability."
     }
-  ],
-  "categories": [
-    "finance",
-    "productivity",
-    "development",
-    "data-science",
-    "content",
-    "utilities"
   ]
 }
