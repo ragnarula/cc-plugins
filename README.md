@@ -42,28 +42,47 @@ A comprehensive investment analysis workflow for evaluating publicly traded comp
 
 ## Installation
 
-### Installing a Plugin
+### Install from GitHub (Recommended)
 
-To use any plugin from this marketplace:
+Add this marketplace to Claude Code, then install plugins:
 
 ```bash
-# Clone the marketplace repository
-git clone <repository-url> cc-plugins
+# Add the marketplace
+/plugin marketplace add ragnarula/cc-plugins
 
-# Navigate to the marketplace directory
-cd cc-plugins
+# Install plugins
+/plugin install sdd@ragnarula-cc-plugins
+/plugin install value-investor@ragnarula-cc-plugins
+```
 
-# Use the plugin with Claude Code
-cc --plugin-dir ./value-investor
+Or via the CLI:
+
+```bash
+claude plugin marketplace add ragnarula/cc-plugins --scope user
+claude plugin install sdd@ragnarula-cc-plugins --scope user
+```
+
+**Scope options:**
+- `user` - Install for yourself across all projects (default)
+- `project` - Install for all collaborators in the repository
+- `local` - Install only for yourself in this repository
+
+### Install from Local Clone
+
+Clone the repository and use a plugin directly:
+
+```bash
+git clone https://github.com/ragnarula/cc-plugins.git
+claude --plugin-dir ./cc-plugins/sdd
 ```
 
 ### Project-Specific Installation
 
-To install a plugin for a specific project:
+Copy a plugin into your project's `.claude-plugin/` directory:
 
 ```bash
-# Copy the desired plugin to your project
-cp -r cc-plugins/value-investor /path/to/your/project/.claude-plugin/
+git clone https://github.com/ragnarula/cc-plugins.git
+cp -r cc-plugins/sdd /path/to/your/project/.claude-plugin/
 ```
 
 ## Plugin Development
