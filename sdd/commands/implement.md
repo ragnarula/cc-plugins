@@ -8,7 +8,7 @@ arguments:
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "LSP", "Task"]
 ---
 
-You must use the sdd skill.
+You must use the sdd skill. Use the exact paths defined in the skill's "Project Structure and Paths" section.
 
 # Implement
 
@@ -51,7 +51,9 @@ Implement a feature according to the tasks defined in its design document. Work 
 
 ## STEP 5 - Implement the phase
 
-- Create a Task with the developer agent and do the following. Pass the design document's path as `SDD_DESIGN_DOCUMENT`, the specification document's path as `SDD_SPECIFICATION_DOCUMENT`, and the phase number as `SDD_CURRENT_PHASE`.
+**CRITICAL**: You MUST use the Task tool with `subagent_type="sdd:developer"` to implement this phase. DO NOT implement the code yourself - launch the developer agent to do the work.
+
+- Use the Task tool with subagent_type="sdd:developer" and the following prompt. Pass the design document's path as `SDD_DESIGN_DOCUMENT`, the specification document's path as `SDD_SPECIFICATION_DOCUMENT`, and the phase number as `SDD_CURRENT_PHASE`.
   - |
     Implement Phase [SDD_CURRENT_PHASE] of the feature according to the design document.
 
@@ -84,7 +86,9 @@ Implement a feature according to the tasks defined in its design document. Work 
 
 ## STEP 6 - Review the implementation
 
-- Create a Task with the reviewer agent to review the implementation. Pass the design document's path as `SDD_DESIGN_DOCUMENT`, the specification document's path as `SDD_SPECIFICATION_DOCUMENT`, and the phase number as `SDD_CURRENT_PHASE`.
+**CRITICAL**: You MUST use the Task tool with `subagent_type="sdd:reviewer"` to review the implementation. DO NOT review the code yourself - launch the reviewer agent to do the work.
+
+- Use the Task tool with subagent_type="sdd:reviewer" and the following prompt. Pass the design document's path as `SDD_DESIGN_DOCUMENT`, the specification document's path as `SDD_SPECIFICATION_DOCUMENT`, and the phase number as `SDD_CURRENT_PHASE`.
   - |
     Review the implementation of Phase [SDD_CURRENT_PHASE] for the feature.
 
@@ -121,7 +125,7 @@ Implement a feature according to the tasks defined in its design document. Work 
 - If the review status is **APPROVED**, skip to STEP 8
 - If the review status is **NEEDS REVISION** or **BLOCKED**:
   1. Present the review findings to the context
-  2. Create a Task with the developer agent to fix the issues:
+  2. **CRITICAL**: Use the Task tool with `subagent_type="sdd:developer"` to fix the issues. DO NOT fix the issues yourself - launch the developer agent:
      - |
        Fix the issues identified in the code review for Phase [SDD_CURRENT_PHASE].
 

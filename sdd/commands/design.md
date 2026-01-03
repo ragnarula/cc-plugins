@@ -7,7 +7,7 @@ arguments:
 allowed-tools: ["Read", "Write", "Bash", "Glob", "Grep", "LSP", "Task", "AskUserQuestion"]
 ---
 
-You must use the sdd skill.
+You must use the sdd skill. Use the exact paths defined in the skill's "Project Structure and Paths" section.
 
 # Design
 
@@ -38,7 +38,10 @@ Create a design document for a feature according to the `design.template.md` tem
 - Fill the metadata in the header of the document including current date, feature name, status (Draft), version, and link to specification
 
 ## STEP 4 - Fill in the document
-- Create a Task with the technical-architect agent and do the following. Pass the new design document's path as `SDD_DESIGN_DOCUMENT`, the specification document's path as `SDD_SPECIFICATION_DOCUMENT`, and if project guidelines exist, pass the path as `SDD_PROJECT_GUIDELINES`.
+
+**CRITICAL**: You MUST use the Task tool with `subagent_type="sdd:technical-architect"` to create the design. DO NOT write the design yourself - launch the technical-architect agent to do the work.
+
+- Use the Task tool with subagent_type="sdd:technical-architect" and the following prompt. Pass the new design document's path as `SDD_DESIGN_DOCUMENT`, the specification document's path as `SDD_SPECIFICATION_DOCUMENT`, and if project guidelines exist, pass the path as `SDD_PROJECT_GUIDELINES`.
   - |
     The [SDD_DESIGN_DOCUMENT] file needs to be completed to the highest standard. The header has already been filled out.
 
@@ -74,7 +77,10 @@ Create a design document for a feature according to the `design.template.md` tem
 - Verify that all requirements from the specification are covered in the Requirements Validation section
 
 ## STEP 6 - Review design for completeness
-- Create a Task with the design-reviewer agent to validate the design. Pass `SDD_DESIGN_DOCUMENT`, `SDD_SPECIFICATION_DOCUMENT`, and if project guidelines exist, `SDD_PROJECT_GUIDELINES`.
+
+**CRITICAL**: You MUST use the Task tool with `subagent_type="sdd:design-reviewer"` to review the design. DO NOT review the design yourself - launch the design-reviewer agent to do the work.
+
+- Use the Task tool with subagent_type="sdd:design-reviewer" and the following prompt. Pass `SDD_DESIGN_DOCUMENT`, `SDD_SPECIFICATION_DOCUMENT`, and if project guidelines exist, `SDD_PROJECT_GUIDELINES`.
   - |
     Review [SDD_DESIGN_DOCUMENT] against [SDD_SPECIFICATION_DOCUMENT] for:
     1. Requirements coverage - Does every requirement have clear design coverage?

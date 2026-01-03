@@ -281,10 +281,19 @@ The specification is the single source of truth. Code implements it. Tests verif
 
 ## Practical Guidelines
 
-### Project Structure
+### Project Structure and Paths
 
-- **`.sdd` folder** All artifacts created during Spec-Driven Development live in a `.sdd` folder also referenced as `SDD_FOLDER`. **Notice** the '.' before the folder name. The folder should be prefixed with a '.'.
-- **Folder-per-feature** Within the `SDD_FOLDER` create a sub folder for each features's specification, plan, and task documents to live together
+All SDD artifacts live in the `.sdd/` folder at the repository root. Use these exact paths:
+
+| Variable | Path |
+|----------|------|
+| `SDD_FOLDER` | `.sdd/` |
+| `SDD_PROJECT_FOLDER` | `.sdd/[FEATURE]/` |
+| `SDD_SPECIFICATION_DOCUMENT` | `.sdd/[FEATURE]/specification.md` |
+| `SDD_DESIGN_DOCUMENT` | `.sdd/[FEATURE]/design.md` |
+| `SDD_PROJECT_GUIDELINES` | `.sdd/project-guidelines.md` |
+
+Where `[FEATURE]` is the kebab-case name of the feature (e.g., `user-authentication`, `shopping-cart`).
 
 ### Templates
 

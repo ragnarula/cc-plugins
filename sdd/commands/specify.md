@@ -7,7 +7,7 @@ arguments:
 allowed-tools: ["Read", "Write", "Bash", "WebSearch", "WebFetch", "Glob", "Grep", "Task"]
 ---
 
-You must use the sdd skill.
+You must use the sdd skill. Use the exact paths defined in the skill's "Project Structure and Paths" section.
 
 # Specify
 
@@ -19,7 +19,10 @@ Create a specification document for a feature according to the `specification.te
 - Fill the metadata in the header of the document including current date, feature name, status (Draft), version etc.
 
 ## STEP 2 - Fill in the document
-- Create a Task with the technical-analyst agent and do the following. Pass the new specification document's path to it's context as `SDD_SPECIFICATION_DOCUMENT`.
+
+**CRITICAL**: You MUST use the Task tool with `subagent_type="sdd:technical-analyst"` to create the specification. DO NOT write the specification yourself - launch the technical-analyst agent to do the work.
+
+- Use the Task tool with subagent_type="sdd:technical-analyst" and the following prompt. Pass the new specification document's path as `SDD_SPECIFICATION_DOCUMENT`.
   - |
     The [SDD_SPECIFICATION_DOCUMENT] file needs to be completed to the highest standard. The header has already been filled out.
     Interview the user to understand the rest of the specifications and requirements
@@ -34,7 +37,10 @@ Create a specification document for a feature according to the `specification.te
 - Ensure [SDD_SPECIFICATION_DOCUMENT] matches the [SDD_TEMPLATE_SPECIFICATION] template. If it deviates ask the agent from STEP 2 to fix it
 
 ## STEP 4 - Review specification for feasibility
-- Create a Task with the spec-reviewer agent to validate the specification. Pass the specification document's path as `SDD_SPECIFICATION_DOCUMENT`.
+
+**CRITICAL**: You MUST use the Task tool with `subagent_type="sdd:spec-reviewer"` to review the specification. DO NOT review the specification yourself - launch the spec-reviewer agent to do the work.
+
+- Use the Task tool with subagent_type="sdd:spec-reviewer" and the following prompt. Pass the specification document's path as `SDD_SPECIFICATION_DOCUMENT`.
   - |
     Review [SDD_SPECIFICATION_DOCUMENT] for:
     1. Achievability - Can requirements be met with current technology and codebase?
