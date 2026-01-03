@@ -4,6 +4,25 @@ A curated collection of high-quality plugins for Claude Code.
 
 ## Available Plugins
 
+### [SDD (Spec Driven Development)](./sdd/)
+
+**Version:** 0.1.2
+
+A structured approach to software development that combines the rigor of upfront specification with the flexibility of iterative implementation.
+
+**Features:**
+- Specification phase (`/specify`) - Define requirements with clarity and precision
+- Design phase (`/design`) - Plan architecture and implementation strategy
+- Implementation phase (`/implement`) - Build with TDD and automated reviews
+- Specialized agents for analysis, design, implementation, and review
+- Living documentation and requirements traceability
+
+**Use Case:** For developers who want disciplined, specification-driven development with AI assistance.
+
+[View Plugin Details →](./sdd/README.md)
+
+---
+
 ### [Value Investor](./value-investor/)
 
 **Version:** 0.1.0
@@ -64,7 +83,16 @@ Want to contribute a plugin? Check out the [Claude Code plugin development docum
 ```
 cc-plugins/
 ├── README.md                    # This file
-├── value-investor/              # Individual plugin directory
+├── .claude-plugin/
+│   └── marketplace.json         # Plugin registry
+├── sdd/                         # Spec Driven Development plugin
+│   ├── .claude-plugin/
+│   │   └── plugin.json
+│   ├── agents/
+│   ├── commands/
+│   ├── skills/
+│   └── README.md
+├── value-investor/              # Value Investor plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── agents/
