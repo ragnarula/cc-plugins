@@ -193,11 +193,11 @@
 
 ---
 
-## Test Stub Tracking
+## Intermediate Stub Tracking
 
-> **CRITICAL: Test stubs are NOT acceptable without explicit tracking.**
-> All tests MUST be fully implemented as part of the task that introduces the code they test.
-> If a test stub is absolutely necessary (e.g., external dependency not yet available), it MUST be tracked here.
+> **CRITICAL: Stubs are NOT acceptable without explicit tracking.**
+> All stubs MUST be fully implemented as part of the task that introduces the code they test.
+> If a stub is absolutely necessary (e.g., external dependency not yet available), it MUST be tracked here.
 > All entries must be resolved (stub implemented or removed) by the final phase.
 > A "stub" includes: `skip`, `todo`, `pass`, `pytest.mark.skip`, `@unittest.skip`, `it.skip`, `xit`, `pending`, empty test bodies, or `assert True` placeholders.
 
