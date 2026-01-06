@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development.
-version: 0.1.0
+version: 0.1.9
 ---
 
 # Spec Driven Development (SDD)
