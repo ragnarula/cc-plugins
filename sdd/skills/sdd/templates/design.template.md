@@ -48,8 +48,8 @@
 **Kind** [Function | Class | Module | Crate etc]
 
 **Requirements References**
-- REQ-FN/NFN-?: [1st Example requirement that necessitates this change]
-- REQ-FN/NFN-?: [2nd Example requirement that necessitates this change]
+- [feature-name:FR-001]: [Why this requirement necessitates this change]
+- [feature-name:NFR-001]: [Why this requirement necessitates this change]
 
 **Test Cases**
 - TEST-NAME-1: [Short description of the test]
@@ -63,8 +63,8 @@
 **Kind** [Function | Class | Module | Crate etc]
 
 **Requirements References**
-- REQ-FN/NFN-?: [1st Example requirement that necessitates this change]
-- REQ-FN/NFN-?: [2nd Example requirement that necessitates this change]
+- [feature-name:FR-001]: [Why this requirement necessitates this change]
+- [feature-name:NFR-001]: [Why this requirement necessitates this change]
 
 **Test Cases**
 - TEST-NAME-1: [Short description of the test]
@@ -84,8 +84,8 @@
 **Location** [Which file/class/module/crate will this new component be located in?]
 
 **Requirements References**
-- REQ-FN/NFN-?: [1st Example requirement that necessitates this change]
-- REQ-FN/NFN-?: [2nd Example requirement that necessitates this change]
+- [feature-name:FR-001]: [Why this requirement necessitates this component]
+- [feature-name:NFR-001]: [Why this requirement necessitates this component]
 
 **Test Cases**
 - TEST-NAME-1: [Short description of the test]
@@ -101,12 +101,32 @@
 **Location** [Which file/class/module/crate will this new component be located in?]
 
 **Requirements References**
-- REQ-FN/NFN-?: [1st Example requirement that necessitates this change]
-- REQ-FN/NFN-?: [2nd Example requirement that necessitates this change]
+- [feature-name:FR-001]: [Why this requirement necessitates this component]
+- [feature-name:NFR-001]: [Why this requirement necessitates this component]
 
 **Test Cases**
 - TEST-NAME-1: [Short description of the test]
 - TEST-NAME-2: [Short description of the test]
+
+---
+
+## Used Components
+
+> Existing components required as-is for implementation. Document what each provides and why it's needed.
+
+### [Used Component 1]
+**Location** [Path to component]
+
+**Provides** [What functionality/interface this component offers that we depend on]
+
+**Used By** [Which Modified/Added components depend on this]
+
+### [Used Component 2]
+**Location** [Path to component]
+
+**Provides** [What functionality/interface this component offers that we depend on]
+
+**Used By** [Which Modified/Added components depend on this]
 
 ---
 
@@ -164,20 +184,24 @@
 - Task [1]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
+  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
   - Tests: [Which test cases from component definitions are written in this task]
 - Task [2]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
+  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
   - Tests: [Which test cases from component definitions are written in this task]
 
 ### Phase [2] [Goal of this phase]
 - Task [1]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
+  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
   - Tests: [Which test cases from component definitions are written in this task]
 - Task [2]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
+  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
   - Tests: [Which test cases from component definitions are written in this task]
 
 ---
@@ -209,19 +233,19 @@
 
 ## Requirements Validation
 
-Ensure all requirements have matching tasks
+> Bidirectional traceability: Every requirement maps to tasks, and every task specifies its requirements.
 
-- REQ-FN-[1]
+- [feature-name:FR-001]
   - Phase [X] Task [Y]
   - Phase [Y] Task [Z]
-- REQ-FN-[2]
+- [feature-name:FR-002]
   - Phase [X] Task [Y]
   - Phase [Y] Task [Z]
 
-- REQ-NFN-[1]
+- [feature-name:NFR-001]
   - Phase [X] Task [Y]
   - Phase [Y] Task [Z]
-- REQ-NFN-[2]
+- [feature-name:NFR-002]
   - Phase [X] Task [Y]
   - Phase [Y] Task [Z]
 

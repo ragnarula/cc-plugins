@@ -15,6 +15,7 @@ All SDD artifacts live in the `.sdd/` folder at the repository root. Use these e
 | Variable | Path |
 |----------|------|
 | `SDD_FOLDER` | `.sdd/` |
+| `SDD_INDEX` | `.sdd/index.md` |
 | `SDD_PROJECT_FOLDER` | `.sdd/[FEATURE]/` |
 | `SDD_SPECIFICATION_DOCUMENT` | `.sdd/[FEATURE]/specification.md` |
 | `SDD_DESIGN_DOCUMENT` | `.sdd/[FEATURE]/design.md` |
@@ -24,6 +25,7 @@ Where `[FEATURE]` is the kebab-case name of the feature (e.g., `user-authenticat
 
 ### Templates
 
+- `SDD_TEMPLATE_INDEX` located in `templates/index.template.md` used for feature index
 - `SDD_TEMPLATE_SPECIFICATION` located in `templates/specification.template.md` used for initial requirements gathering
 - `SDD_TEMPLATE_DESIGN` located in `templates/design.template.md` used for design documents
 - `SDD_TEMPLATE_PROJECT_GUIDELINES` located in `templates/project-guidelines.template.md` used for project-specific conventions
@@ -37,6 +39,30 @@ The `SDD_PROJECT_GUIDELINES` file (`.sdd/project-guidelines.md`) contains projec
 
 You MUST read this file during exploration and apply these conventions to architectural decisions.
 
+### Requirement Traceability
+
+Requirements use fully-qualified IDs in the format `[feature-name:REQ-ID]` where:
+- `feature-name` is the kebab-case folder name (e.g., `user-authentication`)
+- `REQ-ID` is the requirement ID from the specification (e.g., `FR-001`, `NFR-002`)
+
+This format MUST be used consistently in:
+
+**Code comments:**
+```python
+# Implements [user-authentication:FR-003] - Password must be hashed before storage
+def hash_password(password: str) -> str:
+```
+
+**Test docstrings:**
+```python
+def test_password_hashing():
+    """Verifies [user-authentication:FR-003] - Password hashing"""
+```
+
+**Design documents** - Always use fully-qualified IDs when referencing requirements.
+
+This enables grep-based traceability: `grep -r "\[user-authentication:FR-003\]"` finds all code and tests implementing a requirement.
+
 ## Processes
 
 You **MUST** explore the code base using tools like Read, Glob etc before doing **ANY** of the below.
@@ -48,11 +74,16 @@ Do this when a user asks to create a specification or design
 
 You MUST create the required document in the relevant feature specific folder in the `.sdd/` folder at the root of the project
 
+**Maintain the index:**
+1. If `.sdd/index.md` doesn't exist, create it from `templates/index.template.md`
+2. Add a row for the new feature (newest entries at top, ordered by date)
+3. Update the status as the feature progresses through Draft → Approved → Implemented
+
 **Examples**
 
-**If** the user asks to create a **specification** for user authentication **then** copy `templates/specificationtemplate.md` to `.sdd/user-authentication/specification.md` if it doesn't already exist.
+**If** the user asks to create a **specification** for user authentication **then** copy `templates/specification.template.md` to `.sdd/user-authentication/specification.md` if it doesn't already exist.
 
-**If** the user asks to create a **design** for user authentication **then** copy `templates/design.template.md` to `.sdd/user-authentication/specification.md` if it doesn't already exist.
+**If** the user asks to create a **design** for user authentication **then** copy `templates/design.template.md` to `.sdd/user-authentication/design.md` if it doesn't already exist.
 
 ### Specifying
 
@@ -76,6 +107,7 @@ You **MUST** identify components required to implement the feature in the specif
 For each component, document:
 - **Modified**: Current behavior, what changes, dependencies, how to test
 - **Added**: Single responsibility, consumers, location, requirements satisfied, tests
+- **Used**: Existing components required as-is for implementation (document what it provides and why it's needed)
 
 Keep components focused (single responsibility, minimal coupling, explicit dependencies). Define public interfaces and error handling. Avoid over-engineering for future needs.
 
@@ -114,14 +146,38 @@ def add_to_cart(product_id: str, quantity: int) -> Cart:
 
 #### Test Strategy
 
-Plan system-level testing beyond component tests: integration paths, E2E user journeys, performance/security testing needs, and required test data/infrastructure.
+**Tests must verify user scenarios, not implementation details.**
+
+GOOD tests (scenario-driven):
+- "User can add item to cart and see updated total"
+- "User receives error when submitting invalid email"
+- "API returns 404 when product doesn't exist"
+
+BAD tests (avoid these):
+- Testing enum value equals itself
+- "Concurrency tests" that don't actually run concurrent requests
+- Mocking everything so the test only verifies mock setup
+- Testing that a function was called (instead of its effect)
+
+**If you can't realistically test an NFR, don't write a fake test.**
+- Concurrency: Only test if you can run actual concurrent requests against separated client/server
+- Performance: Only test if you have proper benchmarking infrastructure
+- Security: Only test what you can actually verify (e.g., input validation, auth checks)
+
+For NFRs that can't be tested in CI, document them as "Manual Verification Required" with instructions.
+
+**System-level test planning:**
+- Integration paths between components
+- E2E user journeys from the specification
+- Required test data and infrastructure
 
 #### Task Breakdown
 
 - Group into logical phases ordered by dependencies
 - Each task must have clear completion criteria
+- Each task must specify which requirements it fulfills using `[feature:REQ-ID]` format
 - Testing happens WITH implementation, not after
-- Every requirement must map to tasks
+- Every requirement must map to tasks (and vice versa)
 
 #### Write the design
 
@@ -275,7 +331,8 @@ BAD (contains implementation details):
 - Task 1: Implement CartService.addItem()
   - Status: Backlog
   - Add item to cart with quantity validation
-  - Tests: TEST-CART-ADD-VALID, TEST-CART-ADD-INVALID-QTY
+  - Requirements: [shopping-cart:FR-001], [shopping-cart:FR-002]
+  - Tests: test_add_valid_item, test_add_invalid_quantity
 ```
 
 **Example of BAD task structure:**
@@ -305,6 +362,11 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Flag any undocumented deviations
 - If design was altered, verify workarounds are documented
 
+**Traceability verification:**
+- Code comments reference requirements using `[feature-name:REQ-ID]` format
+- Test docstrings reference the requirements they verify
+- Run `grep -r "\[feature-name:" src/ tests/` to verify coverage
+
 **Check for stubs:**
 - Search for: `skip`, `todo`, `pending`, `@pytest.mark.skip`, `pass` in test functions, placeholder assertions
 - **Intermediate phases**: Stubs acceptable only if tracked in design document
@@ -330,13 +392,15 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Failing tests or linting errors
 - Undocumented deviations from design
 - Security vulnerabilities
+- Missing requirement traceability in code comments or test docstrings
 
 #### Quality Standards (All Reviews)
 
 A thorough review must verify:
 - ✅ Requirements coverage complete
-- ✅ Tests adequate and passing
+- ✅ Tests adequate and passing (scenario-driven, not fake NFR tests)
 - ✅ No TBDs or ambiguities
 - ✅ Project guidelines followed
 - ✅ Risks identified with mitigations
 - ✅ All stubs and dead code tracked (intermediate) or resolved (final)
+- ✅ Code and tests use fully-qualified requirement IDs `[feature:REQ-ID]`
