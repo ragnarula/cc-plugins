@@ -20,6 +20,29 @@
 
 ---
 
+## Outcomes
+[Intended outcomes of this work, written from the user/consumer's perspective]
+
+**Must Haves**
+- [Must have goal 1]
+- [Must have goal 2]
+
+**Nice-to-haves** 
+- [Nice to have goal 1]
+- [Nice to have goal 2]
+
+---
+
+## Explicitly Out of Scope
+
+[List what is NOT included in this specification to prevent scope creep]
+
+- [Feature/capability that won't be included]
+- [Future enhancement to be addressed separately]
+- [Alternative approach explicitly rejected]
+
+---
+
 ## Functional Requirements
 
 ### REQ-FN-01: [Requirement Title]
@@ -54,15 +77,7 @@
 
 ___
 
-## Explicitly Out of Scope
 
-[List what is NOT included in this specification to prevent scope creep]
-
-- [Feature/capability that won't be included]
-- [Future enhancement to be addressed separately]
-- [Alternative approach explicitly rejected]
-
----
 
 ## Open Questions
 
