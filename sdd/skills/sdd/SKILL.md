@@ -88,17 +88,57 @@ You MUST create the required document in the relevant feature specific folder in
 ### Specifying
 
 Your **GOAL** is to complete all parts of the specification template for the feature.
-You **MUST** ask the user questions about the feature they are trying to implement
 
-**Probe vague answers relentlessly** - Ask for specific metrics, edge cases, and priorities. Challenge assumptions and explore alternatives. Don't accept "fast", "secure", or "user-friendly" without measurable criteria.
+**CRITICAL: Template structure is sacred.**
+- Do NOT add sections that aren't in the template
+- Do NOT remove sections from the template
+- Do NOT rename sections
+- If a section doesn't apply, write "N/A" or "None" with brief justification
+- Follow the template structure EXACTLY as defined in [SDD_TEMPLATE_SPECIFICATION]
+
+#### Process
+
+**Phase 1: Discovery Interview**
+
+Interview the user about their idea or brief. Keep asking questions until you can unambiguously fill out every section of the template. Don't ask about template sections directly - ask about their problem, users, and goals.
+
+- What problem are they solving? Why does it matter?
+- Who experiences this problem? How do they cope today?
+- What does success look like? How will they know it's working?
+- What are the boundaries? What's explicitly not included?
+- What could go wrong? What are the edge cases?
+
+**Probe vague answers relentlessly** - Don't accept "fast", "secure", or "user-friendly" without measurable criteria. Keep questioning until requirements are specific and testable.
+
+**Phase 2: Write the Specification**
+
+Once you have enough information to fill out every section unambiguously, write the complete specification in one pass. Do not ask further questions during this phase.
 
 You **MUST** complete [SDD_SPECIFICATION_DOCUMENT] **FULLY** for the feature
 
 ### Designing
 
-Your **GOAL** is to complete all parts of the design template for the feature
+Your **GOAL** is to complete all parts of the design template for the feature.
 
-You **MUST** read the relevant [SDD_SPECIFICATION_DOCUMENT] for the feature
+**CRITICAL: Template structure is sacred.**
+- Do NOT add sections that aren't in the template
+- Do NOT remove sections from the template
+- Do NOT rename sections
+- If a section doesn't apply, write "N/A" or "None" with brief justification
+- Follow the template structure EXACTLY as defined in [SDD_TEMPLATE_DESIGN]
+
+#### Process
+
+**Phase 1: Research**
+
+Read and understand before designing:
+- Read the specification thoroughly
+- Explore the existing codebase for patterns, conventions, and integration points
+- Read project guidelines if they exist
+
+**Phase 2: Design**
+
+Once you understand the requirements and codebase, write the complete design in one pass. The design must cover all specification requirements.
 
 You **MUST** identify components required to implement the feature in the specification
 
