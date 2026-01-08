@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development.
-version: 0.1.10
+version: 0.1.11
 ---
 
 # Spec Driven Development (SDD)
@@ -62,6 +62,38 @@ def test_password_hashing():
 **Design documents** - Always use fully-qualified IDs when referencing requirements.
 
 This enables grep-based traceability: `grep -r "\[user-authentication:FR-003\]"` finds all code and tests implementing a requirement.
+
+### Test Scenario Traceability
+
+Test scenarios use fully-qualified IDs in the format `[feature-name:SCENARIO-ID]` where:
+- `feature-name` is the kebab-case folder name (e.g., `user-authentication`)
+- `SCENARIO-ID` is the scenario ID from the design:
+  - Component scenarios: `ComponentName/TS-XX` (e.g., `AuthService/TS-01`)
+  - Integration scenarios: `ITS-XX` (e.g., `ITS-01`)
+  - E2E scenarios: `E2E-XX` (e.g., `E2E-01`)
+
+This format MUST be used consistently in:
+
+**Code comments (link implementation to the scenario it enables):**
+```python
+# Implements [user-authentication:AuthService/TS-01] - Valid credentials return session token
+def authenticate(username: str, password: str) -> Session:
+```
+
+**Test function names and docstrings:**
+```python
+def test_valid_credentials_return_session():
+    """Verifies [user-authentication:AuthService/TS-01] - Valid credentials return session token
+
+    Given: A registered user with valid credentials
+    When: User submits correct username and password
+    Then: A valid session token is returned
+    """
+```
+
+**Design documents** - The Test Scenario Validation section must map every scenario to tasks.
+
+This enables grep-based traceability: `grep -r "\[user-authentication:AuthService/TS-01\]"` finds all code and tests implementing a scenario.
 
 ## Processes
 
@@ -145,8 +177,8 @@ You **MUST** identify components required to implement the feature in the specif
 #### Component Identification
 
 For each component, document:
-- **Modified**: Current behavior, what changes, dependencies, how to test
-- **Added**: Single responsibility, consumers, location, requirements satisfied, tests
+- **Modified**: Current behavior, what changes, dependencies, test scenarios (Given/When/Then)
+- **Added**: Single responsibility, consumers, location, requirements satisfied, test scenarios (Given/When/Then)
 - **Used**: Existing components required as-is for implementation (document what it provides and why it's needed)
 
 Keep components focused (single responsibility, minimal coupling, explicit dependencies). Define public interfaces and error handling. Avoid over-engineering for future needs.
@@ -184,7 +216,7 @@ def add_to_cart(product_id: str, quantity: int) -> Cart:
     ...
 ```
 
-#### Test Strategy
+#### Test Scenarios
 
 **Tests must verify user scenarios, not implementation details.**
 
@@ -206,16 +238,23 @@ BAD tests (avoid these):
 
 For NFRs that can't be tested in CI, document them as "Manual Verification Required" with instructions.
 
-**System-level test planning:**
-- Integration paths between components
-- E2E user journeys from the specification
-- Required test data and infrastructure
+**Scenario ID Format:**
+- Component scenarios: `ComponentName/TS-XX` (e.g., `CartService/TS-01`, `UserAuth/TS-02`)
+- Integration scenarios: `ITS-XX` (e.g., `ITS-01`, `ITS-02`)
+- E2E scenarios: `E2E-XX` (e.g., `E2E-01`, `E2E-02`)
+
+**Scenario Structure:**
+Each scenario uses Given/When/Then format:
+- **Given**: Initial state or preconditions
+- **When**: Action performed
+- **Then**: Expected outcome
 
 #### Task Breakdown
 
 - Group into logical phases ordered by dependencies
 - Each task must have clear completion criteria
 - Each task must specify which requirements it fulfills using `[feature:REQ-ID]` format
+- Each task must reference which test scenarios (TS-IDs, ITS-IDs, E2E-IDs) it implements
 - Testing happens WITH implementation, not after
 - Every requirement must map to tasks (and vice versa)
 
@@ -244,9 +283,12 @@ A complete design document must have:
 - ✅ **Architecture overview** explaining current context and proposed changes
 - ✅ **All requirements traced** to components via Requirements References
 - ✅ **All components defined** with clear descriptions and locations
-- ✅ **Test strategy documented** beyond component-level tests
+- ✅ **Component test scenarios** using Given/When/Then format with unique IDs (ComponentName/TS-XX)
+- ✅ **Integration test scenarios** covering multi-component interactions (ITS-XX)
+- ✅ **E2E test scenarios** covering complete user workflows (E2E-XX)
 - ✅ **Risks identified** with mitigation strategies
 - ✅ **Tasks organized** into logical phases with dependencies
+- ✅ **Tasks reference test scenarios** they implement (TS-IDs, ITS-IDs, E2E-IDs)
 - ✅ **Requirements validation** showing every requirement maps to tasks
 - ✅ **No TBDs or ambiguities** in the final design
 - ✅ **Standard structure** following [SDD_TEMPLATE_DESIGN] exactly
@@ -360,11 +402,13 @@ BAD (contains implementation details):
 - Tests included WITH tasks, not deferred to later phases
 - Architectural decisions fit existing codebase patterns
 - Project guidelines compliance (if SDD_PROJECT_GUIDELINES exists)
+- Test Scenario Validation section is complete (no orphan scenarios)
 
 **Task-level test verification:**
-- Each task must have a "Tests:" field referencing specific test cases
+- Each task must have a "Test Scenarios:" field referencing specific scenario IDs (TS-XX, ITS-XX, E2E-XX)
 - No separate "add tests" tasks or testing phases
-- All component test cases must be assigned to tasks
+- All component, integration, and E2E test scenarios must be assigned to tasks
+- Test Scenario Validation section maps every scenario to at least one task
 
 **Example of GOOD task structure:**
 ```
@@ -372,7 +416,7 @@ BAD (contains implementation details):
   - Status: Backlog
   - Add item to cart with quantity validation
   - Requirements: [shopping-cart:FR-001], [shopping-cart:FR-002]
-  - Tests: test_add_valid_item, test_add_invalid_quantity
+  - Test Scenarios: [shopping-cart:CartService/TS-01], [shopping-cart:CartService/TS-02], [shopping-cart:ITS-01], [shopping-cart:E2E-01]
 ```
 
 **Example of BAD task structure:**
@@ -388,6 +432,7 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - TBDs or ambiguities
 - Architectural decisions conflicting with existing patterns
 - Missing risk assessment
+- Test scenarios missing Given/When/Then structure
 
 #### Implementation Review
 
@@ -403,9 +448,11 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - If design was altered, verify workarounds are documented
 
 **Traceability verification:**
-- Code comments reference requirements using `[feature-name:REQ-ID]` format
-- Test docstrings reference the requirements they verify
+- Code comments reference requirements using `[feature-name:FR-XXX]` or `[feature-name:NFR-XXX]` format
+- Code comments reference test scenarios using `[feature-name:ComponentName/TS-XX]`, `[feature-name:ITS-XX]`, or `[feature-name:E2E-XX]` format
+- Test docstrings reference both requirements and scenarios they verify
 - Run `grep -r "\[feature-name:" src/ tests/` to verify coverage
+- Verify all scenarios from design have corresponding test implementations
 
 **Check for stubs:**
 - Search for: `skip`, `todo`, `pending`, `@pytest.mark.skip`, `pass` in test functions, placeholder assertions
@@ -431,6 +478,8 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Untracked stubs or dead code (in final phase)
 - Failing tests or linting errors
 - Undocumented deviations from design
+- Test scenarios not referenced in test implementations
+- Orphan scenarios (defined but never assigned to tasks)
 - Security vulnerabilities
 - Missing requirement traceability in code comments or test docstrings
 
@@ -439,8 +488,13 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 A thorough review must verify:
 - ✅ Requirements coverage complete
 - ✅ Tests adequate and passing (scenario-driven, not fake NFR tests)
+- ✅ All test scenarios use Given/When/Then format with unique IDs
+- ✅ Integration test scenarios cover component interactions
+- ✅ E2E test scenarios cover complete user workflows
 - ✅ No TBDs or ambiguities
 - ✅ Project guidelines followed
 - ✅ Risks identified with mitigations
 - ✅ All stubs and dead code tracked (intermediate) or resolved (final)
 - ✅ Code and tests use fully-qualified requirement IDs `[feature:REQ-ID]`
+- ✅ Code and tests use fully-qualified scenario IDs `[feature:ComponentName/TS-XX]`, `[feature:ITS-XX]`, `[feature:E2E-XX]`
+- ✅ All scenarios mapped to tasks (no orphans)

@@ -45,30 +45,36 @@
 
 **Dependants** [Any dependants that need to be modified as a result]
 
-**Kind** [Function | Class | Module | Crate etc]
+**Kind** [Function | Class | Module | Crate | Database etc]
 
 **Requirements References**
 - [feature-name:FR-001]: [Why this requirement necessitates this change]
 - [feature-name:NFR-001]: [Why this requirement necessitates this change]
 
-**Test Cases**
-- TEST-NAME-1: [Short description of the test]
-- TEST-NAME-2: [Short description of the test]
+**Test Scenarios**
+
+| ID | Scenario | Given | When | Then |
+|----|----------|-------|------|------|
+| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
+| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
 
 ### [Modified Component 2]
 **Change Description** [Short description of what it currently does and what it needs to do. Describe the delta]
 
 **Dependants** [Any dependants that need to be modified as a result]
 
-**Kind** [Function | Class | Module | Crate etc]
+**Kind** [Function | Class | Module | Crate | Database etc]
 
 **Requirements References**
 - [feature-name:FR-001]: [Why this requirement necessitates this change]
 - [feature-name:NFR-001]: [Why this requirement necessitates this change]
 
-**Test Cases**
-- TEST-NAME-1: [Short description of the test]
-- TEST-NAME-2: [Short description of the test]
+**Test Scenarios**
+
+| ID | Scenario | Given | When | Then |
+|----|----------|-------|------|------|
+| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
+| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
 
 ---
 
@@ -79,7 +85,7 @@
 
 **Users** [Who/what will call/use this component?]
 
-**Kind** [Function | Class | Module | Crate etc]
+**Kind** [Function | Class | Module | Crate | Database etc]
 
 **Location** [Which file/class/module/crate will this new component be located in?]
 
@@ -87,16 +93,19 @@
 - [feature-name:FR-001]: [Why this requirement necessitates this component]
 - [feature-name:NFR-001]: [Why this requirement necessitates this component]
 
-**Test Cases**
-- TEST-NAME-1: [Short description of the test]
-- TEST-NAME-2: [Short description of the test]
+**Test Scenarios**
+
+| ID | Scenario | Given | When | Then |
+|----|----------|-------|------|------|
+| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
+| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
 
 ### [Added Component 2]
 **Description** [Short description of what the new component should do]
 
 **Users** [Who/what will call/use this component?]
 
-**Kind** [Function | Class | Module | Crate etc]
+**Kind** [Function | Class | Module | Crate | Database etc]
 
 **Location** [Which file/class/module/crate will this new component be located in?]
 
@@ -104,9 +113,12 @@
 - [feature-name:FR-001]: [Why this requirement necessitates this component]
 - [feature-name:NFR-001]: [Why this requirement necessitates this component]
 
-**Test Cases**
-- TEST-NAME-1: [Short description of the test]
-- TEST-NAME-2: [Short description of the test]
+**Test Scenarios**
+
+| ID | Scenario | Given | When | Then |
+|----|----------|-------|------|------|
+| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
+| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
 
 ---
 
@@ -138,22 +150,34 @@
 
 ---
 
-## Test Strategy
+## Integration Test Scenarios (if needed)
 
-### Test Pyramid
-- Unit: [What to unit test in addition to components above]
-- Integration: [What to integration test]
-- E2E: [What to test end-to-end]
+> Define scenarios that test interactions between multiple components. Each scenario should verify a complete user journey or system interaction.
 
-### Coverage Strategy
-- Critical paths: [...]
-- Performance tests: [...]
-- Security tests: [...]
+| ID | Scenario | Given | When | Then | Components Involved |
+|----|----------|-------|------|------|---------------------|
+| ITS-01 | [Scenario name] | [Initial system state] | [User action or trigger] | [Expected system behavior] | [List of components] |
+| ITS-02 | [Scenario name] | [Initial system state] | [User action or trigger] | [Expected system behavior] | [List of components] |
 
-### Test Data
+---
+
+## E2E Test Scenarios (if needed)
+
+> Define end-to-end scenarios that test complete user workflows through the entire system. Each scenario should simulate real user behavior from start to finish.
+
+| ID | Scenario | Given | When | Then | User Journey |
+|----|----------|-------|------|------|--------------|
+| E2E-01 | [Scenario name] | [Initial user/system state] | [Complete user workflow] | [Final expected state] | [Steps in the journey] |
+| E2E-02 | [Scenario name] | [Initial user/system state] | [Complete user workflow] | [Final expected state] | [Steps in the journey] |
+
+---
+
+## Test Data
 - [Requirements and sources]
 
-### Test Feasibility
+---
+
+## Test Feasibility
 - [Missing test infrastructure that should be built first]
 - [Missing test data that should be acquired first]
 
@@ -184,25 +208,25 @@
 - Task [1]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
-  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
-  - Tests: [Which test cases from component definitions are written in this task]
+  - Requirements: [feature-name:FR-001], [feature-name:NFR-001]
+  - Test Scenarios: [feature-name:ComponentName/TS-01], [feature-name:ITS-01], [feature-name:E2E-01]
 - Task [2]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
-  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
-  - Tests: [Which test cases from component definitions are written in this task]
+  - Requirements: [feature-name:FR-002], [feature-name:NFR-002]
+  - Test Scenarios: [feature-name:ComponentName/TS-02], [feature-name:ITS-02]
 
 ### Phase [2] [Goal of this phase]
 - Task [1]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
-  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
-  - Tests: [Which test cases from component definitions are written in this task]
+  - Requirements: [feature-name:FR-003]
+  - Test Scenarios: [feature-name:ComponentName/TS-03], [feature-name:E2E-02]
 - Task [2]: [Short description of the task]
   - Status: [Backlog | In Progress | Done]
   - [More detailed description if necessary]
-  - Requirements: [feature-name:REQ-ID], [feature-name:REQ-ID]
-  - Tests: [Which test cases from component definitions are written in this task]
+  - Requirements: [feature-name:FR-004]
+  - Test Scenarios: [feature-name:ComponentName/TS-04]
 
 ---
 
@@ -248,6 +272,24 @@
 - [feature-name:NFR-002]
   - Phase [X] Task [Y]
   - Phase [Y] Task [Z]
+
+---
+
+## Test Scenario Validation
+
+> Every test scenario must be assigned to at least one task. No orphan scenarios allowed.
+
+### Component Scenarios
+- [feature-name:ComponentName/TS-01]: Phase [X] Task [Y]
+- [feature-name:ComponentName/TS-02]: Phase [X] Task [Y]
+
+### Integration Scenarios
+- [feature-name:ITS-01]: Phase [X] Task [Y]
+- [feature-name:ITS-02]: Phase [X] Task [Y]
+
+### E2E Scenarios
+- [feature-name:E2E-01]: Phase [X] Task [Y]
+- [feature-name:E2E-02]: Phase [X] Task [Y]
 
 ---
 

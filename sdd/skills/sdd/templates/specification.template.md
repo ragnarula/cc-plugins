@@ -45,14 +45,14 @@
 
 ## Functional Requirements
 
-### REQ-FN-01: [Requirement Title]
+### FR-001: [Requirement Title]
 **Description:** [What the system must do. Use active voice. Be specific and measurable.]
 
 **Examples:**
 - Positive case: [Example of expected behavior]
 - Edge case: [Example of boundary condition]
 
-### REQ-FN-02: [Requirement Title]
+### FR-002: [Requirement Title]
 **Description:** [Clear statement of capability]
 
 **Examples:**
@@ -63,13 +63,13 @@
 
 ## Non-Functional Requirements
 
-### REQ-NFN-01: [Performance/Security/Reliability/etc.]
+### NFR-001: [Performance/Security/Reliability/etc.]
 **Category:** Performance | Security | Reliability | Usability | Scalability | Maintainability
 **Description:** [Measurable quality attribute]
 
 **Acceptance Threshold:** [Specific metric: e.g., "Response time < 200ms for 95th percentile"]
 
-### REQ-NFN-02: [Requirement Title]
+### NFR-002: [Requirement Title]
 **Category:** [Category]
 **Description:** [Measurable quality attribute]
 
