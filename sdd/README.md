@@ -31,9 +31,21 @@ Build the system with TDD and continuous validation:
 - Progress tracking in design document
 - Requirement and scenario traceability in code comments
 
+### 4. Review
+Validate documents and implementation at any stage:
+- Specification review: achievability, testability, no implementation details
+- Design review: traceability, no orphan scenarios, task coverage
+- Implementation review: matches design, code quality, test coverage
+
+### 5. Refine
+Update existing documents as requirements evolve:
+- Add new requirements while maintaining structure
+- Update designs to reflect changed scope
+- Preserve traceability through changes
+
 ## Example Usage
 
-**Note** If you really need to force use, you can prefix the exmaple prompts below with 'Use sdd to...'
+**Note:** If you need to force usage, prefix the example prompts below with "Use sdd to..."
 
 ### Creating a Specification
 ```
@@ -85,6 +97,8 @@ Review the design for password-reset
 Review the implementation of shopping-cart
 ```
 
+The agent will check for completeness, traceability, test coverage, and adherence to project guidelines. Returns a detailed report with findings.
+
 ### Refining Documents
 ```
 Refine the user-authentication specification - we need to add OAuth support
@@ -92,6 +106,11 @@ Refine the user-authentication specification - we need to add OAuth support
 ```
 Update the design for password-reset to handle rate limiting
 ```
+```
+Add a new requirement to the shopping-cart spec for guest checkout
+```
+
+The agent will read existing documents, identify gaps or changes needed, and update while maintaining template structure and traceability.
 
 ### Setting Up Project Guidelines
 ```
