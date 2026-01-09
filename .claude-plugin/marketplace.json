@@ -7,12 +7,6 @@
 
   "plugins": [
     {
-      "name": "value-investor",
-      "source": "./value-investor",
-
-      "description": "Comprehensive investment analysis workflow for evaluating publicly traded companies using Warren Buffett and Charlie Munger's value investing principles"
-    },
-    {
       "name": "sdd",
       "source": "./sdd",
       "description": "Spec Driven Development (SDD) methodology for Claude Code. Provides a structured workflow for specification, design, and implementation phases with automated reviews, test-driven development enforcement, and requirements traceability."

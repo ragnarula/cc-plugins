@@ -6,39 +6,22 @@ A curated collection of high-quality plugins for Claude Code.
 
 ### [SDD (Spec Driven Development)](./sdd/)
 
-**Version:** 0.1.2
+**Version:** 0.1.11
 
-A structured approach to software development that combines the rigor of upfront specification with the flexibility of iterative implementation.
+A structured approach to software development that combines rigorous upfront specification with iterative implementation.
 
 **Features:**
-- Specification phase (`/specify`) - Define requirements with clarity and precision
-- Design phase (`/design`) - Plan architecture and implementation strategy
-- Implementation phase (`/implement`) - Build with TDD and automated reviews
-- Specialized agents for analysis, design, implementation, and review
-- Living documentation and requirements traceability
+- **Specify** - Define requirements (FR-XXX, NFR-XXX) with clarity and precision
+- **Design** - Plan architecture with test scenarios (Given/When/Then) and task breakdown
+- **Implement** - Build with TDD, requirement traceability in code comments
+- Full traceability from requirements → components → test scenarios → tasks → code
+- Validation sections to ensure no orphan requirements or scenarios
 
 **Use Case:** For developers who want disciplined, specification-driven development with AI assistance.
 
 [View Plugin Details →](./sdd/README.md)
 
 ---
-
-### [Value Investor](./value-investor/)
-
-**Version:** 0.1.0
-
-A comprehensive investment analysis workflow for evaluating publicly traded companies using Warren Buffett and Charlie Munger's value investing principles.
-
-**Features:**
-- Multi-stage analysis workflow (screening → deep dive → valuation → report)
-- Autonomous agents for business analysis, financial modeling, and risk assessment
-- Built-in value investing frameworks and mental models
-- Human approval gates at each stage
-- Systematic 10-year financial analysis
-
-**Use Case:** For investors who want to apply disciplined value investing principles to evaluate public companies.
-
-[View Plugin Details →](./value-investor/README.md)
 
 ## Installation
 
@@ -52,7 +35,6 @@ Add this marketplace to Claude Code, then install plugins:
 
 # Install plugins
 /plugin install sdd@ragnarula-cc-plugins
-/plugin install value-investor@ragnarula-cc-plugins
 ```
 
 Or via the CLI:
@@ -85,48 +67,25 @@ git clone https://github.com/ragnarula/cc-plugins.git
 cp -r cc-plugins/sdd /path/to/your/project/.claude-plugin/
 ```
 
-## Plugin Development
-
-Want to contribute a plugin? Check out the [Claude Code plugin development documentation](https://docs.anthropic.com/claude-code) for guidelines and best practices.
-
-### Submission Guidelines
-
-1. Follow Claude Code plugin structure conventions
-2. Include comprehensive README with examples
-3. Provide clear installation and configuration instructions
-4. Test thoroughly before submission
-5. Include appropriate error handling and user feedback
-
 ## Repository Structure
 
 ```
 cc-plugins/
-├── README.md                    # This file
+├── README.md                       # This file
 ├── .claude-plugin/
-│   └── marketplace.json         # Plugin registry
-├── sdd/                         # Spec Driven Development plugin
-│   ├── .claude-plugin/
-│   │   └── plugin.json
-│   ├── agents/
-│   ├── commands/
-│   ├── skills/
-│   └── README.md
-├── value-investor/              # Value Investor plugin
-│   ├── .claude-plugin/
-│   │   └── plugin.json
-│   ├── agents/
-│   ├── commands/
-│   ├── skills/
-│   └── README.md
-└── [future-plugin]/             # Additional plugins...
+│   └── marketplace.json            # Plugin registry
+└── sdd/                            # Spec Driven Development plugin
+    ├── .claude-plugin/
+    │   └── plugin.json
+    ├── skills/
+    │   ├── sdd/
+    │   │   ├── SKILL.md            # Core SDD methodology
+    │   │   └── templates/
+    │   │       ├── specification.template.md
+    │   │       ├── design.template.md
+    │   │       ├── index.template.md
+    │   │       └── project-guidelines.template.md
+    │   └── project-guidelines/
+    │       └── SKILL.md            # Guidelines reading process
+    └── README.md
 ```
-
-## License
-
-Individual plugins may have their own licenses. Check each plugin's directory for license information.
-
-## Support
-
-For issues with specific plugins, please check the plugin's README for troubleshooting guidance.
-
-For general Claude Code questions, visit: https://docs.anthropic.com/claude-code
