@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development. Use this for writing, refining and reviewing specs, specifications, designs, tasks, test and implementations.
-version: 0.1.12
+version: 0.1.13
 ---
 
 # Spec Driven Development (SDD)
@@ -38,6 +38,20 @@ The `SDD_PROJECT_GUIDELINES` file (`.sdd/project-guidelines.md`) contains projec
 2. **Define inline guidelines** - Specify conventions directly in the file
 
 You MUST read this file during exploration and apply these conventions to architectural decisions.
+
+### Domain Skills
+
+After exploring the codebase and understanding the task, identify which domain skills apply:
+
+- **distributed-systems**: Multiple services, network coordination, eventual consistency
+- **low-level-systems**: Memory management, performance-critical, OS interfaces
+- **security**: Auth, untrusted input, sensitive data, compliance
+- **infrastructure**: Cloud resources, IaC, networking, disaster recovery
+- **devops-sre**: CI/CD, deployment, observability, SLOs
+- **data-engineering**: Pipelines, ETL, schema evolution, data quality
+- **api-design**: Public/internal APIs, versioning, contracts
+
+Load relevant skills and apply their mindset and practices throughout specification, design, and review phases.
 
 ### Requirement Traceability
 
