@@ -66,14 +66,14 @@
 ### NFR-001: [Performance/Security/Reliability/etc.]
 **Category:** Performance | Security | Reliability | Usability | Scalability | Maintainability
 **Description:** [Measurable quality attribute]
-
 **Acceptance Threshold:** [Specific metric: e.g., "Response time < 200ms for 95th percentile"]
+**Verification:** [How will this be verified? e.g., Observability (metrics), Load testing, Static analysis, Security audit, User testing, Code review]
 
 ### NFR-002: [Requirement Title]
 **Category:** [Category]
 **Description:** [Measurable quality attribute]
-
 **Acceptance Threshold:** [Specific metric]
+**Verification:** [Verification method]
 
 ___
 

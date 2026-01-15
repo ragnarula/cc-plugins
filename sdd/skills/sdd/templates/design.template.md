@@ -150,6 +150,17 @@
 
 ---
 
+## Instrumentation (if needed)
+
+> Implementation details for NFRs with observability-based verification. Only include NFRs where the specification's Verification field indicates observability (metrics, logging, tracing, alerting).
+
+| Requirement | Observability Criteria | Implementation | Component |
+|-------------|------------------------|----------------|-----------|
+| [feature:NFR-001] | [What needs to be observable from spec] | [Metric/log/trace implementation] | [Which component] |
+| [feature:NFR-002] | [What needs to be observable from spec] | [Metric/log/trace implementation] | [Which component] |
+
+---
+
 ## Integration Test Scenarios (if needed)
 
 > Define scenarios that test interactions between multiple components. Each scenario should verify a complete user journey or system interaction.

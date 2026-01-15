@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development. Use this for writing, refining and reviewing specs, specifications, designs, tasks, test and implementations.
-version: 0.1.11
+version: 0.1.12
 ---
 
 # Spec Driven Development (SDD)
@@ -142,6 +142,13 @@ Interview the user about their idea or brief. Keep asking questions until you ca
 
 **Probe vague answers relentlessly** - Don't accept "fast", "secure", or "user-friendly" without measurable criteria. Keep questioning until requirements are specific and testable.
 
+**For each NFR, identify the verification method** - How will we know this requirement is being met? Options include:
+- **Observability**: Metrics, logging, tracing, alerting (runtime verification)
+- **Testing**: Load testing, penetration testing, compatibility testing
+- **Static analysis**: SAST, linting, code quality tools
+- **Audits/Reviews**: Security audits, accessibility audits, code review
+- **User research**: Usability testing, UX research
+
 **Phase 2: Write the Specification**
 
 Once you have enough information to fill out every section unambiguously, write the complete specification in one pass. Do not ask further questions during this phase.
@@ -191,12 +198,12 @@ API designs should:
 - Define data shapes and validation rules in prose or simple schemas
 - Specify error conditions and expected behaviors
 - Document constraints and invariants
+- Show Interfaces
 
 API designs should NOT include:
-- Code samples or function implementations
+- Code of function implementations
 - Language-specific syntax (unless illustrating a non-functional requirement)
 - Internal implementation logic
-- Concrete class/function signatures beyond naming
 
 **Exception:** Include code samples ONLY when they illustrate specific non-functional requirements:
 - Serialization formats (JSON structure, protocol buffers)
@@ -249,6 +256,16 @@ Each scenario uses Given/When/Then format:
 - **When**: Action performed
 - **Then**: Expected outcome
 
+
+#### Instrumentation (for observability-verified NFRs)
+
+For NFRs where the specification's Verification field indicates observability, define the implementation:
+- What metrics, logs, or traces will be emitted
+- Which components are responsible for instrumentation
+- How the observability criteria from the spec will be satisfied
+
+This section is only needed when NFRs require runtime observability for verification.
+
 #### Task Breakdown
 
 - Group into logical phases ordered by dependencies
@@ -291,6 +308,7 @@ A complete design document must have:
 - ✅ **Tasks reference test scenarios** they implement (TS-IDs, ITS-IDs, E2E-IDs)
 - ✅ **Requirements validation** showing every requirement maps to tasks
 - ✅ **No TBDs or ambiguities** in the final design
+- ✅ **Instrumentation defined** for all observability-verified NFRs
 - ✅ **Standard structure** following [SDD_TEMPLATE_DESIGN] exactly
 - ✅ **Project guidelines compliance** if SDD_PROJECT_GUIDELINES exists
 
@@ -393,6 +411,8 @@ BAD (contains implementation details):
 - Unrealistic performance expectations
 - Dependencies on unavailable services
 - Requirements that assume non-existent functionality
+- NFRs missing verification methods
+- Verification methods that don't match the requirement type (e.g., "code review" for a performance NFR)
 
 #### Design Review
 
@@ -403,6 +423,7 @@ BAD (contains implementation details):
 - Architectural decisions fit existing codebase patterns
 - Project guidelines compliance (if SDD_PROJECT_GUIDELINES exists)
 - Test Scenario Validation section is complete (no orphan scenarios)
+- Instrumentation section covers all observability-verified NFRs from specification
 
 **Task-level test verification:**
 - Each task must have a "Test Scenarios:" field referencing specific scenario IDs (TS-XX, ITS-XX, E2E-XX)
@@ -433,6 +454,7 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Architectural decisions conflicting with existing patterns
 - Missing risk assessment
 - Test scenarios missing Given/When/Then structure
+- Observability-verified NFRs missing from Instrumentation section
 
 #### Implementation Review
 
@@ -470,6 +492,7 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Run linters and formatters
 - Build/compile the project
 - Verify code follows documented practices
+- Verify instrumentation from design is implemented (metrics emitted, logs present, traces configured)
 
 **Red flags:**
 - Implementation doesn't match design
@@ -482,6 +505,7 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Orphan scenarios (defined but never assigned to tasks)
 - Security vulnerabilities
 - Missing requirement traceability in code comments or test docstrings
+- Instrumentation defined in design but not implemented
 
 #### Quality Standards (All Reviews)
 
@@ -498,3 +522,5 @@ A thorough review must verify:
 - ✅ Code and tests use fully-qualified requirement IDs `[feature:REQ-ID]`
 - ✅ Code and tests use fully-qualified scenario IDs `[feature:ComponentName/TS-XX]`, `[feature:ITS-XX]`, `[feature:E2E-XX]`
 - ✅ All scenarios mapped to tasks (no orphans)
+- ✅ NFRs have appropriate verification methods defined
+- ✅ Observability-verified NFRs have instrumentation defined and implemented
