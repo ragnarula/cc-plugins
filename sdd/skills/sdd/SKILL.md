@@ -67,7 +67,7 @@ This format MUST be used consistently in:
 def hash_password(password: str) -> str:
 ```
 
-**Test docstrings:**
+**Test documentation:**
 ```python
 def test_password_hashing():
     """Verifies [user-authentication:FR-003] - Password hashing"""
@@ -86,15 +86,9 @@ Test scenarios use fully-qualified IDs in the format `[feature-name:SCENARIO-ID]
   - Integration scenarios: `ITS-XX` (e.g., `ITS-01`)
   - E2E scenarios: `E2E-XX` (e.g., `E2E-01`)
 
-This format MUST be used consistently in:
+This format MUST be used in **test code only** (not implementation code), via documentation comments or docstrings as appropriate for the language:
 
-**Code comments (link implementation to the scenario it enables):**
-```python
-# Implements [user-authentication:AuthService/TS-01] - Valid credentials return session token
-def authenticate(username: str, password: str) -> Session:
-```
-
-**Test function names and docstrings:**
+**Test documentation:**
 ```python
 def test_valid_credentials_return_session():
     """Verifies [user-authentication:AuthService/TS-01] - Valid credentials return session token
@@ -107,7 +101,7 @@ def test_valid_credentials_return_session():
 
 **Design documents** - The Test Scenario Validation section must map every scenario to tasks.
 
-This enables grep-based traceability: `grep -r "\[user-authentication:AuthService/TS-01\]"` finds all code and tests implementing a scenario.
+This enables grep-based traceability: `grep -r "\[user-authentication:AuthService/TS-01\]" tests/` finds all tests verifying a scenario.
 
 ## Processes
 
@@ -485,8 +479,7 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 
 **Traceability verification:**
 - Code comments reference requirements using `[feature-name:FR-XXX]` or `[feature-name:NFR-XXX]` format
-- Code comments reference test scenarios using `[feature-name:ComponentName/TS-XX]`, `[feature-name:ITS-XX]`, or `[feature-name:E2E-XX]` format
-- Test docstrings reference both requirements and scenarios they verify
+- Test documentation (comments/docstrings) reference scenarios using `[feature-name:ComponentName/TS-XX]`, `[feature-name:ITS-XX]`, or `[feature-name:E2E-XX]` format
 - Run `grep -r "\[feature-name:" src/ tests/` to verify coverage
 - Verify all scenarios from design have corresponding test implementations
 
@@ -518,7 +511,8 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Test scenarios not referenced in test implementations
 - Orphan scenarios (defined but never assigned to tasks)
 - Security vulnerabilities
-- Missing requirement traceability in code comments or test docstrings
+- Missing requirement traceability in code comments
+- Missing scenario references in test documentation
 - Instrumentation defined in design but not implemented
 
 #### Quality Standards (All Reviews)
@@ -534,7 +528,55 @@ A thorough review must verify:
 - ✅ Risks identified with mitigations
 - ✅ All stubs and dead code tracked (intermediate) or resolved (final)
 - ✅ Code and tests use fully-qualified requirement IDs `[feature:REQ-ID]`
-- ✅ Code and tests use fully-qualified scenario IDs `[feature:ComponentName/TS-XX]`, `[feature:ITS-XX]`, `[feature:E2E-XX]`
+- ✅ Tests use fully-qualified scenario IDs `[feature:ComponentName/TS-XX]`, `[feature:ITS-XX]`, `[feature:E2E-XX]`
 - ✅ All scenarios mapped to tasks (no orphans)
 - ✅ NFRs have appropriate verification methods defined
 - ✅ Observability-verified NFRs have instrumentation defined and implemented
+
+#### Review Severity Levels
+
+All review findings MUST be categorized by severity. Reports must list findings grouped by severity, with P0 issues first.
+
+**P0 - Blocking (must fix before approval):**
+- Missing tests for new code
+- Failing tests
+- Untracked stubs in final phase
+- Security vulnerabilities
+- Requirements not covered by implementation
+- New code without corresponding test scenarios
+
+**P1 - High (should fix before approval):**
+- Missing requirement traceability in code comments
+- Missing scenario references in test documentation
+- Undocumented deviations from design
+- Orphan test scenarios (defined but not implemented)
+- Dead code in final phase
+
+**P2 - Medium (fix recommended):**
+- Test scenarios missing Given/When/Then structure
+- Incomplete instrumentation for observability NFRs
+- Minor architectural inconsistencies
+- Missing risk mitigations
+
+**P3 - Low (nice to have):**
+- Style inconsistencies not caught by linter
+- Documentation improvements
+- Minor naming convention deviations
+
+**Report format:**
+Reviews MUST present findings in severity order:
+```
+## P0 - Blocking
+- [Finding description and location]
+
+## P1 - High
+- [Finding description and location]
+
+## P2 - Medium
+- [Finding description and location]
+
+## P3 - Low
+- [Finding description and location]
+```
+
+A review with any P0 findings MUST recommend rejection until resolved.
