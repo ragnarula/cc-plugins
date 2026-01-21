@@ -167,6 +167,10 @@ You **MUST** complete [SDD_SPECIFICATION_DOCUMENT] **FULLY** for the feature
 
 Your **GOAL** is to complete all parts of the design template for the feature.
 
+**Purpose:** The design document is a complete handover document. Anyone on the team should be able to pick it up and carry out the implementation without needing to ask clarifying questions.
+
+**Level of detail:** Include enough detail to enable handover to another team member, but not so much that you replicate the implementation in the document. Describe *what* and *why*, not *how* at the code level.
+
 **CRITICAL: Template structure is sacred.**
 - Do NOT add sections that aren't in the template
 - Do NOT remove sections from the template
