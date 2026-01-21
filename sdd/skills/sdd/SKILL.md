@@ -129,6 +129,8 @@ You MUST create the required document in the relevant feature specific folder in
 
 Your **GOAL** is to complete all parts of the specification template for the feature.
 
+**Scope:** A single specification should represent approximately 1 day of implementation work. If the feature is larger, break it into multiple specifications. During the discovery interview, sense check the scope and suggest splitting if necessary.
+
 **CRITICAL: Template structure is sacred.**
 - Do NOT add sections that aren't in the template
 - Do NOT remove sections from the template
@@ -399,12 +401,14 @@ Read the design, specification, existing code, and documentation thoroughly. If 
 
 #### Dead Code
 
-- Any dead code introduced in intermediate phases **MUST** be tracked in the design document
+- Any dead code introduced in intermediate phases **MUST** be tracked in the design document with a `DC-XX` identifier
+- Dead code **MUST** include a comment referencing its identifier (e.g., `// DC-01`)
 - All dead code **MUST** be used by the end of the final phase
 
 #### Stubs
 
-- Any stub implementations **MUST** be tracked in the design document
+- Any stub implementations **MUST** be tracked in the design document with a `ST-XX` identifier
+- Stubs **MUST** include a comment referencing their identifier (e.g., `// ST-01`)
 - All stubs **MUST** be implemented or removed by the end of the final phase
 
 ### Reviewing
