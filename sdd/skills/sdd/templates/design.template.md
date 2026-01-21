@@ -45,7 +45,14 @@
 
 **Dependants** [Any dependants that need to be modified as a result]
 
-**Kind** [Function | Class | Module | Crate | Database etc]
+**Kind** [Function | Struct | Module | Crate | Database etc]
+
+**Details**
+> Use pseudo-code or type notation to describe the structure.
+
+```
+[details]
+```
 
 **Requirements References**
 - [feature-name:FR-001]: [Why this requirement necessitates this change]
@@ -53,28 +60,10 @@
 
 **Test Scenarios**
 
-| ID | Scenario | Given | When | Then |
-|----|----------|-------|------|------|
-| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
-| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
-
-### [Modified Component 2]
-**Change Description** [Short description of what it currently does and what it needs to do. Describe the delta]
-
-**Dependants** [Any dependants that need to be modified as a result]
-
-**Kind** [Function | Class | Module | Crate | Database etc]
-
-**Requirements References**
-- [feature-name:FR-001]: [Why this requirement necessitates this change]
-- [feature-name:NFR-001]: [Why this requirement necessitates this change]
-
-**Test Scenarios**
-
-| ID | Scenario | Given | When | Then |
-|----|----------|-------|------|------|
-| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
-| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
+**TS-XX: [Scenario name]**
+- Given: [Initial state/context]
+- When: [Action performed]
+- Then: [Expected outcome]
 
 ---
 
@@ -85,9 +74,16 @@
 
 **Users** [Who/what will call/use this component?]
 
-**Kind** [Function | Class | Module | Crate | Database etc]
+**Kind** [Function | Struct | Module | Crate | Database etc]
 
 **Location** [Which file/class/module/crate will this new component be located in?]
+
+**Details**
+> Use pseudo-code or type notation to describe the structure.
+
+```
+[details]
+```
 
 **Requirements References**
 - [feature-name:FR-001]: [Why this requirement necessitates this component]
@@ -95,30 +91,10 @@
 
 **Test Scenarios**
 
-| ID | Scenario | Given | When | Then |
-|----|----------|-------|------|------|
-| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
-| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
-
-### [Added Component 2]
-**Description** [Short description of what the new component should do]
-
-**Users** [Who/what will call/use this component?]
-
-**Kind** [Function | Class | Module | Crate | Database etc]
-
-**Location** [Which file/class/module/crate will this new component be located in?]
-
-**Requirements References**
-- [feature-name:FR-001]: [Why this requirement necessitates this component]
-- [feature-name:NFR-001]: [Why this requirement necessitates this component]
-
-**Test Scenarios**
-
-| ID | Scenario | Given | When | Then |
-|----|----------|-------|------|------|
-| TS-01 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
-| TS-02 | [Scenario name] | [Initial state/context] | [Action performed] | [Expected outcome] |
+**TS-XX: [Scenario name]**
+- Given: [Initial state/context]
+- When: [Action performed]
+- Then: [Expected outcome]
 
 ---
 
@@ -127,13 +103,6 @@
 > Existing components required as-is for implementation. Document what each provides and why it's needed.
 
 ### [Used Component 1]
-**Location** [Path to component]
-
-**Provides** [What functionality/interface this component offers that we depend on]
-
-**Used By** [Which Modified/Added components depend on this]
-
-### [Used Component 2]
 **Location** [Path to component]
 
 **Provides** [What functionality/interface this component offers that we depend on]
@@ -154,10 +123,10 @@
 
 > Implementation details for NFRs with observability-based verification. Only include NFRs where the specification's Verification field indicates observability (metrics, logging, tracing, alerting).
 
-| Requirement | Observability Criteria | Implementation | Component |
-|-------------|------------------------|----------------|-----------|
-| [feature:NFR-001] | [What needs to be observable from spec] | [Metric/log/trace implementation] | [Which component] |
-| [feature:NFR-002] | [What needs to be observable from spec] | [Metric/log/trace implementation] | [Which component] |
+**[feature:NFR-XXX]**
+- Observability Criteria: [What needs to be observable from spec]
+- Implementation: [Metric/log/trace implementation]
+- Component: [Which component]
 
 ---
 
@@ -165,10 +134,11 @@
 
 > Define scenarios that test interactions between multiple components. Each scenario should verify a complete user journey or system interaction.
 
-| ID | Scenario | Given | When | Then | Components Involved |
-|----|----------|-------|------|------|---------------------|
-| ITS-01 | [Scenario name] | [Initial system state] | [User action or trigger] | [Expected system behavior] | [List of components] |
-| ITS-02 | [Scenario name] | [Initial system state] | [User action or trigger] | [Expected system behavior] | [List of components] |
+**ITS-XX: [Scenario name]**
+- Given: [Initial system state]
+- When: [User action or trigger]
+- Then: [Expected system behavior]
+- Components Involved: [List of components]
 
 ---
 
@@ -176,10 +146,11 @@
 
 > Define end-to-end scenarios that test complete user workflows through the entire system. Each scenario should simulate real user behavior from start to finish.
 
-| ID | Scenario | Given | When | Then | User Journey |
-|----|----------|-------|------|------|--------------|
-| E2E-01 | [Scenario name] | [Initial user/system state] | [Complete user workflow] | [Final expected state] | [Steps in the journey] |
-| E2E-02 | [Scenario name] | [Initial user/system state] | [Complete user workflow] | [Final expected state] | [Steps in the journey] |
+**E2E-XX: [Scenario name]**
+- Given: [Initial user/system state]
+- When: [Complete user workflow]
+- Then: [Final expected state]
+- User Journey: [Steps in the journey]
 
 ---
 
@@ -215,29 +186,16 @@
 > Do NOT create separate "Add tests" tasks or defer testing to later phases.
 > TDD approach: Write failing test → Implement → Verify test passes → Refactor.
 
-### Phase [1] [Goal of this phase]
-- Task [1]: [Short description of the task]
-  - Status: [Backlog | In Progress | Done]
-  - [More detailed description if necessary]
-  - Requirements: [feature-name:FR-001], [feature-name:NFR-001]
-  - Test Scenarios: [feature-name:ComponentName/TS-01], [feature-name:ITS-01], [feature-name:E2E-01]
-- Task [2]: [Short description of the task]
-  - Status: [Backlog | In Progress | Done]
-  - [More detailed description if necessary]
-  - Requirements: [feature-name:FR-002], [feature-name:NFR-002]
-  - Test Scenarios: [feature-name:ComponentName/TS-02], [feature-name:ITS-02]
+### Phase [X]: [Goal of this phase]
 
-### Phase [2] [Goal of this phase]
-- Task [1]: [Short description of the task]
-  - Status: [Backlog | In Progress | Done]
-  - [More detailed description if necessary]
-  - Requirements: [feature-name:FR-003]
-  - Test Scenarios: [feature-name:ComponentName/TS-03], [feature-name:E2E-02]
-- Task [2]: [Short description of the task]
-  - Status: [Backlog | In Progress | Done]
-  - [More detailed description if necessary]
-  - Requirements: [feature-name:FR-004]
-  - Test Scenarios: [feature-name:ComponentName/TS-04]
+**Task [X]: [Short description of the task]**
+- Status: [Backlog | In Progress | Done]
+- Requirements: [feature-name:FR-XXX], [feature-name:NFR-XXX]
+- Test Scenarios: [feature-name:ComponentName/TS-XX], [feature-name:ITS-XX], [feature-name:E2E-XX]
+- Details:
+  ```
+  [details]
+  ```
 
 ---
 

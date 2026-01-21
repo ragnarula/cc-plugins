@@ -180,12 +180,33 @@ Your **GOAL** is to complete all parts of the design template for the feature.
 
 Read and understand before designing:
 - Read the specification thoroughly
+- **Extract and list ALL functional and non-functional requirements by ID** - create a working checklist
 - Explore the existing codebase for patterns, conventions, and integration points
 - Read project guidelines if they exist
 
 **Phase 2: Design**
 
-Once you understand the requirements and codebase, write the complete design in one pass. The design must cover all specification requirements.
+Once you understand the requirements and codebase:
+
+1. **Requirements Enumeration Checkpoint** (MANDATORY before writing components)
+   - Create a checklist of every FR and NFR from the specification
+   - For each requirement, identify which component(s) will address it
+   - If a requirement cannot be mapped to a component, you must either:
+     a. Add a new component to address it
+     b. Document it in Feasibility Review with justification why it cannot be addressed
+   - **Do NOT proceed until every requirement has a component assignment**
+
+2. **Write the design document**
+   - Work through components systematically
+   - As you define each component, verify its Requirements References are complete
+   - Cross-check against your requirements checklist as you go
+   - Do NOT proceed to Task Breakdown until all requirements are mapped to components
+
+3. **Complete Requirements Validation section BEFORE finalizing**
+   - This is a mandatory checkpoint, not optional documentation
+   - Every requirement must appear with at least one task reference
+   - If any requirement is missing task coverage, add tasks to cover it
+   - **A design with unmapped requirements is incomplete and must not be submitted**
 
 You **MUST** identify components required to implement the feature in the specification
 
