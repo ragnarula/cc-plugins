@@ -152,12 +152,7 @@ Interview the user about their idea or brief. Keep asking questions until you ca
 
 **Probe vague answers relentlessly** - Don't accept "fast", "secure", or "user-friendly" without measurable criteria. Keep questioning until requirements are specific and testable.
 
-**For each NFR, identify the verification method** - How will we know this requirement is being met? Options include:
-- **Observability**: Metrics, logging, tracing, alerting (runtime verification)
-- **Testing**: Load testing, penetration testing, compatibility testing
-- **Static analysis**: SAST, linting, code quality tools
-- **Audits/Reviews**: Security audits, accessibility audits, code review
-- **User research**: Usability testing, UX research
+**NFRs are optional** - Only include non-functional requirements when there are genuine, measurable quality constraints (e.g., specific latency targets, compliance requirements). Most features don't need them.
 
 **Phase 2: Write the Specification**
 
@@ -269,6 +264,7 @@ GOOD tests (scenario-driven):
 
 BAD tests (avoid these):
 - Testing enum value equals itself
+- Testing functions with low complexity or trivial implementations (e.g., simple getters, pass-through functions)
 - "Concurrency tests" that don't actually run concurrent requests
 - Mocking everything so the test only verifies mock setup
 - Testing that a function was called (instead of its effect)
@@ -292,14 +288,9 @@ Each scenario uses Given/When/Then format:
 - **Then**: Expected outcome
 
 
-#### Instrumentation (for observability-verified NFRs)
+#### Instrumentation (optional)
 
-For NFRs where the specification's Verification field indicates observability, define the implementation:
-- What metrics, logs, or traces will be emitted
-- Which components are responsible for instrumentation
-- How the observability criteria from the spec will be satisfied
-
-This section is only needed when NFRs require runtime observability for verification.
+Only needed if NFRs require observability. Skip for typical features.
 
 #### Task Breakdown
 
@@ -343,7 +334,7 @@ A complete design document must have:
 - ✅ **Tasks reference test scenarios** they implement (TS-IDs, ITS-IDs, E2E-IDs)
 - ✅ **Requirements validation** showing every requirement maps to tasks
 - ✅ **No TBDs or ambiguities** in the final design
-- ✅ **Instrumentation defined** for all observability-verified NFRs
+- ✅ **Instrumentation defined** if NFRs require observability
 - ✅ **Standard structure** following [SDD_TEMPLATE_DESIGN] exactly
 - ✅ **Project guidelines compliance** if SDD_PROJECT_GUIDELINES exists
 
@@ -420,9 +411,10 @@ The user can ask to review a specification, design or implementation. Follow the
 #### Common Review Steps
 
 1. Read specification, design, and project guidelines (if exists)
-2. Verify requirements traceability and coverage
-3. Check for edge cases and architectural fit
-4. Validate against project conventions (error handling, logging, naming, testing)
+2. Load relevant domain skills based on the feature (e.g., security, api-design, distributed-systems) and apply their review criteria
+3. Verify requirements traceability and coverage
+4. Check for edge cases and architectural fit
+5. Validate against project conventions (error handling, logging, naming, testing)
 
 #### Specification Review
 
@@ -448,8 +440,6 @@ BAD (contains implementation details):
 - Unrealistic performance expectations
 - Dependencies on unavailable services
 - Requirements that assume non-existent functionality
-- NFRs missing verification methods
-- Verification methods that don't match the requirement type (e.g., "code review" for a performance NFR)
 
 #### Design Review
 
@@ -460,7 +450,7 @@ BAD (contains implementation details):
 - Architectural decisions fit existing codebase patterns
 - Project guidelines compliance (if SDD_PROJECT_GUIDELINES exists)
 - Test Scenario Validation section is complete (no orphan scenarios)
-- Instrumentation section covers all observability-verified NFRs from specification
+- Instrumentation section present if NFRs require observability
 
 **Task-level test verification:**
 - Each task must have a "Test Scenarios:" field referencing specific scenario IDs (TS-XX, ITS-XX, E2E-XX)
@@ -470,11 +460,13 @@ BAD (contains implementation details):
 
 **Example of GOOD task structure:**
 ```
-- Task 1: Implement CartService.addItem()
-  - Status: Backlog
-  - Add item to cart with quantity validation
-  - Requirements: [shopping-cart:FR-001], [shopping-cart:FR-002]
-  - Test Scenarios: [shopping-cart:CartService/TS-01], [shopping-cart:CartService/TS-02], [shopping-cart:ITS-01], [shopping-cart:E2E-01]
+**Task 1: Implement CartService.addItem()**
+- Status: Backlog
+- Requirements: [shopping-cart:FR-001], [shopping-cart:FR-002]
+- Test Scenarios: [shopping-cart:CartService/TS-01], [shopping-cart:ITS-01]
+- Details:
+  fn addItem(productId: string, quantity: int) -> Cart
+    throws: ProductNotFound, InvalidQuantity
 ```
 
 **Example of BAD task structure:**
@@ -491,7 +483,6 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Architectural decisions conflicting with existing patterns
 - Missing risk assessment
 - Test scenarios missing Given/When/Then structure
-- Observability-verified NFRs missing from Instrumentation section
 
 #### Implementation Review
 
@@ -548,7 +539,7 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 
 A thorough review must verify:
 - ✅ Requirements coverage complete
-- ✅ Tests adequate and passing (scenario-driven, not fake NFR tests)
+- ✅ Tests adequate and passing (scenario-driven, avoid trivial tests)
 - ✅ All test scenarios use Given/When/Then format with unique IDs
 - ✅ Integration test scenarios cover component interactions
 - ✅ E2E test scenarios cover complete user workflows
@@ -559,8 +550,6 @@ A thorough review must verify:
 - ✅ Code and tests use fully-qualified requirement IDs `[feature:REQ-ID]`
 - ✅ Tests use fully-qualified scenario IDs `[feature:ComponentName/TS-XX]`, `[feature:ITS-XX]`, `[feature:E2E-XX]`
 - ✅ All scenarios mapped to tasks (no orphans)
-- ✅ NFRs have appropriate verification methods defined
-- ✅ Observability-verified NFRs have instrumentation defined and implemented
 
 #### Review Severity Levels
 
@@ -583,7 +572,6 @@ All review findings MUST be categorized by severity. Reports must list findings 
 
 **P2 - Medium (fix recommended):**
 - Test scenarios missing Given/When/Then structure
-- Incomplete instrumentation for observability NFRs
 - Minor architectural inconsistencies
 - Missing risk mitigations
 

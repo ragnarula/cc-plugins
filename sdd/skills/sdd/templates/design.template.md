@@ -119,14 +119,11 @@
 
 ---
 
-## Instrumentation (if needed)
+## Instrumentation (optional)
 
-> Implementation details for NFRs with observability-based verification. Only include NFRs where the specification's Verification field indicates observability (metrics, logging, tracing, alerting).
+> Only include if there are NFRs requiring observability. Skip for typical features.
 
-**[feature:NFR-XXX]**
-- Observability Criteria: [What needs to be observable from spec]
-- Implementation: [Metric/log/trace implementation]
-- Component: [Which component]
+- [Metric/log/trace to implement and which component]
 
 ---
 
