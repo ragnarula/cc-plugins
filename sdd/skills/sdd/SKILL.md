@@ -99,7 +99,7 @@ def test_valid_credentials_return_session():
     """
 ```
 
-**Design documents** - The Test Scenario Validation section must map every scenario to tasks.
+**Design documents** - Every test scenario must map to at least one task (validated during review).
 
 This enables grep-based traceability: `grep -r "\[user-authentication:AuthService/TS-01\]" tests/` finds all tests verifying a scenario.
 
@@ -203,9 +203,8 @@ Once you understand the requirements and codebase:
    - Cross-check against your requirements checklist as you go
    - Do NOT proceed to Task Breakdown until all requirements are mapped to components
 
-3. **Complete Requirements Validation section BEFORE finalizing**
-   - This is a mandatory checkpoint, not optional documentation
-   - Every requirement must appear with at least one task reference
+3. **Verify requirements coverage BEFORE finalizing**
+   - Cross-check every requirement from the specification has task coverage
    - If any requirement is missing task coverage, add tasks to cover it
    - **A design with unmapped requirements is incomplete and must not be submitted**
 
@@ -255,37 +254,14 @@ def add_to_cart(product_id: str, quantity: int) -> Cart:
 
 #### Test Scenarios
 
-**Tests must verify user scenarios, not implementation details.**
+**Tests verify acceptance criteria from requirements.**
 
-GOOD tests (scenario-driven):
-- "User can add item to cart and see updated total"
-- "User receives error when submitting invalid email"
-- "API returns 404 when product doesn't exist"
+Each test must trace to an acceptance criterion defined in a requirement (FR-XXX). No acceptance criterion = no test.
 
-BAD tests (avoid these):
-- Testing enum value equals itself
-- Testing functions with low complexity or trivial implementations (e.g., simple getters, pass-through functions)
-- "Concurrency tests" that don't actually run concurrent requests
-- Mocking everything so the test only verifies mock setup
-- Testing that a function was called (instead of its effect)
-
-**If you can't realistically test an NFR, don't write a fake test.**
-- Concurrency: Only test if you can run actual concurrent requests against separated client/server
-- Performance: Only test if you have proper benchmarking infrastructure
-- Security: Only test what you can actually verify (e.g., input validation, auth checks)
-
-For NFRs that can't be tested in CI, document them as "Manual Verification Required" with instructions.
-
-**Scenario ID Format:**
-- Component scenarios: `ComponentName/TS-XX` (e.g., `CartService/TS-01`, `UserAuth/TS-02`)
-- Integration scenarios: `ITS-XX` (e.g., `ITS-01`, `ITS-02`)
-- E2E scenarios: `E2E-XX` (e.g., `E2E-01`, `E2E-02`)
-
-**Scenario Structure:**
-Each scenario uses Given/When/Then format:
-- **Given**: Initial state or preconditions
+**Scenario format:** Given/When/Then
+- **Given**: Initial state
 - **When**: Action performed
-- **Then**: Expected outcome
+- **Then**: Expected outcome (the acceptance criterion)
 
 
 #### Instrumentation (optional)
@@ -313,9 +289,8 @@ Only needed if NFRs require observability. Skip for typical features.
 
 **Ensure requirement coverage**
 - Every functional requirement must map to one or more components
-- Every non-functional requirement must map to implementation decisions
 - Every requirement must map to one or more tasks
-- Use the Requirements Validation section to verify complete coverage
+- Verify complete coverage by cross-checking against specification
 - No requirement should be left unaddressed in the design
 - If a requirement cannot be addressed, document it in Feasibility Review
 
@@ -332,7 +307,6 @@ A complete design document must have:
 - ✅ **Risks identified** with mitigation strategies
 - ✅ **Tasks organized** into logical phases with dependencies
 - ✅ **Tasks reference test scenarios** they implement (TS-IDs, ITS-IDs, E2E-IDs)
-- ✅ **Requirements validation** showing every requirement maps to tasks
 - ✅ **No TBDs or ambiguities** in the final design
 - ✅ **Instrumentation defined** if NFRs require observability
 - ✅ **Standard structure** following [SDD_TEMPLATE_DESIGN] exactly
@@ -444,19 +418,22 @@ BAD (contains implementation details):
 #### Design Review
 
 **Focus areas:**
-- All requirements traced to components and tasks
 - No implementation leakage (describe contracts conceptually, not code)
 - Tests included WITH tasks, not deferred to later phases
 - Architectural decisions fit existing codebase patterns
 - Project guidelines compliance (if SDD_PROJECT_GUIDELINES exists)
-- Test Scenario Validation section is complete (no orphan scenarios)
 - Instrumentation section present if NFRs require observability
 
-**Task-level test verification:**
-- Each task must have a "Test Scenarios:" field referencing specific scenario IDs (TS-XX, ITS-XX, E2E-XX)
+**Requirements validation (perform during review):**
+- Every requirement from the specification maps to at least one task
+- Every task references the requirements it fulfills
+- No orphan requirements (defined but never addressed)
+
+**Test scenario validation (perform during review):**
+- Every test scenario maps to at least one task
+- Each task has a "Test Scenarios:" field referencing specific scenario IDs (TS-XX, ITS-XX, E2E-XX)
 - No separate "add tests" tasks or testing phases
-- All component, integration, and E2E test scenarios must be assigned to tasks
-- Test Scenario Validation section maps every scenario to at least one task
+- No orphan scenarios (defined but never assigned to tasks)
 
 **Example of GOOD task structure:**
 ```

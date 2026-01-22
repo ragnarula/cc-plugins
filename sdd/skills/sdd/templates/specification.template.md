@@ -45,19 +45,10 @@
 
 ## Functional Requirements
 
-### FR-001: [Requirement Title]
-**Description:** [What the system must do. Use active voice. Be specific and measurable.]
-
-**Examples:**
-- Positive case: [Example of expected behavior]
-- Edge case: [Example of boundary condition]
-
-### FR-002: [Requirement Title]
-**Description:** [Clear statement of capability]
-
-**Examples:**
-- Positive case: [Example]
-- Negative case: [Counter-example of what should NOT happen]
+**FR-XXX: [Requirement Title]**
+- Description: [What the system must do]
+- Acceptance criteria: [How we know this requirement is met]
+- Failure/edge cases: [What happens when things go wrong or hit boundaries]
 
 ---
 
