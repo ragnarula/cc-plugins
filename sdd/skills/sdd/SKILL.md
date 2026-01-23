@@ -53,55 +53,21 @@ After exploring the codebase and understanding the task, identify which domain s
 
 Load relevant skills and apply their mindset and practices throughout specification, design, and review phases.
 
-### Requirement Traceability
+### Traceability
 
-Requirements use fully-qualified IDs in the format `[feature-name:REQ-ID]` where:
-- `feature-name` is the kebab-case folder name (e.g., `user-authentication`)
-- `REQ-ID` is the requirement ID from the specification (e.g., `FR-001`, `NFR-002`)
-
-This format MUST be used consistently in:
-
-**Code comments:**
+**Implementation code** references requirements using `[feature-name:FR-XXX]`:
 ```python
-# Implements [user-authentication:FR-003] - Password must be hashed before storage
+# Implements [user-authentication:FR-003]
 def hash_password(password: str) -> str:
 ```
 
-**Test documentation:**
-```python
-def test_password_hashing():
-    """Verifies [user-authentication:FR-003] - Password hashing"""
-```
-
-**Design documents** - Always use fully-qualified IDs when referencing requirements.
-
-This enables grep-based traceability: `grep -r "\[user-authentication:FR-003\]"` finds all code and tests implementing a requirement.
-
-### Test Scenario Traceability
-
-Test scenarios use fully-qualified IDs in the format `[feature-name:SCENARIO-ID]` where:
-- `feature-name` is the kebab-case folder name (e.g., `user-authentication`)
-- `SCENARIO-ID` is the scenario ID from the design:
-  - Component scenarios: `ComponentName/TS-XX` (e.g., `AuthService/TS-01`)
-  - Integration scenarios: `ITS-XX` (e.g., `ITS-01`)
-  - E2E scenarios: `E2E-XX` (e.g., `E2E-01`)
-
-This format MUST be used in **test code only** (not implementation code), via documentation comments or docstrings as appropriate for the language:
-
-**Test documentation:**
+**Test code** references test scenarios using `[feature-name:TS-XX]`:
 ```python
 def test_valid_credentials_return_session():
-    """Verifies [user-authentication:AuthService/TS-01] - Valid credentials return session token
-
-    Given: A registered user with valid credentials
-    When: User submits correct username and password
-    Then: A valid session token is returned
-    """
+    """Verifies [user-authentication:AuthService/TS-01]"""
 ```
 
-**Design documents** - Every test scenario must map to at least one task (validated during review).
-
-This enables grep-based traceability: `grep -r "\[user-authentication:AuthService/TS-01\]" tests/` finds all tests verifying a scenario.
+**IMPORTANT:** TS-XX references go in test code only, never in implementation code. Implementation code uses FR-XXX only.
 
 ## Processes
 
@@ -474,11 +440,13 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - Flag any undocumented deviations
 - If design was altered, verify workarounds are documented
 
-**Traceability verification:**
-- Code comments reference requirements using `[feature-name:FR-XXX]` or `[feature-name:NFR-XXX]` format
-- Test documentation (comments/docstrings) reference scenarios using `[feature-name:ComponentName/TS-XX]`, `[feature-name:ITS-XX]`, or `[feature-name:E2E-XX]` format
-- Run `grep -r "\[feature-name:" src/ tests/` to verify coverage
-- Verify all scenarios from design have corresponding test implementations
+**Test verification (read the actual test code):**
+- For each test scenario defined in the design, find and read its implementation
+- Verify the test actually exercises the acceptance criterion (not just asserting trivial values)
+- Check that tests would actually fail if the requirement was not implemented
+- Do NOT rely on trace markers alone - read the test implementation
+- Every test scenario from the design must have a corresponding test in the code
+- Verify TS-XX scenario markers are on test code only, not implementation code
 
 **Check for stubs:**
 - Search for: `skip`, `todo`, `pending`, `@pytest.mark.skip`, `pass` in test functions, placeholder assertions
@@ -492,63 +460,46 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - **Final phase**: No dead code allowed
 
 **Quality gates:**
-- Run all tests (unit, integration, e2e)
+- Run all tests
 - Run linters and formatters
 - Build/compile the project
-- Verify code follows documented practices
-- Verify instrumentation from design is implemented (metrics emitted, logs present, traces configured)
 
 **Red flags:**
+- Test scenarios from design missing in code
+- Tests that wouldn't fail if the requirement was removed
 - Implementation doesn't match design
-- Requirements removed without justification
-- New code without tests
-- Untracked stubs or dead code (in final phase)
-- Failing tests or linting errors
 - Undocumented deviations from design
-- Test scenarios not referenced in test implementations
-- Orphan scenarios (defined but never assigned to tasks)
+- Untracked stubs or dead code (in final phase)
 - Security vulnerabilities
-- Missing requirement traceability in code comments
-- Missing scenario references in test documentation
-- Instrumentation defined in design but not implemented
 
 #### Quality Standards (All Reviews)
 
 A thorough review must verify:
-- ✅ Requirements coverage complete
-- ✅ Tests adequate and passing (scenario-driven, avoid trivial tests)
-- ✅ All test scenarios use Given/When/Then format with unique IDs
-- ✅ Integration test scenarios cover component interactions
-- ✅ E2E test scenarios cover complete user workflows
+- ✅ Every test scenario from the design is implemented (verified by reading the test code)
+- ✅ Tests actually exercise acceptance criteria (would fail if requirement not implemented)
 - ✅ No TBDs or ambiguities
 - ✅ Project guidelines followed
 - ✅ Risks identified with mitigations
 - ✅ All stubs and dead code tracked (intermediate) or resolved (final)
-- ✅ Code and tests use fully-qualified requirement IDs `[feature:REQ-ID]`
-- ✅ Tests use fully-qualified scenario IDs `[feature:ComponentName/TS-XX]`, `[feature:ITS-XX]`, `[feature:E2E-XX]`
-- ✅ All scenarios mapped to tasks (no orphans)
 
 #### Review Severity Levels
 
 All review findings MUST be categorized by severity. Reports must list findings grouped by severity, with P0 issues first.
 
 **P0 - Blocking (must fix before approval):**
-- Missing tests for new code
+- Test scenario from design not implemented
+- Test that doesn't actually verify its acceptance criterion (trivial or fake)
 - Failing tests
-- Untracked stubs in final phase
 - Security vulnerabilities
 - Requirements not covered by implementation
-- New code without corresponding test scenarios
 
 **P1 - High (should fix before approval):**
-- Missing requirement traceability in code comments
-- Missing scenario references in test documentation
+- Missing traceability markers (FR-XXX in code, TS-XX in tests)
+- TS-XX markers on implementation code (they belong on tests only)
 - Undocumented deviations from design
-- Orphan test scenarios (defined but not implemented)
-- Dead code in final phase
+- Untracked stubs or dead code in final phase
 
 **P2 - Medium (fix recommended):**
-- Test scenarios missing Given/When/Then structure
 - Minor architectural inconsistencies
 - Missing risk mitigations
 
