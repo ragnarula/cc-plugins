@@ -97,12 +97,10 @@ Your **GOAL** is to complete all parts of the specification template for the fea
 
 **Scope:** A single specification should represent approximately 1 day of implementation work. If the feature is larger, break it into multiple specifications. During the discovery interview, sense check the scope and suggest splitting if necessary.
 
-**CRITICAL: Template structure is sacred.**
-- Do NOT add sections that aren't in the template
-- Do NOT remove sections from the template
-- Do NOT rename sections
-- If a section doesn't apply, write "N/A" or "None" with brief justification
-- Follow the template structure EXACTLY as defined in [SDD_TEMPLATE_SPECIFICATION]
+**Template guidance:**
+- Follow the template structure as defined in [SDD_TEMPLATE_SPECIFICATION]
+- Sections marked "optional" or "if needed" can be omitted entirely if not applicable
+- Do NOT add new sections that aren't in the template
 
 #### Process
 
@@ -134,12 +132,10 @@ Your **GOAL** is to complete all parts of the design template for the feature.
 
 **Level of detail:** Include enough detail to enable handover to another team member, but not so much that you replicate the implementation in the document. Describe *what* and *why*, not *how* at the code level.
 
-**CRITICAL: Template structure is sacred.**
-- Do NOT add sections that aren't in the template
-- Do NOT remove sections from the template
-- Do NOT rename sections
-- If a section doesn't apply, write "N/A" or "None" with brief justification
-- Follow the template structure EXACTLY as defined in [SDD_TEMPLATE_DESIGN]
+**Template guidance:**
+- Follow the template structure as defined in [SDD_TEMPLATE_DESIGN]
+- Sections marked "optional" or "if needed" can be omitted entirely if not applicable
+- Do NOT add new sections that aren't in the template
 
 #### Process
 
@@ -265,18 +261,15 @@ Only needed if NFRs require observability. Skip for typical features.
 A complete design document must have:
 - ✅ **Link to specification** via the Linked Specification field
 - ✅ **Architecture overview** explaining current context and proposed changes
-- ✅ **All requirements traced** to components via Requirements References
-- ✅ **All components defined** with clear descriptions and locations
-- ✅ **Component test scenarios** using Given/When/Then format with unique IDs (ComponentName/TS-XX)
-- ✅ **Integration test scenarios** covering multi-component interactions (ITS-XX)
-- ✅ **E2E test scenarios** covering complete user workflows (E2E-XX)
+- ✅ **Components defined** (Modified/Added) with requirements references and test scenarios
+- ✅ **Tasks organized** into logical phases referencing requirements and test scenarios
 - ✅ **Risks identified** with mitigation strategies
-- ✅ **Tasks organized** into logical phases with dependencies
-- ✅ **Tasks reference test scenarios** they implement (TS-IDs, ITS-IDs, E2E-IDs)
 - ✅ **No TBDs or ambiguities** in the final design
-- ✅ **Instrumentation defined** if NFRs require observability
-- ✅ **Standard structure** following [SDD_TEMPLATE_DESIGN] exactly
-- ✅ **Project guidelines compliance** if SDD_PROJECT_GUIDELINES exists
+
+Optional sections (include only if applicable):
+- Integration Test Scenarios (if multi-component interactions)
+- E2E Test Scenarios (if complete user workflows need testing)
+- Instrumentation (if NFRs require observability)
 
 ### Refining
 
@@ -387,8 +380,7 @@ BAD (contains implementation details):
 - No implementation leakage (describe contracts conceptually, not code)
 - Tests included WITH tasks, not deferred to later phases
 - Architectural decisions fit existing codebase patterns
-- Project guidelines compliance (if SDD_PROJECT_GUIDELINES exists)
-- Instrumentation section present if NFRs require observability
+- Only check for optional sections (Integration Tests, E2E Tests, Instrumentation) if they're applicable to the feature
 
 **Requirements validation (perform during review):**
 - Every requirement from the specification maps to at least one task
