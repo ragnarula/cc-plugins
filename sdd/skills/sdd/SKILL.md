@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development. Use this for writing, refining and reviewing specs, specifications, designs, tasks, test and implementations.
-version: 0.1.23
+version: 0.1.24
 ---
 
 # Spec Driven Development (SDD)
@@ -307,16 +307,20 @@ Read the design, specification, existing code, and documentation thoroughly. If 
 
 7. **Complete the phase** - All tasks done, tests passing, code linted. Wait for merge before next phase.
 
+#### Code Comments
+
+- Only add comments where the logic isn't self-evident
+- Do NOT add comments that reference requirement IDs, test scenario IDs, or other SDD artifacts
+- Prefer self-documenting code over comments
+
 #### Dead Code
 
-- Any dead code introduced in intermediate phases **MUST** be tracked in the design document with a `DC-XX` identifier
-- Dead code **MUST** include a comment referencing its identifier (e.g., `// DC-01`)
+- Any dead code introduced in intermediate phases **MUST** be tracked in the design document
 - All dead code **MUST** be used by the end of the final phase
 
 #### Stubs
 
-- Any stub implementations **MUST** be tracked in the design document with a `ST-XX` identifier
-- Stubs **MUST** include a comment referencing their identifier (e.g., `// ST-01`)
+- Any stub implementations **MUST** be tracked in the design document
 - All stubs **MUST** be implemented or removed by the end of the final phase
 
 ### Auto-Implementing
