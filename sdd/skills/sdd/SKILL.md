@@ -335,6 +335,53 @@ Read the design, specification, existing code, and documentation thoroughly. If 
 - Stubs **MUST** include a comment referencing their identifier (e.g., `// ST-01`)
 - All stubs **MUST** be implemented or removed by the end of the final phase
 
+### Auto-Implementing
+
+Use this process when asked to auto-implement a design. Each phase is implemented as a stacked PR.
+
+#### Process
+
+For each phase in the design (in order):
+
+1. **Create phase branch**
+   - Branch from previous phase branch (or main for phase 1)
+   - Name: `feature/<feature-name>-phase-<N>`
+
+2. **Implementation subagent**
+   - Launch Task tool with implementation prompt for this phase
+   - Subagent implements all tasks in the phase
+   - Subagent commits after each task
+
+3. **Review subagent**
+   - Launch Task tool with review prompt for this phase
+   - Subagent reviews the implementation against the design
+   - Returns list of issues (P0, P1, P2)
+
+4. **Fix loop**
+   - If P0 or P1 issues exist:
+     a. Launch implementation subagent to fix issues
+     b. Launch review subagent again
+     c. Repeat until no P0/P1 issues remain
+
+5. **Create stacked PR**
+   - Create PR from phase branch to previous phase branch (or main for phase 1)
+   - PR description includes:
+     - Phase number and goal
+     - Requirements covered
+     - The final review report (confirming no P0/P1 issues)
+
+6. **Next phase**
+   - Move to next phase, branching from current phase branch
+   - Repeat steps 1-5
+
+#### Subagent Prompts
+
+**Implementation subagent prompt:**
+> Use SDD to implement phase [N] of [design-path].
+
+**Review subagent prompt:**
+> Use SDD to review the implementation of phase [N] for [design-path].
+
 ### Reviewing
 
 The user can ask to review a specification, design or implementation. Follow the process below and produce a report for the user at the end.
