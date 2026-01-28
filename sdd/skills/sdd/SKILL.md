@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development. Use this for writing, refining and reviewing specs, specifications, designs, tasks, test and implementations.
-version: 0.1.22
+version: 0.1.23
 ---
 
 # Spec Driven Development (SDD)
@@ -336,23 +336,24 @@ For each phase in the design (in order):
    - Subagent implements all tasks in the phase
    - Subagent commits after each task
 
-3. **Review subagent**
+3. **Create/update stacked PR**
+   - Create PR from phase branch to previous phase branch (or main for phase 1)
+   - PR description includes phase number, goal, and requirements covered
+   - On subsequent rounds, push commits to update the existing PR
+
+4. **Review subagent**
    - Launch Task tool with review prompt for this phase
    - Subagent reviews the implementation against the design
    - Returns list of issues (P0, P1, P2)
+   - Add review report as PR comment
 
-4. **Fix loop**
+5. **Fix loop**
    - If P0 or P1 issues exist:
      a. Launch implementation subagent to fix issues
-     b. Launch review subagent again
-     c. Repeat until no P0/P1 issues remain
-
-5. **Create stacked PR**
-   - Create PR from phase branch to previous phase branch (or main for phase 1)
-   - PR description includes:
-     - Phase number and goal
-     - Requirements covered
-     - The final review report (confirming no P0/P1 issues)
+     b. Push fixes to PR
+     c. Launch review subagent again
+     d. Add new review report as PR comment
+     e. Repeat until no P0/P1 issues remain
 
 6. **Next phase**
    - Move to next phase, branching from current phase branch
