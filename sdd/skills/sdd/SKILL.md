@@ -53,22 +53,6 @@ After exploring the codebase and understanding the task, identify which domain s
 
 Load relevant skills and apply their mindset and practices throughout specification, design, and review phases.
 
-### Traceability
-
-**Implementation code** references requirements using `[feature-name:FR-XXX]`:
-```python
-# Implements [user-authentication:FR-003]
-def hash_password(password: str) -> str:
-```
-
-**Test code** references test scenarios using `[feature-name:TS-XX]`:
-```python
-def test_valid_credentials_return_session():
-    """Verifies [user-authentication:AuthService/TS-01]"""
-```
-
-**IMPORTANT:** TS-XX references go in test code only, never in implementation code. Implementation code uses FR-XXX only.
-
 ## Processes
 
 You **MUST** explore the code base using tools like Read, Glob etc before doing **ANY** of the below.
@@ -483,9 +467,7 @@ Phase 2: Add unit tests for CartService  ← VIOLATION
 - For each test scenario defined in the design, find and read its implementation
 - Verify the test actually exercises the acceptance criterion (not just asserting trivial values)
 - Check that tests would actually fail if the requirement was not implemented
-- Do NOT rely on trace markers alone - read the test implementation
 - Every test scenario from the design must have a corresponding test in the code
-- Verify TS-XX scenario markers are on test code only, not implementation code
 
 **Check for stubs:**
 - Search for: `skip`, `todo`, `pending`, `@pytest.mark.skip`, `pass` in test functions, placeholder assertions
@@ -533,8 +515,6 @@ All review findings MUST be categorized by severity. Reports must list findings 
 - Requirements not covered by implementation
 
 **P1 - High (should fix before approval):**
-- Missing traceability markers (FR-XXX in code, TS-XX in tests)
-- TS-XX markers on implementation code (they belong on tests only)
 - Undocumented deviations from design
 - Untracked stubs or dead code in final phase
 
