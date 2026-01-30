@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development. Use this for writing, refining and reviewing specs, specifications, designs, tasks, test and implementations.
-version: 0.1.24
+version: 0.1.25
 ---
 
 # Spec Driven Development (SDD)
@@ -310,8 +310,24 @@ Read the design, specification, existing code, and documentation thoroughly. If 
 #### Code Comments
 
 - Only add comments where the logic isn't self-evident
-- Do NOT add comments that reference requirement IDs, test scenario IDs, or other SDD artifacts
 - Prefer self-documenting code over comments
+- **NEVER add SDD artifact references in code or tests** - no FR-XXX, TS-XX, requirement IDs, or scenario IDs in comments, docstrings, or test names
+
+**BAD - Do NOT do this:**
+```python
+# Implements FR-001
+def add_to_cart(): ...
+
+def test_add_item():
+    """Verifies TS-01"""
+```
+
+**GOOD - Clean code without SDD references:**
+```python
+def add_to_cart(): ...
+
+def test_add_item_increases_quantity(): ...
+```
 
 #### Dead Code
 
