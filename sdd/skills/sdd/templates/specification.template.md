@@ -59,9 +59,21 @@
 **NFR-XX: [Requirement Title]**
 - [Measurable quality attribute with specific threshold]
 
-___
+---
 
+## QA Plan
 
+> How the stakeholder will validate the feature works. Describe the steps you'll take in the browser/frontend/CLI to verify each requirement is met.
+
+**QA-XX: [Scenario name]**
+- Goal: [What this validates from user perspective]
+- Steps:
+  1. [User action in browser/frontend/CLI]
+  2. [Next user action]
+  3. ...
+- Expected: [What you should see/experience]
+
+---
 
 ## Open Questions
 

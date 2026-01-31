@@ -1,7 +1,7 @@
 ---
 name: sdd (Spec Driven Development)
 description: This skill outlines how to follow the spec driven development workflow. The workflow is non-negotiable and must be followed for sdd or Spec Driven Development. Use this for writing, refining and reviewing specs, specifications, designs, tasks, test and implementations.
-version: 0.1.25
+version: 0.1.26
 ---
 
 # Spec Driven Development (SDD)
@@ -97,6 +97,8 @@ Interview the user about their idea or brief. Keep asking questions until you ca
 - What does success look like? How will they know it's working?
 - What are the boundaries? What's explicitly not included?
 - What could go wrong? What are the edge cases?
+- How will they validate the feature works? What steps will they take?
+- What would they do in the UI/CLI to verify each requirement is met?
 
 **Probe vague answers relentlessly** - Don't accept "fast", "secure", or "user-friendly" without measurable criteria. Keep questioning until requirements are specific and testable.
 
@@ -153,6 +155,15 @@ Once you understand the requirements and codebase:
    - Cross-check every requirement from the specification has task coverage
    - If any requirement is missing task coverage, add tasks to cover it
    - **A design with unmapped requirements is incomplete and must not be submitted**
+
+4. **QA Feasibility Analysis**
+   For each QA scenario in the specification:
+   - Can the user complete all steps with functionality in this design?
+   - If not, document **white-box setup** required:
+     - What manual manipulation is needed (e.g., insert DB records, call internal APIs)
+     - Why it's needed (what functionality is missing/out of scope)
+     - Is this acceptable or should scope change?
+   - White-box setup should be planned, not discovered during QA
 
 You **MUST** identify components required to implement the feature in the specification
 
@@ -249,6 +260,7 @@ A complete design document must have:
 - ✅ **Tasks organized** into logical phases referencing requirements and test scenarios
 - ✅ **Risks identified** with mitigation strategies
 - ✅ **No TBDs or ambiguities** in the final design
+- ✅ **QA feasibility analyzed** - white-box setup documented for each scenario
 
 Optional sections (include only if applicable):
 - Integration Test Scenarios (if multi-component interactions)
@@ -434,6 +446,14 @@ BAD (contains implementation details):
 - Architectural decisions fit existing codebase patterns
 - Only check for optional sections (Integration Tests, E2E Tests, Instrumentation) if they're applicable to the feature
 
+**QA feasibility validation:**
+- Every QA scenario from spec has feasibility analysis
+- White-box setup is explicitly documented (not discovered during QA)
+- All white-box setup is either:
+  a. Acceptable (functionality intentionally out of scope)
+  b. Covered by tasks (will be implemented)
+  c. Flagged as gap requiring scope change
+
 **Requirements validation (perform during review):**
 - Every requirement from the specification maps to at least one task
 - Every task references the requirements it fulfills
@@ -538,6 +558,8 @@ All review findings MUST be categorized by severity. Reports must list findings 
 **P1 - High (should fix before approval):**
 - Undocumented deviations from design
 - Untracked stubs or dead code in final phase
+- QA scenario has no feasibility analysis
+- Undocumented white-box setup discovered
 
 **P2 - Medium (fix recommended):**
 - Minor architectural inconsistencies
