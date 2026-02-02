@@ -13,7 +13,7 @@ A structured approach to software development that combines rigorous upfront spe
 **Features:**
 - **Specify** - Define requirements (FR-XXX, NFR-XXX) with clarity and precision
 - **Design** - Plan architecture with test scenarios (Given/When/Then) and task breakdown
-- **Implement** - Build with TDD, requirement traceability in code comments
+- **Implement** - Build with TDD, progress tracking in design documents
 - Full traceability from requirements → components → test scenarios → tasks → code
 - Validation sections to ensure no orphan requirements or scenarios
 

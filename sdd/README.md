@@ -29,7 +29,6 @@ Build the system with TDD and continuous validation:
 - Task-by-task implementation
 - Tests written WITH implementation, not after
 - Progress tracking in design document
-- Requirement and scenario traceability in code comments
 
 ### 4. Review
 Validate documents and implementation at any stage:
@@ -122,11 +121,7 @@ Creates `.sdd/project-guidelines.md` to define project-specific conventions for 
 ## Key Features
 
 ### Requirement Traceability
-Every requirement is traced from specification through design to implementation:
-```python
-# Implements [user-authentication:FR-003] - Password must be hashed
-def hash_password(password: str) -> str:
-```
+Every requirement is traced from specification through design to tasks. Requirements map to components, components define test scenarios, and tasks reference both - but **no SDD artifact references appear in code or tests**. Traceability lives in the design document, not in code comments.
 
 ### Test Scenarios (Given/When/Then)
 Component-level, integration, and E2E test scenarios with unique IDs:
@@ -136,15 +131,11 @@ Component-level, integration, and E2E test scenarios with unique IDs:
 | TS-01 | Valid login | Registered user | Correct credentials submitted | Session token returned |
 
 ### Scenario Traceability
-Test scenarios are traced from design to implementation:
+Test scenarios are traced from design to implementation through the task breakdown. Each task references which scenarios it implements, but **test code should be clean without SDD IDs**:
 ```python
-def test_valid_login():
-    """Verifies [user-authentication:AuthService/TS-01]
-
-    Given: A registered user with valid credentials
-    When: User submits correct username and password
-    Then: A valid session token is returned
-    """
+def test_valid_login_returns_session_token():
+    """A registered user submitting correct credentials receives a session token."""
+    ...
 ```
 
 ### Validation Sections
@@ -182,7 +173,7 @@ skills/
 ## Key Principles
 
 1. **Specification as Contract** - The spec defines success and guides all decisions
-2. **Full Traceability** - Requirements and scenarios traced through code comments
+2. **Full Traceability** - Requirements and scenarios traced through design documents (not code)
 3. **Test Scenarios First** - Define Given/When/Then before implementation
 4. **Tests WITH Implementation** - No separate "add tests" phases
 5. **No Orphan Scenarios** - Every scenario must be assigned to a task

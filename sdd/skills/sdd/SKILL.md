@@ -351,9 +351,11 @@ def test_add_item_increases_quantity(): ...
 - Any stub implementations **MUST** be tracked in the design document
 - All stubs **MUST** be implemented or removed by the end of the final phase
 
-### Auto-Implementing
+### Auto-Implement
 
 Use this process when asked to auto-implement a design. Each phase is implemented as a stacked PR.
+
+**CRITICAL**: You MUST use the Task tool to launch subagents for implementation and review. Do NOT implement or review directly - always delegate to subagents.
 
 #### Process
 
@@ -363,7 +365,7 @@ For each phase in the design (in order):
    - Branch from previous phase branch (or main for phase 1)
    - Name: `feature/<feature-name>-phase-<N>`
 
-2. **Implementation subagent**
+2. **Implementation subagent** (MUST use Task tool)
    - Launch Task tool with implementation prompt for this phase
    - Subagent implements all tasks in the phase
    - Subagent commits after each task
@@ -373,7 +375,7 @@ For each phase in the design (in order):
    - PR description includes phase number, goal, and requirements covered
    - On subsequent rounds, push commits to update the existing PR
 
-4. **Review subagent**
+4. **Review subagent** (MUST use Task tool)
    - Launch Task tool with review prompt for this phase
    - Subagent reviews the implementation against the design
    - Returns list of issues (P0, P1, P2)
@@ -381,9 +383,9 @@ For each phase in the design (in order):
 
 5. **Fix loop**
    - If P0 or P1 issues exist:
-     a. Launch implementation subagent to fix issues
+     a. Launch Task tool with implementation subagent to fix issues
      b. Push fixes to PR
-     c. Launch review subagent again
+     c. Launch Task tool with review subagent again
      d. Add new review report as PR comment
      e. Repeat until no P0/P1 issues remain
 
